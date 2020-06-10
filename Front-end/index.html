@@ -15,7 +15,7 @@
             * element that contains the map. */
             #map {
                 height: 100%;
-                min-width: 150;
+                min-width: 50%;
             }
         </style>
     </head>
@@ -51,7 +51,7 @@
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" href="index.html"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard</a
+                                Mapa Coronavírus Piauí</a
                                 >
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts"
@@ -104,46 +104,43 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Dashboard</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
+                        <h1 class="mt-4 text-md-center mb-4">Mapa Coronavírus Piauí</h1>
                         <div class="row flex d-flex-align-items-stretch">
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-primary text-white mb-4 rounded">
                                     <div class="card-body">
-                                        <h1>Suspeitos</h1>
+                                        <h2 style="word-wrap: normal !important;">Suspeitos</h1>
                                     </div>
                                     <div class="card-footer border-0 bg-primary">
                                         <h2 class="font-weight-bold">15000</h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4 rounded d-flex-align-items-stretch">
+                            <div class="col-xl-3 col-md-6 flex-shrink-0">
+                                <div class="card bg-warning text-white mb-4 rounded">
                                     <div class="card-body">
-                                        <h1 style="word-wrap: normal !important;">Confirmados</h1>
+                                        <h2 style="word-wrap: normal !important;">Confirmados</h1>
                                     </div>
                                     <div class="card-footer border-0 bg-warning">
                                         <h2 class="font-weight-bold">15000</h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-success text-white mb-4 rounded">
                                     <div class="card-body">
-                                        <h1 style="word-wrap: normal !important;">Recuperados</h1>
+                                        <h2 style="word-wrap: normal !important;">Recuperados</h1>
                                     </div>
                                     <div class="card-footer border-0 bg-success text-xl-left">
                                         <h2 class="font-weight-bold">15000</h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-danger text-white mb-4 rounded">
                                     <div class="card-body">
-                                        <h1>Óbitos</h1>
-                                    </div>
+                                        <h2>Óbitos</h1>
+                                    </div>  
                                     <div class="card-footer border-0 bg-danger">
                                         <h2 class="font-weight-bold">15000</h2>
                                     </div>
@@ -151,107 +148,109 @@
                             </div>
                         </div>
                         
-                        <div class="map-table container-fluid d-flex flex" style="margin-bottom: 30px; height: 730px; padding: 0;">
-                            <div id="map" class="w-50 "> </div>
-                            <div class="card mb-4 flex-grow-1 flex align-self-lg-stretch h-100" >
-                                <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable Example</div>
-                                <div class="card-body overflow-auto">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Cidade</th>
-                                                    <th>Confirmados</th>
-                                                    <th>Recuperados</th>
-                                                    <th>Óbitos</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Teresina</td>
-                                                    <td>3000</td>
-                                                    <td>700</td>
-                                                    <td>100</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Picos</td>
-                                                    <td>Systems Administrator</td>
-                                                    <td>London</td>
-                                                    <td>21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Parnaíba</td>
-                                                    <td>Developer</td>
-                                                    <td>San Francisco</td>
-                                                    <td>30</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Oeiras</td>
-                                                    <td>Regional Director</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>51</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>AAAAAAAA</td>
-                                                    <td>Javascript Developer</td>
-                                                    <td>Singapore</td>
-                                                    <td>29</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Corrente</td>
-                                                    <td>Customer Support</td>
-                                                    <td>New York</td>
-                                                    <td>27</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                        
+                        <div class="map container-fluid d-flex" style="margin-bottom: 30px; height: 700px; padding: 0;">
+                            <div class="flex-grow-1 flex-shrink-0" >
+                                <div id="map" class="rounded"></div>
+                            </div>
+                        </div>
+                        <div class="card mb-4 container-fluid d-flex" style="padding: 0;" >
+                            <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable Example</div>
+                            <div class="card-body overflow-auto">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Cidade</th>
+                                                <th>Confirmados</th>
+                                                <th>Recuperados</th>
+                                                <th>Óbitos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Teresina</td>
+                                                <td>3000</td>
+                                                <td>700</td>
+                                                <td>100</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Picos</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Parnaíba</td>
+                                                <td>Developer</td>
+                                                <td>San Francisco</td>
+                                                <td>30</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oeiras</td>
+                                                <td>Regional Director</td>
+                                                <td>Edinburgh</td>
+                                                <td>51</td>
+                                            </tr>
+                                            <tr>
+                                                <td>AAAAAAAA</td>
+                                                <td>Javascript Developer</td>
+                                                <td>Singapore</td>
+                                                <td>29</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Corrente</td>
+                                                <td>Customer Support</td>
+                                                <td>New York</td>
+                                                <td>27</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-
                         
                         <div class="row">
                             <div class="col-xl-6">

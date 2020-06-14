@@ -3,4 +3,7 @@ Projeto_Django/.env
 Projeto_Django/env/
 Projeto_Django/**/migrations/*
 Projeto_Django/**/__pycache__/*
-
+Análise Exploratória/.ipynb_checkpoints
+Download\ planilha/.ipynb_checkpoints
+Predições/.ipynb_checkpoints
+Sites/.ipynb_checkpoints

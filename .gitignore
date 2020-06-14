@@ -2,5 +2,5 @@ Download\ planilha/creds.json
 Projeto_Django/.env
 Projeto_Django/env/
 Projeto_Django/**/migrations/*
-Projeto_Django/**/__pycache__/
+Projeto_Django/**/__pycache__/*
 

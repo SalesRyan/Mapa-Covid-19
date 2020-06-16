@@ -3,23 +3,25 @@ from core.models import AuditModel
 
 # Create your models here.
 class DadosEstado(AuditModel):
-    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True)
+    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True,unique=True )
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
 class CasosCidade(AuditModel):
-    nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True)
+    nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True, unique=True)
     confirmados = models.IntegerField("Confirmados",null=True, blank=True)
     obitos = models.IntegerField("Obitos",null=True, blank=True)
     incidencia = models.FloatField("Incidencia", null=True, blank=True)
     cep = models.CharField("CEP", max_length=9,null=True, blank=True)
+    # latitude = models.CharField("Latitude", max_length=45,null=True, blank=True)
+    # longitude = models.CharField("Longitude", max_length=45,null=True, blank=True)
 
     def __str__(self):
         return self.nome
     
 
 class Leitos(AuditModel):
-    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False)
+    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False, unique=True)
     capacidade_clinicos = models.IntegerField("Capacidade Clinicos", null=True, blank=True)
     ocupados_clinicos = models.IntegerField("Ocupados Clinicos", null=True, blank=True)
     capacidade_uti = models.IntegerField("Capacidade UTI", null=True, blank=True)
@@ -38,7 +40,7 @@ class CasosSexo(AuditModel):
     casos_femininos = models.IntegerField("Casos Femininos", null=True, blank=True)
 
 class CasosFaixaEtaria(AuditModel):
-    faixa_etaria = models.CharField("Nome da Faixa Etaria", max_length=45,null=True, blank=True)
+    faixa_etaria = models.CharField("Nome da Faixa Etaria", max_length=45,null=True, blank=True,unique=True)
     confirmados = models.IntegerField("Obitos Masculinos", null=True, blank=True)
     obitos = models.IntegerField("Obitos Femininos", null=True, blank=True)
 
@@ -46,18 +48,8 @@ class CasosFaixaEtaria(AuditModel):
         return self.faixa_etaria
 
 class Comorbidades(AuditModel):
-    nome = models.CharField("Nome da Comorbidade", max_length=45,null=True, blank=True)
-    quantidade = models.IntegerField("Obitos Masculinos", null=True, blank=True)
+    nome = models.CharField("Nome da Comorbidade", max_length=45,null=True, blank=True, unique=True)
+    quantidade = models.IntegerField("Quantidade", null=True, blank=True)
 
     def __str__(self):
         return self.nome
-    
-
-
-
-
-
-
-
-
-

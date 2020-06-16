@@ -10,6 +10,7 @@ Sites/.ipynb_checkpoints
 **/.ipynb_checkpoints/
 */.ipynb_checkpoints/
 Projeto_Django/db.sqlite3
+Projeto_Django/scripts/creds.json
 
 #linux
 Download\ Planilha/creds.json

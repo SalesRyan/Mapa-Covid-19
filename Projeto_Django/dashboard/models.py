@@ -41,8 +41,8 @@ class CasosSexo(AuditModel):
 
 class CasosFaixaEtaria(AuditModel):
     faixa_etaria = models.CharField("Nome da Faixa Etaria", max_length=45,null=True, blank=True,unique=True)
-    confirmados = models.IntegerField("Obitos Masculinos", null=True, blank=True)
-    obitos = models.IntegerField("Obitos Femininos", null=True, blank=True)
+    confirmados = models.IntegerField("Casos Confirmados", null=True, blank=True)
+    obitos = models.IntegerField("Óbitos", null=True, blank=True)
 
     def __str__(self):
         return self.faixa_etaria

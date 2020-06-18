@@ -1,37 +1,37 @@
 from scripts.Funcoes import *
 import pandas as pd
-
+from scripts.email import mail
 
 def authenticCheck():
     try:
         sheets = authentic()
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.authenticCheck', str(e))
+        return pd.Dataframe({'':[]})
     else:
         if not sheets:
-            print("Função de email authenticCheck")
-            return False
-    return True
+            mail('Error on Verificar.authenticCheck', 'Empty sheet')
+            return pd.Dataframe({'':[]})
+    return sheets
 
-def getDataCheck():
+def getDataCheck(sheets):
     try:
-        var = getData(authentic(),index=0)
+        var = getData(sheets,index=0)
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.getDataCheck', str(e))
+        return pd.Dataframe({'':[]})
     else:
         if var.empty:
-            print("Função de email getDataCheck")
-            return False
-    return True
+            mail('Error on Verificar.authenticCheck', 'Empty sheet')
+            return pd.Dataframe({'':[]})
+    return var
 
-def generateInternedDataTableCheck():
+def generateInternedDataTableCheck(sheets):
     try:
-        var = generateInternedDataTable(authentic())
+        var = generateInternedDataTable(sheets)
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.generateInternedDataTableCheck', str(e))
+        return pd.Dataframe({'':[]}) 
     else:
         if ['Dias',
             'Capacidade Leitos Clínicos',
@@ -43,90 +43,91 @@ def generateInternedDataTableCheck():
             'Capacidade Leitos Respiradores',
             'Internados Leitos Respiradores',
             'Altas'] != list(var):
-            print("Função de email generateInternedDataTableCheck")
-            return False
-    return True
+            mail('Error on Verificar.generateInternedDataTableCheck', 'Cabeçalho incorreto')
+            return pd.Dataframe({'':[]})
+    return var
 
 
-def generateCityDataTableCheck():
+def generateCityDataTableCheck(sheets):
     try:
-        var = generateCityDataTable(authentic())
+        var = generateCityDataTable(sheets)
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.generateCityDataTableCheck', str(e))
+        return pd.Dataframe({'':[]})
     else:
         if ['Município', 
             'Confirmados', 
             'Óbitos', 
             'Incidência',
             'CEP'] != list(var):
-            print("Função de email generateCityDataTableCheck")
-            return False
-    return True
+            mail('Error on Verificar.generateCityDataTable', 'Cabeçalho incorreto')
+            return pd.Dataframe({'':[]})
+    return var
 
-def generateStateDataTableCheck():
+def generateStateDataTableCheck(sheets):
 
     try:
-        var = generateStateDataTable(authentic())
+        var = generateStateDataTable(sheets)
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.generateStateDataTable', str(e))
+        return pd.Dataframe({'':[]})
     else:
         if ['Dias',
             'Confirmados',
             'Óbitos'] != list(var):
-            print("Função de email generateStateDataTableCheck")
-            return False
-    return True
+            mail('Error on Verificar.generateStateDataTable', 'Cabeçalho Incorreto')
+            return pd.Dataframe({'':[]})
+    return var
 
-def generateComorbidityTableCheck():
+def generateComorbidityTableCheck(sheets):
     try:
-        var = generateComorbidityTable(authentic())
+        var = generateComorbidityTable(sheets)
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.generateComorbidityTableCheck', str(e))
+        return pd.Dataframe({'':[]})
     else:
         if ['Morbidades',
             'Qtde'] != list(var):
-            print("Função de email generateComorbidityTableCheck")
-            return False
-    return True
+            mail('Error on Verificar.generateComorbidityTable', 'Cabeçalho Incorreto')
+            return pd.Dataframe({'':[]})
+    return var
 
-def generateAgeRangeTableCheck():
+def generateAgeRangeTableCheck(sheets):
     try:
-        var = generateAgeRangeTable(authentic())
+        var = generateAgeRangeTable(sheets)
     except Exception as e:
-        print(e)
-        return False
+        mail('Exception on Verificar.generateAgeRangeTableCheck', str(e))
+        return pd.Dataframe({'':[]})
     else:
         if ['Faixa Etária', 
             'Confirmados', 
             'Óbitos'] != list(var):
-            print("Função de email  generateAgeRangeTableCheck")
-            return False
-    return True
+            mail('Error on Verificar.generateAgeRangeTableCheck', 'Cabeçalho Incorreto')
+            return pd.Dataframe({'':[]})
+    return var
 
-def generateGenderTableCheck():
+def generateGenderTableCheck(sheets):
     try:
-        var = generateGenderTable(authentic())
+        var = generateGenderTable(sheets)
     except Exception as e:
-        print(e)
+        mail('Exception on Verificar.generateGenderTableCheck', str(e))
         return False
     else:
         if ['Obitos Masculino',
             'Obitos Feminino',
             'Confirmados Masculino',
             'Confirmados Feminino'] != list(var):
-            print("Função de email generateGenderTableCheck")
-            return False
-    return True
+            mail('Error on Verificar.generateGenderTableCheck', 'Cabeçalho Incorreto')
+            return pd.DataFrame({'':[]})
+    return var
 
 def check():
-    return authenticCheck() and\
-    getDataCheck() and\
-    generateInternedDataTableCheck() and\
-    generateCityDataTableCheck() and\
-    generateStateDataTableCheck() and\
-    generateComorbidityTableCheck() and\
-    generateAgeRangeTableCheck() and\
-    generateGenderTableCheck()
+    sheets = authenticCheck()
+    return {
+        'Leitos':generateInternedDataTableCheck(sheets),
+        'CasosCidade':generateCityDataTableCheck(sheets),
+        'DadosEstado':generateStateDataTableCheck(sheets),
+        'Comorbidades':generateComorbidityTableCheck(sheets),
+        'CasosFaixaEtaria':generateAgeRangeTableCheck(sheets),
+        'CasosSexo':generateGenderTableCheck(sheets)
+    }

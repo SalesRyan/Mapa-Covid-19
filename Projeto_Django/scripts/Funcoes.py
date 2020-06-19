@@ -23,6 +23,16 @@ def authentic():
     client = gspread.authorize(creds)
     return client.open_by_key('1b-GkDhhxJIwWcA6tk3z4eX58f-f1w2TA2f2XrI4XB1w')
 
+
+def generateDataUpdateTable(sheets):
+    
+    df = getData(sheets,index=9)
+
+    d = {
+        'Data de Atualização':df['Data'].to_list(),
+    }
+    return pd.DataFrame(data=d).replace({'': 0})
+    
 def generateInternedDataTable(sheets):
     
     df = getData(sheets,index=24)

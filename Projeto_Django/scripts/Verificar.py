@@ -1,6 +1,8 @@
 from scripts.Funcoes import *
 import pandas as pd
 from scripts.email import mail
+from warnings import filterwarnings
+filterwarnings("ignore")
 
 def authenticCheck():
     try:
@@ -13,6 +15,19 @@ def authenticCheck():
             mail('Error on Verificar.authenticCheck', 'Empty sheet')
             return pd.DataFrame({'':[]})
     return sheets
+
+def generateDataUpdateTableCheck(sheets):
+    try:
+        var = generateDataUpdateTable(sheets)
+    except Exception as e:
+        mail('Exception on Verificar.generateDataUpdateTaCheck', str(e))
+        return pd.DataFrame({'':[]})
+    else:
+        if ['Data de Atualização'] != list(var):
+            mail('Error on Verificar.generateDataUpdateTableCheck', 'Empty sheet')
+            return pd.DataFrame({'':[]})
+    return var
+
 
 def getDataCheck(sheets):
     try:
@@ -124,6 +139,7 @@ def generateGenderTableCheck(sheets):
 def check():
     sheets = authenticCheck()
     return {
+        'Data':generateDataUpdateTableCheck(sheets),
         'Leitos':generateInternedDataTableCheck(sheets),
         'CasosCidade':generateCityDataTableCheck(sheets),
         'DadosEstado':generateStateDataTableCheck(sheets),

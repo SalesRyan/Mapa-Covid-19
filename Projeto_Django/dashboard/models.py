@@ -2,6 +2,9 @@ from django.db import models
 from core.models import AuditModel
 
 # Create your models here.
+class DataAtualizacao(models.Model):
+    data = models.CharField("Data de atualização da planilha", max_length=45)
+
 class DadosEstado(AuditModel):
     data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True,unique=True )
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)

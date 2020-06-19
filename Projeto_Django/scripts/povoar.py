@@ -14,6 +14,10 @@ filterwarnings("ignore")
 
 sheets = authentic()
 
+dataset = dataset = [DataAtualizacao.objects.create(
+    data=d[0]
+    ).save() for d in generateDataUpdateTable(sheets).values]
+
 dataset = [Leitos.objects.create(
     data=datetime.strptime(d[0],'%d/%m/%Y'),
     capacidade_clinicos=d[1],

@@ -11,10 +11,17 @@ from datetime import datetime
 'CasosSexo':generateGenderTableCheck(sheets)
 """
 
+def atualizarDataUpdate(d):
+    if(DataAtualizacao.objects.all().last().data != d[0][0]):
+        DataAtualizacao.objects.all().update(
+            data = d[0][0]
+        )
+        return True
+    return False
+
 def atualizarDadosEstado(d): #SUPIMPA FUNCIONANDO
-    print(d,"\n")
     for line in d[-5:]:    
-        ob = DadosEstado.objects.update_or_create(
+        DadosEstado.objects.update_or_create(
             data=datetime.strptime(line[0]+'/2020','%d/%m/%Y'),
             defaults={
                 'confirmados':line[1],
@@ -81,9 +88,12 @@ def atualizarComorbidades(d):
 def verification():
     dfs = check()
     if not True in map(lambda df : df.empty, dfs.values()):
-        atualizarDadosEstado(dfs['DadosEstado'].values)
-        atualizarCasosCidade(dfs['CasosCidade'].values)
-        atualizarLeitos(dfs['Leitos'].values)
-        atualizarCasosSexo(dfs['CasosSexo'].values)
-        atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
-        atualizarComorbidades(dfs['Comorbidades'].values)
+        if atualizarDataUpdate(dfs['Data'].values):
+            atualizarDadosEstado(dfs['DadosEstado'].values)
+            atualizarCasosCidade(dfs['CasosCidade'].values)
+            atualizarLeitos(dfs['Leitos'].values)
+            atualizarCasosSexo(dfs['CasosSexo'].values)
+            atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
+            atualizarComorbidades(dfs['Comorbidades'].values)
+
+verification()

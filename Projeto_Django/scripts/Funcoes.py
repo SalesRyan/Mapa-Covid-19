@@ -25,7 +25,7 @@ def authentic():
 
 def generateInternedDataTable(sheets):
     
-    df = getData(sheets,index=23)
+    df = getData(sheets,index=24)
     
     d = {
         'Dias':df['Dias'].to_list(),
@@ -42,7 +42,8 @@ def generateInternedDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateCityDataTable(sheets):
-    df = getData(sheets,index=6)
+    df = getData(sheets,index=7)
+
     d = {
         'Município':df['Município'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -53,7 +54,7 @@ def generateCityDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateStateDataTable(sheets):
-    df = getData(sheets,index=5)
+    df = getData(sheets,index=6)
     d = {
         'Dias':df['Dias'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -62,7 +63,7 @@ def generateStateDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateComorbidityTable(sheets):
-    df = getData(sheets,index=4)
+    df = getData(sheets,index=5)
     d = {
         'Morbidades':df['Morbidades'].to_list(),
         'Qtde':df['Qtde'].to_list(),
@@ -70,7 +71,7 @@ def generateComorbidityTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateAgeRangeTable(sheets):
-    df = getData(sheets,index=3)
+    df = getData(sheets,index=4)
     d = {
         'Faixa Etária':df['Faixa Etária'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -79,8 +80,8 @@ def generateAgeRangeTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateGenderTable(sheets):
-    df1 = getData(sheets,index=1)
-    df2 = getData(sheets,index=2)
+    df1 = getData(sheets,index=2)
+    df2 = getData(sheets,index=3)
     d = {
         'Obitos Masculino':list(df2[df2.Sexo=="Masculino"].Quantidade),
         'Obitos Feminino':list(df2[df2.Sexo=="Feminino"].Quantidade),

@@ -11,90 +11,79 @@ from datetime import datetime
 'CasosSexo':generateGenderTableCheck(sheets)
 """
 
-def atualizarDadosEstado(d): #SUPIMPA
+def atualizarDadosEstado(d): #SUPIMPA FUNCIONANDO
     print(d,"\n")
-    return 0
-    ob = DadosEstado.objects.update_or_create(
-        data=datetime.strptime(d[-1][0],'%d/%m/2020'),
-        defaults={
-            'confirmados':d[-1][1],
-            'obitos':d[-1][2],
-        }
-    )
-    ob.save()
+    for line in d[-5:]:    
+        ob = DadosEstado.objects.update_or_create(
+            data=datetime.strptime(line[0]+'/2020','%d/%m/%Y'),
+            defaults={
+                'confirmados':line[1],
+                'obitos':line[2],
+            }   
+        )
 
-def atualizarCasosCidade(d):
-    print(d,"\n")
-    return 0
-    ob = CasosSexo.objects.all().last()
-    ob.update(
-        nome=d[0][0],
-        confirmados=d[0][1],
-        obitos=d[0][2],
-        incidencia=d[0][3],
-        cep=d[0][4],
-    )
-    ob.save()
+def atualizarCasosCidade(d): #SUPIMPA FUNCIONANDO
+    for line in d:
+        CasosCidade.objects.update_or_create(
+            nome=line[0],
+            cep=line[4],
+            defaults = {
+                'confirmados':line[1],
+                'obitos':line[2],
+                'incidencia':line[3].replace(',','.'),
+            }
+        )
 
-def atualizarLeitos(d): #SUPIMPA(MAIS OU MENOS)
-    print(d,"\n")
-    return 0
-    ob = DadosEstado.objects.update_or_create(
-        data=datetime.strptime(d[-1][0],'%d/%m/%Y'),
-        defaults={
-            'capacidade_clinicos':d[-1][1],
-            'ocupados_clinicos':d[-1][2],
-            'capacidade_uti':d[-1][3],
-            'ocupados_uti':d[-1][4],
-            'capacidade_estabilizacao':d[-1][5],
-            'ocupados_estabilizacao':d[-1][6],
-            'capacidade_respiradores':d[-1][7],
-            'ocupados_respiradores':d[-1][8],
-            'altas':d[-1][9],
-        }
-    )
-    ob.save()
-
-def atualizarCasosSexo(d): #SUPIMPA
-    print(d,"\n")
-    return 0
-    ob = CasosSexo.objects.all().last()
-    ob.update(
+def atualizarLeitos(d):
+    for line in d[-5:]:
+        Leitos.objects.update_or_create(
+            data=datetime.strptime(line[0],'%d/%m/%Y'),
+            defaults={
+                'capacidade_clinicos':line[1],
+                'ocupados_clinicos':line[2],
+                'capacidade_uti':line[3],
+                'ocupados_uti':line[4],
+                'capacidade_estabilizacao':line[5],
+                'ocupados_estabilizacao':line[6],
+                'capacidade_respiradores':line[7],
+                'ocupados_respiradores':line[8],
+                'altas':line[9],
+            }
+        )
+    
+def atualizarCasosSexo(d): #SUPIMPA FUNCIONANDO
+    CasosSexo.objects.all().update(
         obitos_masculinos=d[0][0],
         obitos_femininos=d[0][1],
         casos_masculinos=d[0][2],
         casos_femininos=d[0][3],
-    ) 
-    ob.save()
+    )
 
 def atualizarCasosFaixaEtaria(d):
-    print(d,"\n")
-    return 0
     for line in d:
-        ob = CasosFaixaEtaria.objects.get(faixa_etaria=line[0]).update(
-            confirmados=line[1],
-            obitos=line[2],
+        CasosFaixaEtaria.objects.all().update_or_create(
+            faixa_etaria=line[0],
+            defaults= {
+                'confirmados':line[1],
+                'obitos':line[2],
+            }
         )
-        ob.save()
 
 def atualizarComorbidades(d):
-    print(d,"\n")
-    return 0
     for line in d:
-        ob = CasosSexo.Comorbidades.objects.get(nome=line[0]).update(
-            quantidade=line[1],
+        Comorbidades.objects.all().update_or_create(
+            nome=line[0],
+            defaults = {
+                'quantidade':line[1]
+            }
         )
-        ob.save()
 
 def verification():
     dfs = check()
-
     if not True in map(lambda df : df.empty, dfs.values()):
         atualizarDadosEstado(dfs['DadosEstado'].values)
-        # atualizarCasosCidade(dfs['CasosCidade'].values)
-        # atualizarLeitos(dfs['Leitos'].values)
-        # atualizarCasosSexo(dfs['CasosSexo'].values)
-        # atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
-        # atualizarComorbidades(dfs['Comorbidades'].values)
-
-verification() 
+        atualizarCasosCidade(dfs['CasosCidade'].values)
+        atualizarLeitos(dfs['Leitos'].values)
+        atualizarCasosSexo(dfs['CasosSexo'].values)
+        atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
+        atualizarComorbidades(dfs['Comorbidades'].values)

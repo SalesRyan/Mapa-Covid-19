@@ -7,11 +7,11 @@ def authenticCheck():
         sheets = authentic()
     except Exception as e:
         mail('Exception on Verificar.authenticCheck', str(e))
-        return pd.Dataframe({'':[]})
+        return pd.DataFrame({'':[]})
     else:
         if not sheets:
             mail('Error on Verificar.authenticCheck', 'Empty sheet')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return sheets
 
 def getDataCheck(sheets):
@@ -19,11 +19,11 @@ def getDataCheck(sheets):
         var = getData(sheets,index=0)
     except Exception as e:
         mail('Exception on Verificar.getDataCheck', str(e))
-        return pd.Dataframe({'':[]})
+        return pd.DataFrame({'':[]})
     else:
         if var.empty:
             mail('Error on Verificar.authenticCheck', 'Empty sheet')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return var
 
 def generateInternedDataTableCheck(sheets):
@@ -31,7 +31,7 @@ def generateInternedDataTableCheck(sheets):
         var = generateInternedDataTable(sheets)
     except Exception as e:
         mail('Exception on Verificar.generateInternedDataTableCheck', str(e))
-        return pd.Dataframe({'':[]}) 
+        return pd.DataFrame({'':[]}) 
     else:
         if ['Dias',
             'Capacidade Leitos Clínicos',
@@ -44,7 +44,7 @@ def generateInternedDataTableCheck(sheets):
             'Internados Leitos Respiradores',
             'Altas'] != list(var):
             mail('Error on Verificar.generateInternedDataTableCheck', 'Cabeçalho incorreto')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return var
 
 
@@ -53,7 +53,7 @@ def generateCityDataTableCheck(sheets):
         var = generateCityDataTable(sheets)
     except Exception as e:
         mail('Exception on Verificar.generateCityDataTableCheck', str(e))
-        return pd.Dataframe({'':[]})
+        return pd.DataFrame({'':[]})
     else:
         if ['Município', 
             'Confirmados', 
@@ -61,7 +61,7 @@ def generateCityDataTableCheck(sheets):
             'Incidência',
             'CEP'] != list(var):
             mail('Error on Verificar.generateCityDataTable', 'Cabeçalho incorreto')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return var
 
 def generateStateDataTableCheck(sheets):
@@ -70,13 +70,13 @@ def generateStateDataTableCheck(sheets):
         var = generateStateDataTable(sheets)
     except Exception as e:
         mail('Exception on Verificar.generateStateDataTable', str(e))
-        return pd.Dataframe({'':[]})
+        return pd.DataFrame({'':[]})
     else:
         if ['Dias',
             'Confirmados',
             'Óbitos'] != list(var):
             mail('Error on Verificar.generateStateDataTable', 'Cabeçalho Incorreto')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return var
 
 def generateComorbidityTableCheck(sheets):
@@ -84,12 +84,12 @@ def generateComorbidityTableCheck(sheets):
         var = generateComorbidityTable(sheets)
     except Exception as e:
         mail('Exception on Verificar.generateComorbidityTableCheck', str(e))
-        return pd.Dataframe({'':[]})
+        return pd.DataFrame({'':[]})
     else:
         if ['Morbidades',
             'Qtde'] != list(var):
             mail('Error on Verificar.generateComorbidityTable', 'Cabeçalho Incorreto')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return var
 
 def generateAgeRangeTableCheck(sheets):
@@ -97,13 +97,13 @@ def generateAgeRangeTableCheck(sheets):
         var = generateAgeRangeTable(sheets)
     except Exception as e:
         mail('Exception on Verificar.generateAgeRangeTableCheck', str(e))
-        return pd.Dataframe({'':[]})
+        return pd.DataFrame({'':[]})
     else:
         if ['Faixa Etária', 
             'Confirmados', 
             'Óbitos'] != list(var):
             mail('Error on Verificar.generateAgeRangeTableCheck', 'Cabeçalho Incorreto')
-            return pd.Dataframe({'':[]})
+            return pd.DataFrame({'':[]})
     return var
 
 def generateGenderTableCheck(sheets):
@@ -111,7 +111,7 @@ def generateGenderTableCheck(sheets):
         var = generateGenderTable(sheets)
     except Exception as e:
         mail('Exception on Verificar.generateGenderTableCheck', str(e))
-        return False
+        return pd.DataFrame({'':[]})
     else:
         if ['Obitos Masculino',
             'Obitos Feminino',

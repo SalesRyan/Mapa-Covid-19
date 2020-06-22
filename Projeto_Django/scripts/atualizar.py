@@ -19,7 +19,7 @@ def atualizarDataUpdate(d):
         return True
     return False
 
-def atualizarDadosEstado(d): #SUPIMPA FUNCIONANDO
+def atualizarDadosEstado(d):
     for line in d[-5:]:    
         DadosEstado.objects.update_or_create(
             data=datetime.strptime(line[0]+'/2020','%d/%m/%Y'),
@@ -29,7 +29,7 @@ def atualizarDadosEstado(d): #SUPIMPA FUNCIONANDO
             }   
         )
 
-def atualizarCasosCidade(d): #SUPIMPA FUNCIONANDO
+def atualizarCasosCidade(d):
     for line in d:
         CasosCidade.objects.update_or_create(
             nome=line[0],
@@ -37,7 +37,7 @@ def atualizarCasosCidade(d): #SUPIMPA FUNCIONANDO
             defaults = {
                 'confirmados':line[1],
                 'obitos':line[2],
-                'incidencia':line[3].replace(',','.'),
+                'incidencia':str(line[3]).replace(',','.'),
             }
         )
 
@@ -58,7 +58,7 @@ def atualizarLeitos(d):
             }
         )
     
-def atualizarCasosSexo(d): #SUPIMPA FUNCIONANDO
+def atualizarCasosSexo(d):
     CasosSexo.objects.all().update(
         obitos_masculinos=d[0][0],
         obitos_femininos=d[0][1],
@@ -95,5 +95,3 @@ def verification():
             atualizarCasosSexo(dfs['CasosSexo'].values)
             atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
             atualizarComorbidades(dfs['Comorbidades'].values)
-
-verification()

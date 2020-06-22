@@ -103,6 +103,12 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
+                <label>
+                    {% for ob in data_atualizacao %}
+                        {{ob.data}}
+                    {% endfor %}
+                
+                </label>
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4 text-md-center mb-4">Mapa Coronavírus Piauí</h1>
@@ -156,7 +162,7 @@
                             </div>
                         </div>
                         <div class="card mb-4 container-fluid d-flex" style="padding: 0;" >
-                            <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable Example</div>
+                            <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
                             <div class="card-body overflow-auto">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -164,89 +170,21 @@
                                             <tr>
                                                 <th>Cidade</th>
                                                 <th>Confirmados</th>
-                                                <th>Recuperados</th>
                                                 <th>Óbitos</th>
+                                                <th>Incidência</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Teresina</td>
-                                                <td>3000</td>
-                                                <td>700</td>
-                                                <td>100</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Picos</td>
-                                                <td>Systems Administrator</td>
-                                                <td>London</td>
-                                                <td>21</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Parnaíba</td>
-                                                <td>Developer</td>
-                                                <td>San Francisco</td>
-                                                <td>30</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Oeiras</td>
-                                                <td>Regional Director</td>
-                                                <td>Edinburgh</td>
-                                                <td>51</td>
-                                            </tr>
-                                            <tr>
-                                                <td>AAAAAAAA</td>
-                                                <td>Javascript Developer</td>
-                                                <td>Singapore</td>
-                                                <td>29</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Corrente</td>
-                                                <td>Customer Support</td>
-                                                <td>New York</td>
-                                                <td>27</td>
-                                            </tr>
+                                            {% for object in casos_cidade %}
+                                                {% if object.nome != 'PIAUÍ' %}
+                                                    <tr>
+                                                        <td>{{ object.nome }}</td>
+                                                        <td>{{ object.confirmados }}</td>
+                                                        <td>{{ object.obitos }}</td>
+                                                        <td>{{ object.incidencia }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -256,14 +194,14 @@
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
-                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Area Chart Example</div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Confirmados no Piauí</div>
+                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40" dados="{{ data_casos_cidade }}"></canvas></div>
                                 </div>
                             </div>
                             <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Bar Chart Example</div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                <div class="card mb-4" >
+                                    <div class="card-header" ><i class="fas fa-chart-bar mr-1"></i>Bar Chart Example</div>
+                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40" ></canvas></div>
                                 </div>
                             </div>
                         </div>
@@ -293,7 +231,7 @@
         <script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/datatables-demo.js"></script>
+        <script src="{% static 'assets/demo/datatables-demo.js' %}"></script>
 
         <script>
             var map;

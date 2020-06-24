@@ -104,53 +104,50 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <label>
-                    {% for ob in data_atualizacao %}
-                        {{ob.data}}
-                    {% endfor %}
-                
-                </label>
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4 text-md-center mb-4">Mapa Coronavírus Piauí</h1>
+                        <h6 class="mt-4 text-md-center mb-4">
+                            {{data_atualizacao.data}}
+                        </h6>
                         <div class="row flex d-flex-align-items-stretch">
-                            <div class="col-xl-3 col-md-6 flex-shrink-0">
-                                <div class="card bg-primary text-white mb-4 rounded">
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Suspeitos</h1>
-                                    </div>
-                                    <div class="card-footer border-0 bg-primary">
-                                        <h2 class="font-weight-bold">15000</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6 flex-shrink-0">
-                                <div class="card bg-warning text-white mb-4 rounded">
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Confirmados</h1>
-                                    </div>
-                                    <div class="card-footer border-0 bg-warning">
-                                        <h2 class="font-weight-bold">15000</h2>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-success text-white mb-4 rounded">
                                     <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Recuperados</h1>
+                                        <h2 style="word-wrap: normal !important;">Confirmados</h1>
                                     </div>
                                     <div class="card-footer border-0 bg-success text-xl-left">
-                                        <h2 class="font-weight-bold">15000</h2>
+                                        <h2 class="font-weight-bold">{{ confirmados_atual }}</h2>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-danger text-white mb-4 rounded">
                                     <div class="card-body">
-                                        <h2>Óbitos</h1>
+                                        <h2>Novos</h1>
                                     </div>  
                                     <div class="card-footer border-0 bg-danger">
-                                        <h2 class="font-weight-bold">15000</h2>
+                                        <h2 class="font-weight-bold">{{ confirmados_novos }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 flex-shrink-0">
+                                <div class="card bg-primary text-white mb-4 rounded">
+                                    <div class="card-body">
+                                        <h2 style="word-wrap: normal !important;">Óbitos</h1>
+                                    </div>
+                                    <div class="card-footer border-0 bg-primary">
+                                        <h2 class="font-weight-bold">{{ obitos_atual }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 flex-shrink-0">
+                                <div class="card bg-warning text-white mb-4 rounded">
+                                    <div class="card-body">
+                                        <h2 style="word-wrap: normal !important;">Novos</h1>
+                                    </div>
+                                    <div class="card-footer border-0 bg-warning">
+                                        <h2 class="font-weight-bold">{{ obitos_novos }}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -201,8 +198,8 @@
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-6">
-                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Confirmados no Piauí</div>
-                                    <div class="chart" id="chartdivleitos" dados="{{ data_casos_cidade }}"></div>
+                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação dos Leitos no Piauí</div>
+                                    <div class="chart" id="chartdivleitos" dados="{{ data_leitos }}"></div>
                                 </div>
                             </div>
                             <div class="col-xl-6">

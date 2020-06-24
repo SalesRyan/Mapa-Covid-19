@@ -55,16 +55,17 @@ def generateCityDataTable(sheets):
     df = getData(sheets,index=7)
 
     d = {
-        'Município':df['Município'].to_list(),
-        'Confirmados':df['Confirmados'].to_list(),
-        'Óbitos':df['Óbitos'].to_list(),
-        'Incidência':df['Incidência'].to_list(),
-        'CEP':df['CEP'].to_list()
+        'Município':df['Município'].to_list().remove(''),
+        'Confirmados':df['Confirmados'].to_list().remove(''),
+        'Óbitos':df['Óbitos'].to_list().remove(''),
+        'Incidência':df['Incidência'].to_list().remove(''),
+        'CEP':df['CEP'].to_list().remove('')
     }
-    return pd.DataFrame(data=d).replace({'': 0})
+    return pd.DataFrame(data=d)
 
 def generateStateDataTable(sheets):
     df = getData(sheets,index=6)
+
     d = {
         'Dias':df['Dias'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -74,6 +75,7 @@ def generateStateDataTable(sheets):
 
 def generateComorbidityTable(sheets):
     df = getData(sheets,index=5)
+    
     d = {
         'Morbidades':df['Morbidades'].to_list(),
         'Qtde':df['Qtde'].to_list(),

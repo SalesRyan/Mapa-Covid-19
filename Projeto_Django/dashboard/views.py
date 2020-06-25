@@ -37,15 +37,46 @@ def site_view(request):
         'data': [{
             'date':str(obj.data.strftime('%d-%m-%Y')),
             'capacidadeClinicos':obj.capacidade_clinicos,
-            'ocupadosClinicos':obj.ocupados_clinicos,
+            'ocupadosClinicos':obj.ocupados_clinicos/obj.capacidade_clinicos,
             'capacidadeUti':obj.capacidade_uti,
-            'ocupadosUti':obj.ocupados_uti,
+            'ocupadosUti':obj.ocupados_uti/obj.capacidade_uti,
             'capacidadeEstabilizacao':obj.capacidade_estabilizacao,
-            'ocupadosEstabilizacao':obj.ocupados_estabilizacao,
+            'ocupadosEstabilizacao':obj.ocupados_estabilizacao/obj.capacidade_estabilizacao,
             'capacidadeRespiradores':obj.capacidade_respiradores,
-            'ocupadosRespiradores':obj.ocupados_respiradores,
+            'ocupadosRespiradores':obj.ocupados_respiradores/obj.capacidade_respiradores,
         } for obj in leitos]
     }
+    
+    data_sexo_casos = {
+        'data' : [{
+                'label':'Masculino',
+                'value':casos_sexo.casos_masculinos,
+            },{
+                'label':'Feminino',
+                'value':casos_sexo.casos_femininos
+            }]
+    }
+
+    data_sexo_obitos = {
+        'data' : [{
+                'label':'Masculino',
+                'value':casos_sexo.obitos_masculinos,
+            },{
+                'label':'Feminino',
+                'value':casos_sexo.obitos_femininos,
+            }]
+    }
+    
+
+    data_faixa = {
+        'data': [{
+            'faixaEtaria':obj.faixa_etaria,
+            'confirmados':obj.confirmados,
+            'obitos':obj.obitos*-1,
+        } for obj in casos_faixa_etaria]
+    }
+
+
 
     context = {
         'google_api_key': GOOGLE_API_KEY,
@@ -56,13 +87,15 @@ def site_view(request):
         'obitos_atual': obitos_atual,
         'obitos_novos': obitos_novos,
         'casos_cidade': casos_cidade,
+        'data_faixa':json.dumps(data_faixa),
+        'data_sexo_casos':json.dumps(data_sexo_casos),
+        'data_sexo_obitos':json.dumps(data_sexo_obitos),
         'data_casos_cidade': json.dumps(data_casos_cidades),
         'leitos': leitos,
         'data_leitos': json.dumps(data_leitos),
         'casos_sexo': casos_sexo,
         'casos_faixa_etaria': casos_faixa_etaria,
         'comorbidades': comorbidades,
-
     }
 
     return render(request, 'dashboard/index.html', context)

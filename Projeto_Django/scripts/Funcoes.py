@@ -52,16 +52,17 @@ def generateInternedDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateCityDataTable(sheets):
-    df = getData(sheets,index=7)
+    df = getData(sheets,index=8)
 
     d = {
-        'Município':df['Município'].to_list().remove(''),
-        'Confirmados':df['Confirmados'].to_list().remove(''),
-        'Óbitos':df['Óbitos'].to_list().remove(''),
-        'Incidência':df['Incidência'].to_list().remove(''),
-        'CEP':df['CEP'].to_list().remove('')
+        'Município':df['Município'].to_list(),
+        'Confirmados':df['Confirmados'].to_list(),
+        'Óbitos':df['Óbitos'].to_list(),
+        'Incidência':df['Incidência'].to_list(),
+        'CEP':df['CEP'].to_list()
     }
-    return pd.DataFrame(data=d)
+
+    return pd.DataFrame(data=d).replace({'': 0})
 
 def generateStateDataTable(sheets):
     df = getData(sheets,index=6)

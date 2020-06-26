@@ -188,8 +188,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="row">
+
+                        <div class="row mb-4">
                             <div class="col-xl-6">
                                 <div class="card mb-6">
                                     <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
@@ -203,7 +203,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        
+                        <div class="row mb-4">
                             <div class="col-xl-6">
                                 <div class="card mb-6">
                                     <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Casos por Idade</div>
@@ -216,11 +217,16 @@
                                     <div class="pizza d-flex">
                                         <div class="pizza-chart" id="chartdivsexocasos" dados="{{ data_sexo_casos }}" ></div>
                                         <div class="pizza-chart" id="chartdivsexoobitos" dados="{{ data_sexo_obitos }}"></div>
-                                    <div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="card mb-4">
+                            <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Comorbidades no Piauí</div>
+                            <div class="comorbidity-chart" id="chartdivcomorbidades" dados="{{ data_comorbidades }}"></div>
+                        </div>
                     </div>
+                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
@@ -244,6 +250,7 @@
         <script src="https://www.amcharts.com/lib/4/charts.js"></script>
         <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
         <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+        <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'assets/demo/datatables-demo.js' %}"></script>

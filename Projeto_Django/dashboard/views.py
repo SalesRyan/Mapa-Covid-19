@@ -46,6 +46,13 @@ def site_view(request):
             'ocupadosRespiradores':obj.ocupados_respiradores/obj.capacidade_respiradores,
         } for obj in leitos]
     }
+
+    data_comorbidades = {
+        'data': [{
+            'name':obj.nome,
+            'value':obj.quantidade,
+        } for obj in comorbidades]
+    }
     
     data_sexo_casos = {
         'data' : [{
@@ -91,6 +98,7 @@ def site_view(request):
         'data_sexo_casos':json.dumps(data_sexo_casos),
         'data_sexo_obitos':json.dumps(data_sexo_obitos),
         'data_casos_cidade': json.dumps(data_casos_cidades),
+        'data_comorbidades': json.dumps(data_comorbidades),
         'leitos': leitos,
         'data_leitos': json.dumps(data_leitos),
         'casos_sexo': casos_sexo,

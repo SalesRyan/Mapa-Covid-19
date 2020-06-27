@@ -88,10 +88,13 @@ def atualizarComorbidades(d):
 def verification():
     dfs = check()
     if not True in map(lambda df : df.empty, dfs.values()):
-        if atualizarDataUpdate(dfs['Data'].values):
-            atualizarDadosEstado(dfs['DadosEstado'].values)
-            atualizarCasosCidade(dfs['CasosCidade'].values)
-            atualizarLeitos(dfs['Leitos'].values)
-            atualizarCasosSexo(dfs['CasosSexo'].values)
-            atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
-            atualizarComorbidades(dfs['Comorbidades'].values)
+        try:
+            if atualizarDataUpdate(dfs['Data'].values):
+                atualizarDadosEstado(dfs['DadosEstado'].values)
+                atualizarCasosCidade(dfs['CasosCidade'].values)
+                atualizarLeitos(dfs['Leitos'].values)
+                atualizarCasosSexo(dfs['CasosSexo'].values)
+                atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
+                atualizarComorbidades(dfs['Comorbidades'].values)
+        except Exception as e:
+            mail('Exception on atualizar.verification', str(e))

@@ -50,10 +50,23 @@ def generateInternedDataTable(sheets):
         'Altas':df['Altas'].to_list()
     }
     return pd.DataFrame(data=d).replace({'': 0})
-
+'''
 def generateCityDataTable(sheets):
     df = getData(sheets,index=8)
 
+    d = {
+        'Município':df['Município'].to_list(),
+        'Confirmados':df['Confirmados'].to_list(),
+        'Óbitos':df['Óbitos'].to_list(),
+        'Incidência':df['Incidência'].to_list(),
+        'CEP':df['CEP'].to_list()
+    }
+
+    return pd.DataFrame(data=d).replace({'': 0})
+'''
+def generateCityDataTable(sheets):
+    df = getData(sheets,index=8)
+    df = df[df['Município']!='PIAUÍ']
     d = {
         'Município':df['Município'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -82,9 +95,19 @@ def generateComorbidityTable(sheets):
         'Qtde':df['Qtde'].to_list(),
     }
     return pd.DataFrame(data=d).replace({'': 0})
-
+'''
 def generateAgeRangeTable(sheets):
     df = getData(sheets,index=4)
+    d = {
+        'Faixa Etária':df['Faixa Etária'].to_list(),
+        'Confirmados':df['Confirmados'].to_list(),
+        'Óbitos':df['Óbitos'].to_list()
+    }
+    return pd.DataFrame(data=d).replace({'': 0})
+'''
+def generateAgeRangeTable(sheets):
+    df = getData(sheets,index=4)
+    df = df[df['Faixa Etária']!='TOTAL']
     d = {
         'Faixa Etária':df['Faixa Etária'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),

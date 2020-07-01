@@ -2,6 +2,11 @@
 # coding: utf-8
 
 #models
+from pykml.factory import KML_ElementMaker as KML
+from pykml import parser
+from unidecode import unidecode
+from os import path
+from lxml import etree
 
 from datetime import datetime
 from dashboard.models import *
@@ -12,7 +17,27 @@ from warnings import filterwarnings
 from scripts.Funcoes import *
 filterwarnings("ignore")
 
+arq = open('scripts/arquivos/doc.kml', 'rb').read()
+kml = parser.fromstring(arq)
+
+dataset = [CasosCidade.objects.create(
+    nome=unidecode(str(placemark.name)),
+    coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).strip(),
+    ).save() for placemark in kml.Document.Folder.Placemark]
+
+print('povoando casosCidade')
 sheets = authentic()
+print(len(generateCityDataTable(sheets).values))
+dataset = [CasosCidade.objects.update_or_create(
+    nome=d[0],
+    defaults = {
+        'confirmados':d[1], 
+        'obitos':d[2],
+        'incidencia':str(d[3]).replace(',', '.'),
+        'cep':d[4],
+    }
+    ) for d in generateCityDataTable(sheets).values]
+exit(-1)
 
 print("Povoando a data de atualização")
 dataset = dataset = [DataAtualizacao.objects.create(
@@ -33,15 +58,6 @@ dataset = [Leitos.objects.create(
     altas=d[9],
     ).save() for d in generateInternedDataTable(sheets).values]
 
-print('povoando casosCidade')
-print(len(generateCityDataTable(sheets).values))
-dataset = [CasosCidade.objects.create(
-    nome=d[0],
-    confirmados=d[1], 
-    obitos=d[2],
-    incidencia=str(d[3]).replace(',', '.'),
-    cep=d[4],
-    ).save() for d in generateCityDataTable(sheets).values]
     
 print('povoando DadosEstado')
 dataset = [DadosEstado.objects.create(

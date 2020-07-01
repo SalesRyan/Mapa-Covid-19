@@ -12,12 +12,11 @@ class DadosEstado(AuditModel):
 
 class CasosCidade(AuditModel):
     nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True, unique=True)
-    confirmados = models.IntegerField("Confirmados",null=True, blank=True)
-    obitos = models.IntegerField("Obitos",null=True, blank=True)
-    incidencia = models.FloatField("Incidencia", null=True, blank=True)
+    confirmados = models.IntegerField("Confirmados",null=True, blank=True, default=0)
+    obitos = models.IntegerField("Obitos",null=True, blank=True, default=0)
+    incidencia = models.FloatField("Incidencia", null=True, blank=True, default=0)
     cep = models.CharField("CEP", max_length=9,null=True, blank=True)
-    # latitude = models.CharField("Latitude", max_length=45,null=True, blank=True)
-    # longitude = models.CharField("Longitude", max_length=45,null=True, blank=True)
+    coordenadas = models.TextField("Coordenadas")
 
     def __str__(self):
         return self.nome
@@ -56,3 +55,4 @@ class Comorbidades(AuditModel):
 
     def __str__(self):
         return self.nome
+

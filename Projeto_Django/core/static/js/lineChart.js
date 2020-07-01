@@ -119,7 +119,6 @@ $(function graficosLinhaLeitos() {
     dateAxis.keepSelection = true;
 })
 
-
 $(function graficosPizza() {
 
     let ctx = document.getElementById('chartdivsexocasos')
@@ -168,7 +167,6 @@ $(function graficosPizza() {
     chart.legend.marginBottom = 20;
 
 })
-
 
 $(function graficosPizzaObitos() {
 

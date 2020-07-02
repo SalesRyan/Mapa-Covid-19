@@ -37,7 +37,6 @@ dataset = [CasosCidade.objects.update_or_create(
         'cep':d[4],
     }
     ) for d in generateCityDataTable(sheets).values]
-exit(-1)
 
 print("Povoando a data de atualização")
 dataset = dataset = [DataAtualizacao.objects.create(

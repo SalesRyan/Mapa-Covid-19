@@ -5,6 +5,8 @@ from django.core.paginator import Paginator,InvalidPage, EmptyPage
 import json
 # Create your views here.
 
+
+
 def site_view(request):
     env = os.environ
     GOOGLE_API_KEY = env.get('GOOGLE_API_KEY')
@@ -75,6 +77,22 @@ def site_view(request):
         } for obj in casos_faixa_etaria]
     }
 
+    def prepareJson(objeto):
+        return {
+            "nome": objeto.nome,
+            "obitos": objeto.obitos,
+            "confirmados": objeto.confirmados,
+            "incidencia": objeto.incidencia,
+            "coordenadas": [{
+                "lng":float(coordenadas.split(',')[0]),
+                "lat":float(coordenadas.split(',')[1])
+            }  for coordenadas in objeto.coordenadas.split(' ')]
+        }
+    
+    data_mapa = {
+        'data': [prepareJson(obj) for obj in casos_cidade]
+    }
+        
     context = {
         'google_api_key': GOOGLE_API_KEY,
         'data_atualizacao': data_atualizacao,
@@ -89,6 +107,7 @@ def site_view(request):
         'data_leitos': json.dumps(data_leitos),
         'data_comorbidades': json.dumps(data_comorbidades),
         'casos_cidade': casos_cidade,
+        'data_mapa': json.dumps(data_mapa),
     }
 
     return render(request, 'dashboard/index.html', context)

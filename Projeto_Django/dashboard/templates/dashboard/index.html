@@ -85,10 +85,10 @@
                         </div>
                         
                         <div class="row d-flex d-flex-align-items-stretch">
-                            <div class="col-xl-6 mb-4" id="map-container">
+                            <div class="col-xl-6 mb-4" id="map-container" >
                                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
-                                        <div id="map" class="rounded pl-0"></div>
+                                        <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
                                     </div>
                                 </div>
                             </div>
@@ -191,16 +191,56 @@
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'assets/demo/datatables-demo.js' %}"></script>
         <script src="{% static 'js/lineChart.js' %}"></script>
-
         <script>
-            var map;
             function initMap() {
+                var map;
                 map = new google.maps.Map(document.querySelector('div#map'), {
                     center: { lat: -7.0364390, lng: -42.822612 },
                     zoom: 6.1
                 });
+                let infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
+
+                poligono(infowindow,map)
+                
+            }
+            function criaPoligono(path, cor) {
+                var cidades_poligono = new google.maps.Polygon({
+                    paths: path,
+                    strokeColor: cor,
+                    strokeOpacity: 0.8,
+                    strokeWeight: 3,
+                    fillColor: cor,
+                    fillOpacity: 0.35
+                });
+                return cidades_poligono
+            }
+
+            function poligono(infowindow,mapa) {
+                // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
+                google.maps.event.addListener(mapa, 'click', function () {
+                    infowindow.close();
+                });
+                let ctx = document.getElementById('map')
+                let value = ctx.getAttribute('dados')
+                let data = JSON.parse(value).data
+    
+                data.forEach(element => {
+                    cidades_poligono = criaPoligono(element.coordenadas,"#f14666")
+                    cidades_poligono.setMap(mapa);
+                    
+                    // Evento para exibir a infowindow com o nome da UBS e a quantidade cada um dos tipos de notificações
+                    cidades_poligono.addListener('click', function (event) {
+                        var contentString = '<div id="content">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
+                            String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
+                            "Incidência: " + String(element.incidencia) + '</div>';
+                        infowindow.setContent(contentString);
+                        infowindow.setPosition(event.latLng);
+                        infowindow.open(mapa);
+                    });
+                });
             }
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap" async defer></script>
+        {% comment %} <script src="{% static 'js/map.js' %}"></script> {% endcomment %}
     </body>
 </html>

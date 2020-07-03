@@ -220,7 +220,6 @@ $(function graficosBarrasFaixaEtaria() {
     let ctx = document.getElementById('chartdivfaixaetaria')
     let value = ctx.getAttribute('dados')
     let data = JSON.parse(value).data
-    console.log(data)
     
     // Themes begin
     am4core.useTheme(am4themes_animated);
@@ -306,7 +305,6 @@ $(function graficosPessoaComordidades() {
     let ctx = document.getElementById('chartdivcomorbidades')
     let value = ctx.getAttribute('dados')
     let data = JSON.parse(value).data
-    console.log(data)
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end

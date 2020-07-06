@@ -3,6 +3,7 @@ from dashboard.models import *
 import pandas as pd
 from datetime import datetime
 from scripts.email import mail
+from unidecode import unidecode
 """ 
 'Leitos':generateInternedDataTableCheck(sheets),
 'CasosCidade':generateCityDataTableCheck(sheets),
@@ -33,9 +34,9 @@ def atualizarDadosEstado(d):
 def atualizarCasosCidade(d):
     for line in d:
         CasosCidade.objects.update_or_create(
-            nome=line[0],
-            cep=line[4],
+            nome=unidecode(str(line[0])),
             defaults = {
+                'cep':line[4],
                 'confirmados':line[1],
                 'obitos':line[2],
                 'incidencia':str(line[3]).replace(',','.'),

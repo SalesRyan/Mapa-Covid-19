@@ -35,7 +35,7 @@ def generateDataUpdateTable(sheets):
     
 def generateInternedDataTable(sheets):
     
-    df = getData(sheets,index=26)
+    df = getData(sheets,index=27)
     
     d = {
         'Dias':df['Dias'].to_list(),
@@ -65,7 +65,7 @@ def generateCityDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 '''
 def generateCityDataTable(sheets):
-    df = getData(sheets,index=8)
+    df = getData(sheets,index=6)
     df = df[df['Município']!='PIAUÍ']
     d = {
         'Município':df['Município'].to_list(),
@@ -78,7 +78,7 @@ def generateCityDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateStateDataTable(sheets):
-    df = getData(sheets,index=6)
+    df = getData(sheets,index=8)
 
     d = {
         'Dias':df['Dias'].to_list(),

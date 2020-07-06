@@ -3,6 +3,7 @@ import os
 from .models import *
 from django.core.paginator import Paginator,InvalidPage, EmptyPage
 import json
+from django.db.models import Max
 # Create your views here.
 
 
@@ -76,13 +77,15 @@ def site_view(request):
             'obitos':obj.obitos*-1,
         } for obj in casos_faixa_etaria]
     }
-
+    referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
+   
     def prepareJson(objeto):
         return {
             "nome": objeto.nome,
             "obitos": objeto.obitos,
             "confirmados": objeto.confirmados,
             "incidencia": objeto.incidencia,
+            "classe": int(objeto.incidencia*10/(2*referencia)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),
                 "lat":float(coordenadas.split(',')[1])

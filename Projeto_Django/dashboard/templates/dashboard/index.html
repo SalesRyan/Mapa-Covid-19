@@ -469,9 +469,26 @@
                 let ctx = document.getElementById('map')
                 let value = ctx.getAttribute('dados')
                 let data = JSON.parse(value).data
-    
+                /*let dicionario = {
+                    0:'rgb(252.189,182)',
+                    1:'rgb(248,106,90)',
+                    2:'rgb(240,34,11)',
+                    3:'rgb(149,20,6)',
+                    4:'rgb(80,11,3)',
+                    5:'rgb(80,11,3)',
+                }*/
+                let dicionario = {
+                    0:'#e85d04',
+                    1:'#dc2f02',
+                    2:'#9d0208',
+                    3:'#6a040f',
+                    4:'#370617',
+                    5:'#370617',
+                }
+                console.log(data.map((element) => element.classe))
+                
                 data.forEach(element => {
-                    cidades_poligono = criaPoligono(element.coordenadas,"#f14666")
+                    cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
                     cidades_poligono.setMap(mapa);
                     
                     // Evento para exibir a infowindow com o nome da UBS e a quantidade cada um dos tipos de notificações

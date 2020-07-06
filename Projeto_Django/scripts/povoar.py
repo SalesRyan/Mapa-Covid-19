@@ -17,6 +17,7 @@ from warnings import filterwarnings
 from scripts.Funcoes import *
 
 filterwarnings("ignore")
+sheets = authentic()
 
 arq = open('scripts/arquivos/doc.kml', 'rb').read()
 kml = parser.fromstring(arq)
@@ -27,7 +28,6 @@ dataset = [CasosCidade.objects.create(
     ).save() for placemark in kml.Document.Folder.Placemark]
 
 print('povoando casosCidade')
-sheets = authentic()
 print(len(generateCityDataTable(sheets).values))
 dataset = [CasosCidade.objects.update_or_create(
     nome=d[0],

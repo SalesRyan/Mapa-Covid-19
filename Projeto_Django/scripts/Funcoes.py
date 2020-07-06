@@ -35,7 +35,7 @@ def generateDataUpdateTable(sheets):
     
 def generateInternedDataTable(sheets):
     
-    df = getData(sheets,index=24)
+    df = getData(sheets,index=26)
     
     d = {
         'Dias':df['Dias'].to_list(),

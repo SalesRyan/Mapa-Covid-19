@@ -2,6 +2,7 @@ from scripts.Verificar import check
 from dashboard.models import *
 import pandas as pd
 from datetime import datetime
+from scripts.email import mail
 """ 
 'Leitos':generateInternedDataTableCheck(sheets),
 'CasosCidade':generateCityDataTableCheck(sheets),

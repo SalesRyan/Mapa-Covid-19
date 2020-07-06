@@ -12,7 +12,7 @@ def site_view(request):
     env = os.environ
     GOOGLE_API_KEY = env.get('GOOGLE_API_KEY')
 
-    data_atualizacao = DataAtualizacao.objects.all().last()
+    data_atualizacao = DataAtualizacao.objects.last()
     dados_estado = DadosEstado.objects.all()
     casos_cidade = CasosCidade.objects.all()
     leitos = Leitos.objects.all()

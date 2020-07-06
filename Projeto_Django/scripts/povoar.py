@@ -4,7 +4,7 @@
 #models
 from pykml.factory import KML_ElementMaker as KML
 from pykml import parser
-from unidecode import unidecode
+from unidecode import unidecoder
 from os import path
 from lxml import etree
 
@@ -15,6 +15,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from warnings import filterwarnings
 from scripts.Funcoes import *
+
 filterwarnings("ignore")
 
 arq = open('scripts/arquivos/doc.kml', 'rb').read()
@@ -35,8 +36,7 @@ dataset = [CasosCidade.objects.update_or_create(
         'obitos':d[2],
         'incidencia':str(d[3]).replace(',', '.'),
         'cep':d[4],
-    }
-    ) for d in generateCityDataTable(sheets).values]
+    }) for d in generateCityDataTable(sheets).values]
 
 print("Povoando a data de atualização")
 dataset = dataset = [DataAtualizacao.objects.create(

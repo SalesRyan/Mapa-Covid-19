@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'core',
-    'dashboard'  
+    'dashboard',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'mapa_covid.urls'
@@ -135,3 +137,9 @@ EMAIL_HOST = env.get("EMAIL_HOST")
 EMAIL_HOST_USER = env.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = env.get("EMAIL_PORT")
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]

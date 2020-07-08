@@ -6,6 +6,13 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 
 
+
+def CheckValue(df,column): #Função para salvar a coluna caso o valor esteja vazio
+    indexs = list(df[df[column]==''].index)
+    if indexs:
+        for index in indexs:
+            df[column][index] = df[column][index-1]
+
 def authentic():
     scope = ["https://spreadsheets.google.com/feeds",
              "https://www.googleapis.com/auth/spreadsheets",
@@ -49,24 +56,17 @@ def generateInternedDataTable(sheets):
         'Internados Leitos Respiradores':df['Internados Leitos Respiradores'].to_list(),
         'Altas':df['Altas'].to_list()
     }
+    CheckValue(df,'Capacidade Leitos Clínicos')
+    CheckValue(df,'Capacidade UTI')
+    CheckValue(df,'Capacidade LE')
+    CheckValue(df,'Capacidade Leitos Respiradores')
+    
     return pd.DataFrame(data=d).replace({'': 0})
-'''
-def generateCityDataTable(sheets):
-    df = getData(sheets,index=8)
 
-    d = {
-        'Município':df['Município'].to_list(),
-        'Confirmados':df['Confirmados'].to_list(),
-        'Óbitos':df['Óbitos'].to_list(),
-        'Incidência':df['Incidência'].to_list(),
-        'CEP':df['CEP'].to_list()
-    }
-
-    return pd.DataFrame(data=d).replace({'': 0})
-'''
 def generateCityDataTable(sheets):
     df = getData(sheets,index=6)
     df = df[df['Município']!='PIAUÍ']
+    df = df[df['Município']!='']
     d = {
         'Município':df['Município'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -85,6 +85,7 @@ def generateStateDataTable(sheets):
         'Confirmados':df['Confirmados'].to_list(),
         'Óbitos':df['Óbitos'].to_list(),
     }
+
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateComorbidityTable(sheets):
@@ -95,16 +96,7 @@ def generateComorbidityTable(sheets):
         'Qtde':df['Qtde'].to_list(),
     }
     return pd.DataFrame(data=d).replace({'': 0})
-'''
-def generateAgeRangeTable(sheets):
-    df = getData(sheets,index=4)
-    d = {
-        'Faixa Etária':df['Faixa Etária'].to_list(),
-        'Confirmados':df['Confirmados'].to_list(),
-        'Óbitos':df['Óbitos'].to_list()
-    }
-    return pd.DataFrame(data=d).replace({'': 0})
-'''
+
 def generateAgeRangeTable(sheets):
     df = getData(sheets,index=4)
     df = df[df['Faixa Etária']!='TOTAL']

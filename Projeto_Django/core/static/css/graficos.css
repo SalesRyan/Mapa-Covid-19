@@ -33,3 +33,20 @@ div.comorbidity-chart {
     width: 100%;
     height: 600px;
 }
+
+.green-background {
+    background-color: #67ad45;
+}
+
+.yellow-background {
+    background-color: #f8cd3c;
+}
+
+.red-background {
+    background-color: #ff0000;
+}
+
+.blue-background {
+    background-color: #008bbf;
+}
+

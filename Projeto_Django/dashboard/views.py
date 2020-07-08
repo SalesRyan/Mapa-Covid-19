@@ -135,7 +135,6 @@ def site_view(request):
         'data_mapa': json.dumps(data_mapa),
         'ocupacao':str(round(taxa_ocupacao,2))+"%",
         'altas':leitos.last().altas,
-
     }
 
     return render(request, 'dashboard/index.html', context)

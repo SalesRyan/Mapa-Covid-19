@@ -3,7 +3,7 @@ import os
 from .models import *
 from django.core.paginator import Paginator,InvalidPage, EmptyPage
 import json
-from django.db.models import Max
+from django.db.models import Max,Sum
 # Create your views here.
 
 
@@ -74,7 +74,7 @@ def site_view(request):
         'data': [{
             'faixaEtaria':obj.faixa_etaria,
             'confirmados':obj.confirmados,
-            'obitos':obj.obitos*-1,
+            'obitos':obj.obitos,
         } for obj in casos_faixa_etaria]
     }
     referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
@@ -95,6 +95,28 @@ def site_view(request):
     data_mapa = {
         'data': [prepareJson(obj) for obj in casos_cidade]
     }
+
+    sum_object = leitos.aggregate(Sum('capacidade_clinicos'),
+        Sum('capacidade_uti'),
+        Sum('capacidade_estabilizacao'),
+        Sum('capacidade_respiradores'),
+        Sum('ocupados_clinicos'),
+        Sum('ocupados_uti'),
+        Sum('ocupados_estabilizacao'),
+        Sum('ocupados_respiradores')
+    )
+
+    capacidade = sum_object['capacidade_clinicos__sum']
+    capacidade += sum_object['capacidade_uti__sum']
+    capacidade += sum_object['capacidade_estabilizacao__sum']
+    capacidade += sum_object['capacidade_respiradores__sum']
+    
+    ocupacao = sum_object['ocupados_clinicos__sum']
+    ocupacao += sum_object['ocupados_uti__sum']
+    ocupacao += sum_object['ocupados_estabilizacao__sum']
+    ocupacao += sum_object['ocupados_respiradores__sum']
+    
+    taxa_ocupacao = (ocupacao*100)/capacidade
         
     context = {
         'google_api_key': GOOGLE_API_KEY,
@@ -111,6 +133,9 @@ def site_view(request):
         'data_comorbidades': json.dumps(data_comorbidades),
         'casos_cidade': casos_cidade,
         'data_mapa': json.dumps(data_mapa),
+        'ocupacao':str(round(taxa_ocupacao,2))+"%",
+        'altas':leitos.last().altas,
+
     }
 
     return render(request, 'dashboard/index.html', context)

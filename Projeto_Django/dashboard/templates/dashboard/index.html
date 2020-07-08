@@ -27,8 +27,8 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="#map">Mapa</a>
-                    <a class="nav-item nav-link" href="#">Tabela</a>
-                    <a class="nav-item nav-link" href="#">Gráficos</a>
+                    <a class="nav-item nav-link" href="#tabela">Tabela</a>
+                    <a class="nav-item nav-link" href="#graficos">Gráficos</a>
                 </div>
             </div>  
         </nav>
@@ -43,11 +43,11 @@
                         </h6>
                         <div class="row flex d-flex-align-items-stretch">
                             <div class="col-xl-3 col-md-6 flex-shrink-0">
-                                <div class="card bg-success text-white mb-4 rounded card-hover">
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Confirmados</h1>
+                                <div class="card text-white mb-4 rounded card-hover" style="background-color: rgba(248,205,60,.8) !important;">
+                                    <div class="card-body" style="background-color: rgba(248,205,60,.8) !important;">
+                                        <h2>Confirmados</h1>
                                     </div>
-                                    <div class="card-footer border-0 bg-success text-xl-left">
+                                    <div class="card-footer border-0 text-xl-left" style="background-color: rgba(248,205,60,.8) !important;">
                                         <h2 class="font-weight-bold">{{ confirmados_atual }}</h2>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                             <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-danger text-white mb-4 rounded card-hover">
                                     <div class="card-body">
-                                        <h2>Novos</h1>
+                                        <h2>Óbitos</h1>
                                     </div>  
                                     <div class="card-footer border-0 bg-danger">
                                         <h2 class="font-weight-bold">{{ confirmados_novos }}</h2>
@@ -65,20 +65,20 @@
                             <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-primary text-white mb-4 rounded card-hover">
                                     <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Óbitos</h1>
+                                        <h2 style="word-wrap: normal !important;">Altas</h1>
                                     </div>
                                     <div class="card-footer border-0 bg-primary">
-                                        <h2 class="font-weight-bold">{{ obitos_atual }}</h2>
+                                        <h2 class="font-weight-bold">{{ altas }}</h2>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6 flex-shrink-0">
                                 <div class="card bg-warning text-white mb-4 rounded card-hover">
                                     <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Novos</h1>
+                                        <h2 style="word-wrap: normal !important;">Ocupação</h1>
                                     </div>
                                     <div class="card-footer border-0 bg-warning">
-                                        <h2 class="font-weight-bold">{{ obitos_novos }}</h2>
+                                        <h2 class="font-weight-bold">{{ ocupacao }}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 mb-4">
-                                <div class="card mb-4 container-fluid d-flex w-100 h-100" style="padding: 0;" >
+                                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0;" >
                                     <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
                                     <div class="card-body overflow-auto">
                                         <div class="table-responsive">
@@ -108,14 +108,12 @@
                                                 </thead>
                                                 <tbody>
                                                     {% for object in casos_cidade %}
-                                                        {% if object.nome != 'PIAUÍ' %}
-                                                            <tr>
-                                                                <td>{{ object.nome }}</td>
-                                                                <td>{{ object.confirmados }}</td>
-                                                                <td>{{ object.obitos }}</td>
-                                                                <td>{{ object.incidencia }}</td>
-                                                            </tr>
-                                                        {% endif %}
+                                                        <tr>
+                                                            <td>{{ object.nome }}</td>
+                                                            <td>{{ object.confirmados }}</td>
+                                                            <td>{{ object.obitos }}</td>
+                                                            <td>{{ object.incidencia }}</td>
+                                                        </tr>
                                                     {% endfor %}
                                                 </tbody>
                                             </table>
@@ -125,7 +123,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="graficos">
                             <div class="col-xl-6 mb-4">
                                 <div class="card mb-6">
                                     <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
@@ -181,8 +179,10 @@
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/scripts.js' %}"></script>
+        
         <script>
             function initMap() {
+                var antes = Date.now();
                 let styledMap = new google.maps.StyledMapType([
                     {
                         "elementType": "geometry",
@@ -444,10 +444,14 @@
                 });
                 map.mapTypes.set('styled_map', styledMap)
                 map.setMapTypeId('styled_map')
-                let infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
+                var infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
 
+                var duracao = Date.now() - antes;
+                console.log("initmapa:",duracao)
+                antes = Date.now();
                 poligono(infowindow,map)
-                
+                duracao = Date.now() - antes;
+                console.log("poligono:",duracao)
             }
             function criaPoligono(path, cor) {
                 var cidades_poligono = new google.maps.Polygon({
@@ -485,8 +489,6 @@
                     4:'#370617',
                     5:'#370617',
                 }
-                console.log(data.map((element) => element.classe))
-                
                 data.forEach(element => {
                     cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
                     cidades_poligono.setMap(mapa);
@@ -501,14 +503,31 @@
                         infowindow.open(mapa);
                     });
                 });
+               
             }
+            function addScripts(){
+                // let scripts = [
+                //     "https://www.amcharts.com/lib/4/core.js" ,
+                //     "https://www.amcharts.com/lib/4/charts.js",
+                //     "https://www.amcharts.com/lib/4/lang/pt_BR.js",
+                //     "https://www.amcharts.com/lib/4/themes/animated.js",
+                //     "https://www.amcharts.com/lib/4/themes/dataviz.js",
+                // ]
+                // scripts.forEach(elemento => {
+                //     var node = document.createElement("script")
+                //     node.src = elemento
+                //     document.body.appendChild(node)
+                // })
+            }
+
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap" async></script>
-        <script src="https://www.amcharts.com/lib/4/core.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
+        <script src="https://www.amcharts.com/lib/4/core.js" ></script>
         <script src="https://www.amcharts.com/lib/4/charts.js"></script>
         <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
-        <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+        {% comment %} <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script> {% endcomment %}
         <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
+
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/lineChart.js' %}"></script>

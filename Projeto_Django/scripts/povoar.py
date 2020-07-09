@@ -4,7 +4,7 @@
 #models
 from pykml.factory import KML_ElementMaker as KML
 from pykml import parser
-from unidecode import unidecoder
+from unidecode import unidecode
 from os import path
 from lxml import etree
 

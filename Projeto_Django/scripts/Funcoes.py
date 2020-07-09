@@ -12,6 +12,7 @@ def CheckValue(df,column): #Função para salvar a coluna caso o valor esteja va
     if indexs:
         for index in indexs:
             df[column][index] = df[column][index-1]
+    return df
 
 def authentic():
     scope = ["https://spreadsheets.google.com/feeds",
@@ -38,12 +39,18 @@ def generateDataUpdateTable(sheets):
     d = {
         'Data de Atualização':df['Data'].to_list(),
     }
+    
     return pd.DataFrame(data=d).replace({'': 0})
     
 def generateInternedDataTable(sheets):
     
     df = getData(sheets,index=27)
     
+    df = CheckValue(df,'Capacidade Leitos Clínicos')
+    df = CheckValue(df,'Capacidade UTI')
+    df = CheckValue(df,'Capacidade LE')
+    df = CheckValue(df,'Capacidade Leitos Respiradores')
+
     d = {
         'Dias':df['Dias'].to_list(),
         'Capacidade Leitos Clínicos':df['Capacidade Leitos Clínicos'].to_list(),
@@ -56,11 +63,7 @@ def generateInternedDataTable(sheets):
         'Internados Leitos Respiradores':df['Internados Leitos Respiradores'].to_list(),
         'Altas':df['Altas'].to_list()
     }
-    CheckValue(df,'Capacidade Leitos Clínicos')
-    CheckValue(df,'Capacidade UTI')
-    CheckValue(df,'Capacidade LE')
-    CheckValue(df,'Capacidade Leitos Respiradores')
-    
+
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateCityDataTable(sheets):

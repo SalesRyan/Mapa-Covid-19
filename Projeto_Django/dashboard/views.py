@@ -25,6 +25,12 @@ def site_view(request):
     obitos_novos = obitos_atual - dados_estado[size-2].obitos
     confirmados_atual = dados_estado.last().confirmados
     confirmados_novos = confirmados_atual - dados_estado[size-2].confirmados
+    
+    size_leitos = len(leitos)
+    last_leitos = leitos.last()
+    penult_leitos = leitos[size_leitos-2]
+    altas_atual = last_leitos.altas
+    altas_novos = altas_atual - penult_leitos.altas
 
     data_casos_cidades = {
         'data': [{
@@ -96,7 +102,7 @@ def site_view(request):
         'data': [prepareJson(obj) for obj in casos_cidade]
     }
 
-    sum_object = leitos.aggregate(Sum('capacidade_clinicos'),
+    """ sum_object = leitos.aggregate(Sum('capacidade_clinicos'),
         Sum('capacidade_uti'),
         Sum('capacidade_estabilizacao'),
         Sum('capacidade_respiradores'),
@@ -114,10 +120,42 @@ def site_view(request):
     ocupacao = sum_object['ocupados_clinicos__sum']
     ocupacao += sum_object['ocupados_uti__sum']
     ocupacao += sum_object['ocupados_estabilizacao__sum']
-    ocupacao += sum_object['ocupados_respiradores__sum']
+    ocupacao += sum_object['ocupados_respiradores__sum'] """
+
+    
+
+
+    ocupacao = last_leitos.ocupados_clinicos
+    ocupacao += last_leitos.ocupados_uti
+    ocupacao += last_leitos.ocupados_estabilizacao
+    ocupacao += last_leitos.ocupados_respiradores
+    
+    capacidade = last_leitos.capacidade_clinicos
+    capacidade += last_leitos.capacidade_uti
+    capacidade += last_leitos.capacidade_estabilizacao
+    capacidade += last_leitos.capacidade_respiradores
     
     taxa_ocupacao = (ocupacao*100)/capacidade
-        
+
+    ocupacao_penult = penult_leitos.ocupados_clinicos
+    ocupacao_penult += penult_leitos.ocupados_uti
+    ocupacao_penult += penult_leitos.ocupados_estabilizacao
+    ocupacao_penult += penult_leitos.ocupados_respiradores
+    
+    capacidade_penult = penult_leitos.capacidade_clinicos
+    capacidade_penult += penult_leitos.capacidade_uti
+    capacidade_penult += penult_leitos.capacidade_estabilizacao
+    capacidade_penult += penult_leitos.capacidade_respiradores
+
+    taxa_ocupacao_penult = (ocupacao_penult*100)/capacidade_penult
+    taxa_ocupacao_penult = taxa_ocupacao-taxa_ocupacao_penult
+
+    if taxa_ocupacao_penult>=0:
+        taxa_ocupacao_penult = '+'+str(round(taxa_ocupacao_penult,2))
+    else:
+        taxa_ocupacao_penult = str(round(taxa_ocupacao_penult,2))
+    
+
     context = {
         'google_api_key': GOOGLE_API_KEY,
         'data_atualizacao': data_atualizacao,
@@ -133,8 +171,10 @@ def site_view(request):
         'data_comorbidades': json.dumps(data_comorbidades),
         'casos_cidade': casos_cidade,
         'data_mapa': json.dumps(data_mapa),
-        'ocupacao':str(round(taxa_ocupacao,2))+"%",
-        'altas':leitos.last().altas,
+        'ocupacao_atual':str(round(taxa_ocupacao,2)),
+        'ocupacao_novos':taxa_ocupacao_penult,
+        'altas_atual':altas_atual,
+        'altas_novos':altas_novos,
     }
 
     return render(request, 'dashboard/index.html', context)

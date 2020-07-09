@@ -50,3 +50,14 @@ div.comorbidity-chart {
     background-color: #008bbf;
 }
 
+.tooltip-right{
+    position: absolute; 
+    right: 0px;
+    margin: 10px;
+}
+
+.new-right{
+    position: absolute; 
+    right: 0px;
+    margin-right: 10px;
+}

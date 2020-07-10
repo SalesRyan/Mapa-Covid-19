@@ -1,4 +1,4 @@
-from scripts.Funcoes import *
+from scripts.funcoes import *
 import pandas as pd
 from scripts.email import mail
 from warnings import filterwarnings
@@ -135,6 +135,8 @@ def generateGenderTableCheck(sheets):
             mail('Error on Verificar.generateGenderTableCheck', 'Cabeçalho Incorreto')
             return pd.DataFrame({'':[]})
     return var
+
+
 
 def check():
     sheets = authenticCheck()

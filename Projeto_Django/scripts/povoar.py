@@ -8,13 +8,14 @@ from unidecode import unidecode
 from os import path
 from lxml import etree
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from dashboard.models import *
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from warnings import filterwarnings
-from scripts.Funcoes import *
+from scripts.funcoes import *
+
 
 filterwarnings("ignore")
 sheets = authentic()
@@ -28,7 +29,7 @@ dataset = [CasosCidade.objects.create(
     ).save() for placemark in kml.Document.Folder.Placemark]
 
 print('povoando casosCidade')
-print(len(generateCityDataTable(sheets).values))
+df = generateCityDataTable(sheets)
 dataset = [CasosCidade.objects.update_or_create(
     nome=d[0],
     defaults = {
@@ -36,7 +37,7 @@ dataset = [CasosCidade.objects.update_or_create(
         'obitos':d[2],
         'incidencia':str(d[3]).replace(',', '.'),
         'cep':d[4],
-    }) for d in generateCityDataTable(sheets).values]
+    }) for d in df.values]
 
 print("Povoando a data de atualização")
 dataset = dataset = [DataAtualizacao.objects.create(
@@ -59,11 +60,12 @@ dataset = [Leitos.objects.create(
 
     
 print('povoando DadosEstado')
+df = generateStateDataTable(sheets)
 dataset = [DadosEstado.objects.create(
     data=datetime(2020, int(d[0].split('/')[1]), int(d[0].split('/')[0])),
     confirmados=d[1],
     obitos=d[2],
-    ).save() for d in generateStateDataTable(sheets).values] 
+    ).save() for d in df.values] 
 
 print('povoando Comorbidades')
 dataset = [Comorbidades.objects.create(
@@ -85,3 +87,16 @@ dataset = [CasosSexo.objects.create(
         casos_masculinos=d[2],
         casos_femininos=d[3],
     ).save() for d in generateGenderTable(sheets).values]
+
+pred_confirmados = PredFull(df,mode=14,name='Confirmados')
+pred_obitos = PredFull(df,mode=14,name='Óbitos')
+last_date = list(df['Dias'])[-1]
+last_date = datetime.strptime(last_date+'/2020','%d/%m/%Y')
+count = 1
+for conf, obt in zip(pred_confirmados, pred_obitos):
+    DadosEstadoPredicao.objects.create(
+        data=last_date+timedelta(days=count),
+        confirmados=conf,
+        obitos=obt
+    ).save()
+    count += 1

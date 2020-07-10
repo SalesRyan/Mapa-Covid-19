@@ -19,6 +19,7 @@ def site_view(request):
     casos_sexo = CasosSexo.objects.all().last()
     casos_faixa_etaria = CasosFaixaEtaria.objects.all()
     comorbidades = Comorbidades.objects.all()
+    dados_estado_pred = DadosEstadoPredicao.objects.all()
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos
@@ -39,6 +40,16 @@ def site_view(request):
             'obitos':obj.obitos,
         } for obj in dados_estado]
     }
+    data_casos_cidades['data'][-1]['lineDash'] = '2,2'
+    data_casos_cidades['data'][-1]['lineColor'] = '#ffff00'
+    for obj in dados_estado_pred:
+        data_casos_cidades['data'].append({
+            'date':str(obj.data.strftime('%d-%m-%Y')),
+            'confirmados':obj.confirmados,
+            'obitos':obj.obitos,
+            'additional': '(Projeção)',
+        })
+
     data_leitos = {
         'data': [{
             'date':str(obj.data.strftime('%d-%m-%Y')),

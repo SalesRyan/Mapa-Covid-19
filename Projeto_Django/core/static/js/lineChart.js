@@ -14,7 +14,15 @@ $(function graficosLinhaSituacao() {
     chart.dateFormatter.language = new am4core.Language();
     chart.dateFormatter.language.locale = am4lang_pt_BR;
     
-    // Add data
+    for(let item of data){
+        if(item.lineColor){
+            item.lineColor = am4core.color(item.lineColor) 
+        }
+        if(item.bulletColor){
+            item.bulletColor = am4core.color(item.bulletColor)
+        }
+    }
+
     chart.data = data;
     chart.dateFormatter.inputDateFormat = "dd-MM-yyyy";
     
@@ -30,13 +38,19 @@ $(function graficosLinhaSituacao() {
         series.dataFields.valueY = field;
         series.dataFields.dateX = "date";
         series.name = name;
-        series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('#')}";
+        series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('#')}[/] [#fff]{additional}[/]";
         series.strokeWidth = 2;
+        //series.propertyFields.stroke = "lineColor"
+        series.propertyFields.strokeDasharray = "lineDash";
+
         
         let bullet = series.bullets.push(new am4charts.CircleBullet());
-        bullet.circle.stroke = am4core.color("#fff");
-        bullet.circle.strokeWidth = 2;
-        
+        bullet.stroke = am4core.color("#fff");
+        bullet.strokeWidth = 1;
+        //bullet.propertyFields.stroke = "bulletColor"
+        //console.log(bullet)
+
+
         return series;
     }
     
@@ -48,6 +62,7 @@ $(function graficosLinhaSituacao() {
     chart.cursor = new am4charts.XYCursor();
     
     chart.scrollbarX = new am4charts.XYChartScrollbar();
+    chart.scrollbarX.series.push(series1);
     chart.scrollbarX.series.push(series2);
     chart.scrollbarX.parent = chart.bottomAxesContainer;
     

@@ -10,6 +10,11 @@ class DadosEstado(AuditModel):
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
+class DadosEstadoPredicao(AuditModel):
+    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True,unique=True )
+    confirmados = models.IntegerField("Confirmados", null=True, blank=True)
+    obitos = models.IntegerField("Obitos", null=True, blank=True)
+
 class CasosCidade(AuditModel):
     nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True, unique=True)
     confirmados = models.IntegerField("Confirmados",null=True, blank=True, default=0)

@@ -1,9 +1,10 @@
-from scripts.Verificar import check
+from scripts.verificar import check
 from dashboard.models import *
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from scripts.email import mail
 from unidecode import unidecode
+from scripts.funcoes import PredFull
 """ 
 'Leitos':generateInternedDataTableCheck(sheets),
 'CasosCidade':generateCityDataTableCheck(sheets),
@@ -87,6 +88,22 @@ def atualizarComorbidades(d):
             }
         )
 
+def atualizarPred(d):
+    pred_confirmados = PredFull(d,mode=14,name='Confirmados')
+    pred_obitos = PredFull(d,mode=14,name='Óbitos')
+    last_date = list(d['Dias'])[-1]
+    last_date = datetime.strptime(last_date+'/2020','%d/%m/%Y')
+    predicoes = DadosEstadoPredicao.objects.all()
+    count = 1
+    
+    for ob, conf, obt in zip(predicoes, pred_confirmados, pred_obitos):
+        ob.data = last_date+timedelta(days=count)
+        ob.confirmados = conf
+        ob.obitos = obt
+        ob.save()
+        count+=1
+    
+
 def verification():
     dfs = check()
     if not True in map(lambda df : df.empty, dfs.values()):
@@ -98,5 +115,6 @@ def verification():
                 atualizarCasosSexo(dfs['CasosSexo'].values)
                 atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
                 atualizarComorbidades(dfs['Comorbidades'].values)
+                atualizarPred(dfs['DadosEstado'])
         except Exception as e:
             mail('Exception on atualizar.verification', str(e))

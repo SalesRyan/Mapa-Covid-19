@@ -5,7 +5,12 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 
-
+import numpy as np
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from warnings import filterwarnings
+filterwarnings("ignore")
 
 def CheckValue(df,column): #Função para salvar a coluna caso o valor esteja vazio
     indexs = list(df[df[column]==''].index)
@@ -128,3 +133,35 @@ def getData(sheets,index=0):
     data = sheets.worksheets()[index].get_all_values()
     headers = data.pop(0)
     return pd.DataFrame(data, columns = headers)
+
+
+
+    # Predições
+
+def getcolumn(df,column,verbose=0): #Retorna o X e  y respectivamente
+    X, y = df[column].index.ravel().reshape(-1,1), df[column].values.ravel().reshape(-1,1)
+    if verbose:
+        print("column: {} CSV X shape: {} Max: {} Min: {}".format(column,X.shape,X.max(),X.min()))
+        print("column: {} CSV y shape: {} Max: {} Min: {}".format(column,y.shape,y.max(),y.min()))
+    return X,y
+
+def Pred(X_train, X_test, y_train, y_test=None):
+    
+    degree = 4
+
+    modelo_polinomial = make_pipeline(PolynomialFeatures(degree), Ridge())
+    modelo_polinomial.fit(X_train, y_train)
+
+    pred_values = modelo_polinomial.predict(X_test)
+    pred = np.int_(pred_values)
+
+    return pred
+    
+
+def PredFull(df,mode=30,name='Confirmados'):
+    X_train, y_train = getcolumn(df,name,verbose=0)
+    x_max = X_train.max()+1
+    X_test = np.asarray(range(x_max,x_max+mode)).reshape(-1,1)
+    pred = Pred(X_train, X_test, y_train)
+
+    return pred

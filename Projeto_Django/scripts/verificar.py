@@ -1,4 +1,4 @@
-from scripts.funcoes import *
+ from scripts.funcoes import *
 import pandas as pd
 from scripts.email import mail
 from warnings import filterwarnings

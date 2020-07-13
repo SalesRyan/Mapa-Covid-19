@@ -41,13 +41,13 @@ def site_view(request):
         } for obj in dados_estado]
     }
     data_casos_cidades['data'][-1]['lineDash'] = '2,2'
-    data_casos_cidades['data'][-1]['lineColor'] = '#ffff00'
     for obj in dados_estado_pred:
         data_casos_cidades['data'].append({
             'date':str(obj.data.strftime('%d-%m-%Y')),
             'confirmados':obj.confirmados,
             'obitos':obj.obitos,
             'additional': '(Projeção)',
+            'lineColor': '#DE3163',
         })
 
     data_leitos = {

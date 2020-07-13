@@ -40,12 +40,14 @@ $(function graficosLinhaSituacao() {
         series.name = name;
         series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('#')}[/] [#fff]{additional}[/]";
         series.strokeWidth = 2;
-        //series.propertyFields.stroke = "lineColor"
+        series.propertyFields.stroke = "lineColor"
         series.propertyFields.strokeDasharray = "lineDash";
-
+        
         
         let bullet = series.bullets.push(new am4charts.CircleBullet());
+        bullet.propertyFields.fill = "lineColor";
         bullet.stroke = am4core.color("#fff");
+        // bullet.fill = am4core.color("#ff0000");
         bullet.strokeWidth = 1;
         //bullet.propertyFields.stroke = "bulletColor"
         //console.log(bullet)

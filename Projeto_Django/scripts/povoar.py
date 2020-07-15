@@ -45,6 +45,7 @@ dataset = dataset = [DataAtualizacao.objects.create(
     ).save() for d in generateDataUpdateTable(sheets).values]
     
 print('povoando leitos')
+df_c = generateInternedDataTable(sheets)
 dataset = [Leitos.objects.create(
     data=datetime.strptime(d[0],'%d/%m/%Y'),
     capacidade_clinicos=d[1],
@@ -56,7 +57,7 @@ dataset = [Leitos.objects.create(
     capacidade_respiradores=d[7],
     ocupados_respiradores=d[8],
     altas=d[9],
-    ).save() for d in generateInternedDataTable(sheets).values]
+    ).save() for d in df_c.values]
 
     
 print('povoando DadosEstado')
@@ -100,3 +101,19 @@ for conf, obt in zip(pred_confirmados, pred_obitos):
         obitos=obt
     ).save()
     count += 1
+
+pred_leitos = pred_clinical(df_c,mode=3)
+# pred_obitos = PredFull(df,mode=14,name='Óbitos')
+last_date = list(df_c['Dias'])[-1]
+last_date = datetime.strptime(last_date,'%d/%m/%Y')
+count = 1
+for LC, UTI, LE, LR in zip(pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
+    LeitosPredicao.objects.create(
+        data=last_date+timedelta(days=count),
+        taxa_ocupados_clinicos=LC,
+        taxa_ocupados_uti=UTI,
+        taxa_ocupados_estabilizacao=LE,
+        taxa_ocupados_respiradores=LR
+    ).save()
+    count += 1
+

@@ -18,9 +18,6 @@ $(function graficosLinhaSituacao() {
         if(item.lineColor){
             item.lineColor = am4core.color(item.lineColor) 
         }
-        if(item.bulletColor){
-            item.bulletColor = am4core.color(item.bulletColor)
-        }
     }
 
     chart.data = data;
@@ -89,6 +86,12 @@ $(function graficosLinhaLeitos() {
     chart.dateFormatter.language = new am4core.Language();
     chart.dateFormatter.language.locale = am4lang_pt_BR;
     
+    for(let item of data){
+        if(item.lineColor){
+            item.lineColor = am4core.color(item.lineColor) 
+        }
+    }
+
     // Add data
     chart.data = data;
     chart.dateFormatter.inputDateFormat = "dd-MM-yyyy";
@@ -107,12 +110,17 @@ $(function graficosLinhaLeitos() {
         series.dataFields.valueY = field;
         series.dataFields.dateX = "date";
         series.name = name;
-        series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('.##%')}";
+        series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('.##%')}[/] [#fff]{additional}[/]";
         series.strokeWidth = 2;
+        series.propertyFields.stroke = "lineColor"
+        series.propertyFields.strokeDasharray = "lineDash";
+        
         
         let bullet = series.bullets.push(new am4charts.CircleBullet());
         bullet.circle.stroke = am4core.color("#fff");
-        bullet.circle.strokeWidth = 2;
+        bullet.circle.strokeWidth = 1;
+        bullet.propertyFields.fill = "lineColor";
+
         
         return series;
     }

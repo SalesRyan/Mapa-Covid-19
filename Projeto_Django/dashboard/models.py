@@ -22,7 +22,7 @@ class CasosCidade(AuditModel):
     incidencia = models.FloatField("Incidencia", null=True, blank=True, default=0)
     cep = models.CharField("CEP", max_length=9,null=True, blank=True)
     coordenadas = models.TextField("Coordenadas")
-
+    
     def __str__(self):
         return self.nome
     
@@ -39,6 +39,12 @@ class Leitos(AuditModel):
     ocupados_respiradores = models.IntegerField("Ocupados Respiradores", null=True, blank=True)
     altas = models.IntegerField("Altas", null=True, blank=True)
 
+class LeitosPredicao(AuditModel):
+    data = models.DateTimeField("Dia", null=True, blank=True)
+    taxa_ocupados_clinicos = models.FloatField("Ocupados Clinicos", null=True, blank=True)
+    taxa_ocupados_uti = models.FloatField("Ocupados UTI", null=True, blank=True)
+    taxa_ocupados_estabilizacao = models.FloatField("Ocupados Estabilizacao", null=True, blank=True)
+    taxa_ocupados_respiradores = models.FloatField("Ocupados Respiradores", null=True, blank=True)
 
 class CasosSexo(AuditModel):
     obitos_masculinos = models.IntegerField("Obitos Masculinos", null=True, blank=True)

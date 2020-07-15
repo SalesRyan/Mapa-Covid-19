@@ -20,6 +20,7 @@ def site_view(request):
     casos_faixa_etaria = CasosFaixaEtaria.objects.all()
     comorbidades = Comorbidades.objects.all()
     dados_estado_pred = DadosEstadoPredicao.objects.all()
+    dados_leitos_pred = LeitosPredicao.objects.all()
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos
@@ -47,7 +48,8 @@ def site_view(request):
             'confirmados':obj.confirmados,
             'obitos':obj.obitos,
             'additional': '(Projeção)',
-            'lineColor': '#DE3163',
+            'lineColor': '#f8cd3c',
+            'lineDash': '2,2',
         })
 
     data_leitos = {
@@ -63,6 +65,25 @@ def site_view(request):
             'ocupadosRespiradores':obj.ocupados_respiradores/obj.capacidade_respiradores,
         } for obj in leitos]
     }
+
+    data_leitos['data'][-1]['lineDash'] = '2,2'
+    for obj in dados_leitos_pred:
+        data_leitos['data'].append({
+            'date':str(obj.data.strftime('%d-%m-%Y')),
+            'capacidadeClinicos':1,
+            'ocupadosClinicos':obj.taxa_ocupados_clinicos/100,
+            'capacidadeUti':1,
+            'ocupadosUti':obj.taxa_ocupados_uti/100,
+            'capacidadeEstabilizacao':1,
+            'ocupadosEstabilizacao':obj.taxa_ocupados_estabilizacao/100,
+            'capacidadeRespiradores':1,
+            'ocupadosRespiradores':obj.taxa_ocupados_respiradores/100,
+            'additional': '(Projeção)',
+            'lineColor': '#f8cd3c',
+            'lineDash': '2,2',
+        })
+
+
     data_comorbidades = {
         'data': [{
             'name':obj.nome,

@@ -165,3 +165,48 @@ def PredFull(df,mode=30,name='Confirmados'):
     pred = Pred(X_train, X_test, y_train)
 
     return pred
+
+
+
+def pred_de(X_train,y_train,X_test):
+ 
+    degree = 2
+
+    modelo_polinomial = make_pipeline(PolynomialFeatures(degree), Ridge())
+    modelo_polinomial.fit(X_train, y_train)
+
+    pred_values = modelo_polinomial.predict(X_test)
+    pred = np.int_(pred_values)
+    return pred
+    
+
+def pred_clinical(csv,mode=7):
+
+    CapacidadeLC = np.int_(csv['Capacidade Leitos Clínicos'].values.reshape(-1,1))
+    InternadosLC = np.int_(csv['Internados Leitos Clínicos'].values.reshape(-1,1))
+
+    CapacidadeUTI = np.int_((csv['Capacidade UTI'].values.reshape(-1,1)))
+    InternadosUTI = np.int_((csv['Internados UTI'].values.reshape(-1,1)))
+
+    CapacidadeLE = np.int_((csv['Capacidade LE'].values.reshape(-1,1)))
+    InternadosLE = np.int_((csv['Internados Estabilização'].values.reshape(-1,1)))
+
+    CapacidadeLR = np.int_(csv['Capacidade Leitos Respiradores'].values.reshape(-1,1))
+    InternadosLR = np.int_(csv['Internados Leitos Respiradores'].values.reshape(-1,1))
+
+    index = np.asarray(csv['Dias'].index).reshape(-1,1)
+    print(InternadosLC)
+    LC = np.int_((InternadosLC/CapacidadeLC)*100)
+    UTI = np.int_((InternadosUTI/CapacidadeUTI)*100)
+    LE = np.int_((InternadosLE/CapacidadeLE)*100)
+    LR = np.int_((InternadosLR/CapacidadeLR)*100)
+
+    x_max = index.max()+1
+    X_test = np.asarray(range(x_max,x_max+mode)).reshape(-1,1)
+
+    p_LC = pred_de(index,LC,X_test)
+    p_UTI = pred_de(index,UTI,X_test)
+    p_LE = pred_de(index,LE,X_test)
+    p_LR = pred_de(index,LR,X_test)
+
+    return {'index':X_test,'LC':p_LC,'UTI':p_UTI,'LE':p_LE,'LR':p_LR}

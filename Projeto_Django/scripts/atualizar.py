@@ -102,6 +102,23 @@ def atualizarPred(d):
         ob.obitos = obt
         ob.save()
         count+=1
+
+def atualizarPredLeitos(d):
+    pred_leitos = pred_clinical(d,mode=3)
+    # pred_obitos = PredFull(df,mode=14,name='Óbitos')
+    last_date = list(d['Dias'])[-1]
+    last_date = datetime.strptime(last_date,'%d/%m/%Y')
+    count = 1
+    objetos = LeitosPredicao.objects.all()
+    for LC, UTI, LE, LR in zip(objs, pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
+        LeitosPredicao.objects.create(
+            data=last_date+timedelta(days=count),
+            taxa_ocupados_clinicos=LC,
+            taxa_ocupados_uti=UTI,
+            taxa_ocupados_estabilizacao=LE,
+            taxa_ocupados_respiradores=LR
+        ).save()
+        count += 1
     
 
 def verification():

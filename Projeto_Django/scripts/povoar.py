@@ -20,7 +20,7 @@ from scripts.funcoes import *
 filterwarnings("ignore")
 sheets = authentic()
 
-arq = open('scripts/arquivos/doc.kml', 'rb').read()
+arq = open('scripts/arquivos/doc.kml', 'rb').read() 
 kml = parser.fromstring(arq)
 
 dataset = [CasosCidade.objects.create(
@@ -40,7 +40,7 @@ dataset = [CasosCidade.objects.update_or_create(
     }) for d in df.values]
 
 print("Povoando a data de atualização")
-dataset = dataset = [DataAtualizacao.objects.create(
+dataset = [DataAtualizacao.objects.create(
     data=d[0]
     ).save() for d in generateDataUpdateTable(sheets).values]
     

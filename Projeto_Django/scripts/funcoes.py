@@ -195,7 +195,6 @@ def pred_clinical(csv,mode=7):
     InternadosLR = np.int_(csv['Internados Leitos Respiradores'].values.reshape(-1,1))
 
     index = np.asarray(csv['Dias'].index).reshape(-1,1)
-    print(InternadosLC)
     LC = np.int_((InternadosLC/CapacidadeLC)*100)
     UTI = np.int_((InternadosUTI/CapacidadeUTI)*100)
     LE = np.int_((InternadosLE/CapacidadeLE)*100)

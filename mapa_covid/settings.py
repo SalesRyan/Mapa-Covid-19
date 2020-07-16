@@ -33,7 +33,7 @@ from ast import literal_eval
 DEBUG = literal_eval(env.get("DEBUG"))
 
 ALLOWED_HOSTS = ['mapa-covid-19.herokuapp.com','localhost']
-default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+# default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 # Application definition
 
 INSTALLED_APPS = [

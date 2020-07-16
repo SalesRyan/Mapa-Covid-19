@@ -11,7 +11,7 @@ class DadosEstado(AuditModel):
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
 class DadosEstadoPredicao(AuditModel):
-    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True,unique=True )
+    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True)
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
@@ -28,7 +28,7 @@ class CasosCidade(AuditModel):
     
 
 class Leitos(AuditModel):
-    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False, unique=True)
+    data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False)
     capacidade_clinicos = models.IntegerField("Capacidade Clinicos", null=True, blank=True)
     ocupados_clinicos = models.IntegerField("Ocupados Clinicos", null=True, blank=True)
     capacidade_uti = models.IntegerField("Capacidade UTI", null=True, blank=True)

@@ -1,3 +1,6 @@
+import os
+import environ
+import json
 from datetime import datetime
 from dashboard.models import *
 
@@ -30,7 +33,13 @@ def authentic():
              "https://www.googleapis.com/auth/drive"]
     try:
 
-        creds = ServiceAccountCredentials.from_json_keyfile_name('scripts/creds.json', scope)
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        env_file = os.path.join(BASE_DIR, ".env")
+        environ.Env.read_env(env_file)
+        env = os.environ
+        JSON = env.get("JSON")
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(JSON), scope)
 
 
     except Exception as e:

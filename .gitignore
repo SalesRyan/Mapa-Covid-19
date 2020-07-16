@@ -10,6 +10,7 @@ aquivos_auxiliares/Sites/.ipynb_checkpoints
 ***/.ipynb_checkpoints/
 **/.ipynb_checkpoints/
 db.sqlite3
+db.sqlite3-journal
 scripts/creds.json
 
 #linux

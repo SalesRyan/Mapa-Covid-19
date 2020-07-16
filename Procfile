@@ -1,1 +1,1 @@
-web: gunicorn mapa_covid.wsgi
+web: gunicorn Projeto_Django/mapa_covid.wsgi

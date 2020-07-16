@@ -29,7 +29,8 @@ env = os.environ
 SECRET_KEY = env.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.get("DEBUG")
+from ast import literal_eval
+DEBUG = literal_eval(env.get("DEBUG"))
 
 ALLOWED_HOSTS = ['mapa-covid.herokuapp.com/','localhost']
 default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')

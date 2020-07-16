@@ -4,7 +4,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from scripts.email import mail
 from unidecode import unidecode
-from scripts.funcoes import PredFull
+from scripts.funcoes import PredFull, pred_clinical
+
 """ 
 'Leitos':generateInternedDataTableCheck(sheets),
 'CasosCidade':generateCityDataTableCheck(sheets),
@@ -94,8 +95,8 @@ def atualizarPred(d):
     last_date = list(d['Dias'])[-1]
     last_date = datetime.strptime(last_date+'/2020','%d/%m/%Y')
     predicoes = DadosEstadoPredicao.objects.all()
+
     count = 1
-    
     for ob, conf, obt in zip(predicoes, pred_confirmados, pred_obitos):
         ob.data = last_date+timedelta(days=count)
         ob.confirmados = conf
@@ -110,17 +111,15 @@ def atualizarPredLeitos(d):
     last_date = datetime.strptime(last_date,'%d/%m/%Y')
     count = 1
     objetos = LeitosPredicao.objects.all()
-    for LC, UTI, LE, LR in zip(objs, pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
-        LeitosPredicao.objects.create(
-            data=last_date+timedelta(days=count),
-            taxa_ocupados_clinicos=LC,
-            taxa_ocupados_uti=UTI,
-            taxa_ocupados_estabilizacao=LE,
-            taxa_ocupados_respiradores=LR
-        ).save()
+    for obj, LC, UTI, LE, LR in zip(objetos, pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
+        obj.data=last_date+timedelta(days=count),
+        obj.taxa_ocupados_clinicos=LC
+        obj.taxa_ocupados_uti=UTI
+        obj.taxa_ocupados_estabilizacao=LE
+        obj.taxa_ocupados_respiradores=LR
+        obj.save()
         count += 1
     
-
 def verification():
     dfs = check()
     if not True in map(lambda df : df.empty, dfs.values()):
@@ -133,5 +132,6 @@ def verification():
                 atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
                 atualizarComorbidades(dfs['Comorbidades'].values)
                 atualizarPred(dfs['DadosEstado'])
+                atualizarPredLeitos(dfs['Leitos'])
         except Exception as e:
             mail('Exception on atualizar.verification', str(e))

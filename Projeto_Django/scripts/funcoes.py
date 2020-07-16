@@ -17,6 +17,10 @@ def CheckValue(df,column): #Função para salvar a coluna caso o valor esteja va
     if indexs:
         for index in indexs:
             df[column][index] = df[column][index-1]
+    indexs = list(df[df[column]=='0'].index)
+    if indexs:
+        for index in indexs:
+            df[column][index] = df[column][index-1]
     return df
 
 def authentic():

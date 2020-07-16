@@ -1,16 +1,16 @@
 Download planilha/creds.json
-Projeto_Django/.env
-Projeto_Django/env/
-Projeto_Django/**/migrations/*
-Projeto_Django/**/__pycache__/*
-An�lise Explorat�ria/.ipynb_checkpoints
-Download planilha/.ipynb_checkpoints
-Predi��es/.ipynb_checkpoints
-Sites/.ipynb_checkpoints
+.env
+env/
+*/migrations/*
+*/__pycache__/*
+aquivos_auxiliares/An�lise Explorat�ria/.ipynb_checkpoints
+aquivos_auxiliares/Download planilha/.ipynb_checkpoints
+aquivos_auxiliares/Predi��es/.ipynb_checkpoints
+aquivos_auxiliares/Sites/.ipynb_checkpoints
+***/.ipynb_checkpoints/
 **/.ipynb_checkpoints/
-*/.ipynb_checkpoints/
-Projeto_Django/db.sqlite3
-Projeto_Django/scripts/creds.json
+db.sqlite3
+scripts/creds.json
 
 #linux
-Download\ Planilha/creds.json
+aquivos_auxiliares/Download\ Planilha/creds.json

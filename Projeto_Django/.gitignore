@@ -1,7 +1,0 @@
-.env
-env/
-**/migrations/*
-**/__pycache__/*
-db.sqlite3
-scripts/creds.json
-

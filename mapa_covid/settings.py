@@ -91,11 +91,11 @@ DATABASES = {
     # },'postgres_heroku': {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME_PRODUCAO'),
-            'USER': config('DB_USER_PRODUCAO'),
-            'PASSWORD': config('DB_PASSWORD_PRODUCAO'),
-            'HOST': config('DB_HOST_PRODUCAO'),
-            'PORT': config('DB_PORT_PRODUCAO'),
+            'NAME': env.get('DB_NAME_PRODUCAO'),
+            'USER': env.get('DB_USER_PRODUCAO'),
+            'PASSWORD': env.get('DB_PASSWORD_PRODUCAO'),
+            'HOST': env.get('DB_HOST_PRODUCAO'),
+            'PORT': env.get('DB_PORT_PRODUCAO'),
     },
 }
 

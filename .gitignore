@@ -12,6 +12,7 @@ aquivos_auxiliares/Sites/.ipynb_checkpoints
 db.sqlite3
 db.sqlite3-journal
 scripts/creds.json
+mapa_covid/settings_local.py
 
 #linux
 aquivos_auxiliares/Download\ Planilha/creds.json

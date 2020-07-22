@@ -4,6 +4,9 @@ from .models import *
 from django.core.paginator import Paginator,InvalidPage, EmptyPage
 import json
 from django.db.models import Max,Sum
+from scripts.funcoes import propDoen
+import pandas as pd
+
 # Create your views here.
 
 
@@ -154,9 +157,6 @@ def site_view(request):
     ocupacao += sum_object['ocupados_estabilizacao__sum']
     ocupacao += sum_object['ocupados_respiradores__sum'] """
 
-    
-
-
     ocupacao = last_leitos.ocupados_clinicos
     ocupacao += last_leitos.ocupados_uti
     ocupacao += last_leitos.ocupados_estabilizacao
@@ -187,6 +187,42 @@ def site_view(request):
     else:
         taxa_ocupacao_penult = str(round(taxa_ocupacao_penult,2))
     
+    dados_estado_list = list(dados_estado.values("confirmados", "obitos"))
+    confirmados = []
+    obitos = []
+
+    for dados_estado_dict in dados_estado_list:
+        confirmados.append(dados_estado_dict['confirmados'])
+        obitos.append(dados_estado_dict['obitos'])
+    dados_estado_dict = {
+        'confirmados':confirmados,
+        'obitos':obitos,
+    }
+    dados_estado_dict = pd.DataFrame.from_dict(dados_estado_dict)
+    
+    leitos_list = list(leitos.values("ocupados_clinicos", "ocupados_uti","ocupados_estabilizacao","ocupados_respiradores"))
+    
+    ocupados_clinicos = []
+    ocupados_uti = []
+    ocupados_estabilizacao = []
+    ocupados_respiradores = []
+
+    for leitos_dict in leitos_list:
+        ocupados_clinicos.append(leitos_dict['ocupados_clinicos'])
+        ocupados_uti.append(leitos_dict['ocupados_uti'])
+        ocupados_estabilizacao.append(leitos_dict['ocupados_estabilizacao'])
+        ocupados_respiradores.append(leitos_dict['ocupados_respiradores'])
+
+    leitos_dict = {
+        'ocupados_clinicos':ocupados_clinicos,
+        'ocupados_uti':ocupados_uti,
+        'ocupados_estabilizacao':ocupados_estabilizacao,
+        'ocupados_respiradores':ocupados_respiradores,
+    }
+    leitos_dict = pd.DataFrame.from_dict(leitos_dict)
+    
+    prop_doen = propDoen(leitos_dict, dados_estado_dict)
+    
 
     context = {
         'google_api_key': GOOGLE_API_KEY,
@@ -207,7 +243,8 @@ def site_view(request):
         'ocupacao_novos':taxa_ocupacao_penult,
         'altas_atual':altas_atual,
         'altas_novos':altas_novos,
+        'prop_doen':200,
     }
-
+    
     return render(request, 'dashboard/index.html', context)
 

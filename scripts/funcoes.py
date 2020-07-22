@@ -63,11 +63,14 @@ def generateDataUpdateTable(sheets):
 def generateInternedDataTable(sheets):
     
     df = getData(sheets,index=28)
-    
+    df = df[df.Dias!='']
+
     df = CheckValue(df,'Capacidade Leitos Clínicos')
     df = CheckValue(df,'Capacidade UTI')
     df = CheckValue(df,'Capacidade LE')
     df = CheckValue(df,'Capacidade Leitos Respiradores')
+
+    
 
     d = {
         'Dias':df['Dias'].to_list(),
@@ -222,3 +225,30 @@ def pred_clinical(csv,mode=7):
     p_LR = pred_de(index,LR,X_test)
 
     return {'index':X_test,'LC':p_LC,'UTI':p_UTI,'LE':p_LE,'LR':p_LR}
+
+
+def propDoen(dfL,dfC): 
+    confirmados = np.int_(dfC.confirmados.values[-14:])
+    
+    c_a = confirmados[7:]
+    c_o = confirmados[:7]
+
+    obitos = np.int_(dfC.obitos.values[-14:])
+    o_a = obitos[7:]
+    o_o = obitos[:7]
+
+    ilc = np.int_(dfL['ocupados_clinicos'])
+    iuti= np.int_(dfL['ocupados_uti'])
+    ile = np.int_(dfL['ocupados_estabilizacao'])
+    ilr = np.int_(dfL['ocupados_respiradores'])
+
+    n_i = ilc + iuti + ile+ ilr
+    n_i_a = n_i[7:]
+    n_i_o = n_i[:7]
+    
+    i = n_i_a.sum()/n_i_o.sum()
+    c = c_a.sum()/c_o.sum()
+    o = o_a.sum()/o_o.sum()
+    
+    indicePropagacaodoenca = ((c*4)+(i*4)+(o*2))/(4+4+2)
+    return indicePropagacaodoenca

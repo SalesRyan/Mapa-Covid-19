@@ -6,6 +6,8 @@ from scripts.email import mail
 from unidecode import unidecode
 from scripts.funcoes import PredFull, pred_clinical
 
+
+
 """ 
 'Leitos':generateInternedDataTableCheck(sheets),
 'CasosCidade':generateCityDataTableCheck(sheets),
@@ -93,7 +95,7 @@ def atualizarPred(d):
     pred_confirmados = PredFull(d,mode=14,name='Confirmados')
     pred_obitos = PredFull(d,mode=14,name='Óbitos')
     last_date = list(d['Dias'])[-1]
-    last_date = datetime.strptime(last_date+'/2020','%d/%m/%Y')
+    last_date = datetime.strptime(str(last_date)+'/2020','%d/%m/%Y')
     predicoes = DadosEstadoPredicao.objects.all()
 
     count = 1
@@ -108,11 +110,11 @@ def atualizarPredLeitos(d):
     pred_leitos = pred_clinical(d,mode=3)
     # pred_obitos = PredFull(df,mode=14,name='Óbitos')
     last_date = list(d['Dias'])[-1]
-    last_date = datetime.strptime(last_date,'%d/%m/%Y')
+    last_date = datetime.strptime(str(last_date),'%d/%m/%Y')
     count = 1
     objetos = LeitosPredicao.objects.all()
     for obj, LC, UTI, LE, LR in zip(objetos, pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
-        obj.data=last_date+timedelta(days=count),
+        obj.data=last_date+timedelta(days=count)
         obj.taxa_ocupados_clinicos=LC
         obj.taxa_ocupados_uti=UTI
         obj.taxa_ocupados_estabilizacao=LE

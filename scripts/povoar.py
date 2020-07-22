@@ -47,7 +47,7 @@ dataset = [DataAtualizacao.objects.create(
 print('povoando leitos')
 df_c = generateInternedDataTable(sheets)
 dataset = [Leitos.objects.create(
-    data=datetime.strptime(d[0],'%d/%m/%Y'),
+    data=datetime.strptime(str(d[0]),'%d/%m/%Y'),
     capacidade_clinicos=d[1],
     ocupados_clinicos=d[2],
     capacidade_uti=d[3],
@@ -105,7 +105,7 @@ for conf, obt in zip(pred_confirmados, pred_obitos):
 pred_leitos = pred_clinical(df_c,mode=3)
 # pred_obitos = PredFull(df,mode=14,name='Óbitos')
 last_date = list(df_c['Dias'])[-1]
-last_date = datetime.strptime(last_date,'%d/%m/%Y')
+last_date = datetime.strptime(str(last_date),'%d/%m/%Y')
 count = 1
 for LC, UTI, LE, LR in zip(pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
     LeitosPredicao.objects.create(

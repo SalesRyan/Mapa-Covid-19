@@ -15,6 +15,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from warnings import filterwarnings
 from scripts.funcoes import *
+from django.db.models import Sum
+
 
 
 filterwarnings("ignore")
@@ -23,10 +25,13 @@ sheets = authentic()
 arq = open('scripts/arquivos/doc.kml', 'rb').read() 
 kml = parser.fromstring(arq)
 
-dataset = [CasosCidade.objects.create(
+
+print('povoando casosCidade coordenadas')
+[CasosCidade.objects.create(
     nome=unidecode(str(placemark.name)),
     coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).strip(),
     ).save() for placemark in kml.Document.Folder.Placemark]
+
 
 print('povoando casosCidade')
 df = generateCityDataTable(sheets)
@@ -117,3 +122,27 @@ for LC, UTI, LE, LR in zip(pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['L
     ).save()
     count += 1
 
+arq_regiao = open('scripts/arquivos/doc_regiao.kml', 'rb').read() 
+kml_regiao = parser.fromstring(arq_regiao)
+
+print('povoando CasosRegioes coordenadas')
+dataset = [CasosRegioes.objects.create(
+    nome=unidecode(str(placemark.name)).upper(),
+    coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).replace(" ","").replace("\n", " "),
+    ).save() for placemark in kml_regiao.Document.Placemark]
+
+regioes = json.loads(open('scripts/arquivos/regioes.json', 'r').read())
+for key, value in regioes.items():
+    for cidade in value:
+        # print("aqui\n\n",CasosRegioes.objects.get(nome=unidecode(key).upper()))
+        CasosCidade.objects.update_or_create(
+            nome=cidade,
+            defaults={
+                'regiao': CasosRegioes.objects.get(nome=unidecode(key).upper()),
+            }
+        )
+
+for obj in CasosRegioes.objects.all():
+    obj.obitos = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('obitos'))['obitos__sum']
+    obj.confirmados = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('confirmados'))['confirmados__sum']
+    obj.save()

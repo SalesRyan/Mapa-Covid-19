@@ -24,6 +24,7 @@ def site_view(request):
     comorbidades = Comorbidades.objects.all()
     dados_estado_pred = DadosEstadoPredicao.objects.all()
     dados_leitos_pred = LeitosPredicao.objects.all()
+    casos_regioes = CasosRegioes.objects.all()
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos
@@ -132,9 +133,28 @@ def site_view(request):
                 "lat":float(coordenadas.split(',')[1])
             }  for coordenadas in objeto.coordenadas.split(' ')]
         }
+   
+    def prepareRegioesJson(objeto):
+        return {
+            "nome": objeto.nome,
+            "obitos": objeto.obitos,
+            "confirmados": objeto.confirmados,
+            # "incidencia": objeto.incidencia,
+            "incidencia": 1,
+            # "classe": int(objeto.incidencia*10/(2*referencia)),
+            "classe": 1,
+            "coordenadas": [{
+                "lng":float(coordenadas.split(',')[0]),
+                "lat":float(coordenadas.split(',')[1])
+            }  for coordenadas in objeto.coordenadas.split(' ')]
+        }
     
     data_mapa = {
         'data': [prepareJson(obj) for obj in casos_cidade]
+    }
+    
+    data_mapa_regioes = {
+        'data': [prepareRegioesJson(obj) for obj in casos_regioes]
     }
 
     """ sum_object = leitos.aggregate(Sum('capacidade_clinicos'),
@@ -223,6 +243,7 @@ def site_view(request):
     
     prop_doen = propDoen(leitos_dict, dados_estado_dict)
     
+    
 
     context = {
         'google_api_key': GOOGLE_API_KEY,
@@ -239,6 +260,7 @@ def site_view(request):
         'data_comorbidades': json.dumps(data_comorbidades),
         'casos_cidade': casos_cidade,
         'data_mapa': json.dumps(data_mapa),
+        'data_mapa_regioes': json.dumps(data_mapa_regioes),
         'ocupacao_atual':str(round(taxa_ocupacao,2)),
         'ocupacao_novos':taxa_ocupacao_penult,
         'altas_atual':altas_atual,

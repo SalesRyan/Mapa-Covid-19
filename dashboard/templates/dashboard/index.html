@@ -31,6 +31,8 @@
                     <a class="nav-item nav-link" href="#graficos">Gráficos</a>
                 </div>
             </div>  
+            <button onclick="alterMap('map-regioes')"> Região </button>
+            <button onclick="alterMap('map')"> Municipio </button>
         </nav>
 
         <div id="layoutSidenav">
@@ -118,7 +120,7 @@
                                         <h2 style="word-wrap: normal !important;">Propagação</h1>
                                     </div>
                                     <div class="card-footer border-0 blue-background d-flex">
-                                        <h2 class="font-weight-bold">{{ prop_doen }}%</h2> <h2 class="new-right font-weight-bold"> ({{ ocupacao_novos }}%)</h2>
+                                        <h2 class="font-weight-bold">{{ prop_doen }}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +136,7 @@
                                         <h2 style="word-wrap: normal !important;">Resp. de saúde</h1>
                                     </div>
                                     <div class="card-footer border-0 blue-background d-flex">
-                                        <h2 class="font-weight-bold">{{ ocupacao_atual }}%</h2> <h2 class="new-right font-weight-bold"> ({{ ocupacao_novos }}%)</h2>
+                                        <h2 class="font-weight-bold">{{ resp_saude }}%</h2>
                                     </div>
                                 </div>
                             </div>
@@ -142,19 +144,17 @@
                         
                         <div class="row d-flex d-flex-align-items-stretch">
                             <div class="col-xl-6 mb-4" id="map-container" >
+                                <div style="position: absolute;z-index: 80000; margin: 10px; height: 40px; border-radius: 2px;">
+                                    <button id='button-regioes' onclick="alterMap('map-regioes','button-municipios', 'button-regioes')" class="btn btn-primary text-white" style="border-radius: 2px; height: 100%;">Regiões</button> 
+                                    <button id='button-municipios' onclick="alterMap('map', 'button-regioes','button-municipios')" class="btn btn-primary text-white d-none" style="border-radius: 2px; height: 100%;">Municípios</button>
+                                </div>
                                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
                                         <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
+                                        <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="d-none"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 mb-4 d-none" id="map-container-regioes" >
-                                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
-                                    <div class="flex-grow-1 flex-shrink-0 pl-0" >
-                                        <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="rounded pl-0"></div>
-                                    </div>
-                                </div>
-                            </div> 
                             <div class="col-xl-6 mb-4">
                                 <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0;" >
                                     <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
@@ -256,7 +256,9 @@
 
                 map = new google.maps.Map(document.querySelector('div#map'), {
                     center: { lat: -7.0364390, lng: -42.822612 },
-                    zoom: 6.1
+                    zoom: 6.1,
+                    streetViewControl: false,
+                    mapTypeControl: false
                 });
                 map.mapTypes.set('styled_map', styledMap)
                 map.setMapTypeId('styled_map')
@@ -281,10 +283,16 @@
                 return cidades_poligonoreal
             }
 
-            function resetPoligonos(iddiv){
-                listadepoligonos.forEach(element => {
+            function alterMap(iddiv, idbutton,idbuttonNone){
+                            listadepoligonos.forEach(element => {
                     element.setMap(null)
                 })
+
+                div = document.getElementById(idbuttonNone)
+                div.classList.add("d-none")
+                div = document.getElementById(idbutton)
+                div.classList.remove("d-none")
+
                 id = iddiv
                 poligono(infowindow,map)
             }

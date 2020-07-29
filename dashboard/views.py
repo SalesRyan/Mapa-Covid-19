@@ -4,7 +4,7 @@ from .models import *
 from django.core.paginator import Paginator,InvalidPage, EmptyPage
 import json
 from django.db.models import Max,Sum
-from scripts.funcoes import propDoen
+from scripts.funcoes import propDoen, respSaude
 import pandas as pd
 
 # Create your views here.
@@ -220,28 +220,41 @@ def site_view(request):
     }
     dados_estado_dict = pd.DataFrame.from_dict(dados_estado_dict)
     
-    leitos_list = list(leitos.values("ocupados_clinicos", "ocupados_uti","ocupados_estabilizacao","ocupados_respiradores"))
+    leitos_list = list(leitos.values("ocupados_clinicos", "ocupados_uti","ocupados_estabilizacao","ocupados_respiradores","altas", "capacidade_uti", "capacidade_respiradores", "capacidade_clinicos"))
     
     ocupados_clinicos = []
     ocupados_uti = []
     ocupados_estabilizacao = []
     ocupados_respiradores = []
+    altas = []
+    capacidade_uti = []
+    capacidade_clinicos = []
+    capacidade_respiradores = []
 
     for leitos_dict in leitos_list:
         ocupados_clinicos.append(leitos_dict['ocupados_clinicos'])
         ocupados_uti.append(leitos_dict['ocupados_uti'])
         ocupados_estabilizacao.append(leitos_dict['ocupados_estabilizacao'])
         ocupados_respiradores.append(leitos_dict['ocupados_respiradores'])
+        altas.append(leitos_dict['altas'])
+        capacidade_uti.append(leitos_dict['capacidade_uti'])
+        capacidade_clinicos.append(leitos_dict['capacidade_clinicos'])
+        capacidade_respiradores.append(leitos_dict['capacidade_respiradores'])
 
     leitos_dict = {
         'ocupados_clinicos':ocupados_clinicos,
         'ocupados_uti':ocupados_uti,
         'ocupados_estabilizacao':ocupados_estabilizacao,
         'ocupados_respiradores':ocupados_respiradores,
+        'altas':altas,
+        'capacidade_uti':capacidade_uti,
+        'capacidade_clinicos':capacidade_clinicos,
+        'capacidade_respiradores':capacidade_respiradores
     }
     leitos_dict = pd.DataFrame.from_dict(leitos_dict)
     
-    prop_doen = propDoen(leitos_dict, dados_estado_dict)
+    prop_doen = round(propDoen(leitos_dict, dados_estado_dict),2)
+    resp_saude = round(respSaude(leitos_dict),2)
     
     
 
@@ -265,8 +278,8 @@ def site_view(request):
         'ocupacao_novos':taxa_ocupacao_penult,
         'altas_atual':altas_atual,
         'altas_novos':altas_novos,
-        'prop_doen':200,
+        'prop_doen':prop_doen,
+        'resp_saude':resp_saude,
     }
     
     return render(request, 'dashboard/index.html', context)
-

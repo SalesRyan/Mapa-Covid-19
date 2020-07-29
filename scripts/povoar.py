@@ -128,7 +128,7 @@ kml_regiao = parser.fromstring(arq_regiao)
 print('povoando CasosRegioes coordenadas')
 dataset = [CasosRegioes.objects.create(
     nome=unidecode(str(placemark.name)).upper(),
-    coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).replace(" ","").replace("\n", " "),
+    coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).replace(" ","").replace("\n", " ").strip(),
     ).save() for placemark in kml_regiao.Document.Placemark]
 
 regioes = json.loads(open('scripts/arquivos/regioes.json', 'r').read())

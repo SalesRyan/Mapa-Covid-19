@@ -237,18 +237,37 @@ def propDoen(dfL,dfC):
     o_a = obitos[7:]
     o_o = obitos[:7]
 
-    ilc = np.int_(dfL['ocupados_clinicos'])
-    iuti= np.int_(dfL['ocupados_uti'])
-    ile = np.int_(dfL['ocupados_estabilizacao'])
-    ilr = np.int_(dfL['ocupados_respiradores'])
+    ilc = np.int_(dfL['ocupados_clinicos'])[-14:]
+    iuti= np.int_(dfL['ocupados_uti'])[-14:]
+    ile = np.int_(dfL['ocupados_estabilizacao'])[-14:]
+    ilr = np.int_(dfL['ocupados_respiradores'])[-14:]
+    altas = np.int_(dfL['altas'])[-14:]
 
-    n_i = ilc + iuti + ile+ ilr
+    n_i = ilc + iuti + ile + ilr + altas
     n_i_a = n_i[7:]
     n_i_o = n_i[:7]
+    print(n_i_a)
+    print(n_i_o)
     
-    i = n_i_a.sum()/n_i_o.sum()
-    c = c_a.sum()/c_o.sum()
-    o = o_a.sum()/o_o.sum()
+    # N de casos novos nos últimos 7 dias / N de casos novos nos 7 dias anteriores peso 4)
+    i = (n_i_a[-1]-n_i_a[0])/(n_i_o[-1]-n_i_o[0])
+    c = (c_a[-1]-c_a[0])/(c_o[-1]-c_o[0]) #N de internações nos últimos 7 dias / N de internações nos 7 dias anteriores (peso 4);
+    o = (o_a[-1]-o_a[0])/(o_o[-1]-o_o[0]) #N de internações nos últimos 7 dias / N de internações nos 7 dias anteriores (peso 4);
+    print(i)
+    print(c)
+    print(o)
     
     indicePropagacaodoenca = ((c*4)+(i*4)+(o*2))/(4+4+2)
     return indicePropagacaodoenca
+
+def respSaude(dfL): 
+    
+    ilc = np.int_(dfL['ocupados_clinicos'])[-1]
+    iuti= np.int_(dfL['ocupados_uti'])[-1]
+    ilr = np.int_(dfL['ocupados_respiradores'])[-1]
+    ilc_capacidade = np.int_(dfL['capacidade_clinicos'])[-1]
+    iuti_capacidade = np.int_(dfL['capacidade_uti'])[-1]
+    ilr_capacidade = np.int_(dfL['capacidade_respiradores'])[-1]
+    
+    indice = (((iuti/iuti_capacidade)*400)+(ilc/ilc_capacidade)*400+(ilr_capacidade/3.273227)*2)/(4+4+2)
+    return indice

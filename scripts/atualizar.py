@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from scripts.email import mail
 from unidecode import unidecode
 from scripts.funcoes import PredFull, pred_clinical
+from django.db.models import Sum
 
 
 
@@ -46,6 +47,12 @@ def atualizarCasosCidade(d):
                 'incidencia':str(line[3]).replace(',','.'),
             }
         )
+
+def atualizarCasosRegioes():
+    for obj in CasosRegioes.objects.all():
+        obj.obitos = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('obitos'))['obitos__sum']
+        obj.confirmados = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('confirmados'))['confirmados__sum']
+        obj.save()
 
 def atualizarLeitos(d):
     for line in d[-5:]:
@@ -135,5 +142,6 @@ def verification():
                 atualizarComorbidades(dfs['Comorbidades'].values)
                 atualizarPred(dfs['DadosEstado'])
                 atualizarPredLeitos(dfs['Leitos'])
+                atualizarCasosRegioes()
         except Exception as e:
             mail('Exception on atualizar.verification', str(e))

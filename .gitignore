@@ -17,7 +17,9 @@ scripts/testeando.py
 scripts/arquivos/testes.py
 scripts/arquivos/regioes_coord.json
 scripts/arquivos/cord.txt
-
+new_coords.json
+regioes.json
+scripts/arquivos/order_map.ipynb
 
 #linux
 aquivos_auxiliares/Download\ Planilha/creds.json

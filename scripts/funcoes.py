@@ -246,17 +246,12 @@ def propDoen(dfL,dfC):
     n_i = ilc + iuti + ile + ilr + altas
     n_i_a = n_i[7:]
     n_i_o = n_i[:7]
-    print(n_i_a)
-    print(n_i_o)
-    
+  
     # N de casos novos nos últimos 7 dias / N de casos novos nos 7 dias anteriores peso 4)
     i = (n_i_a[-1]-n_i_a[0])/(n_i_o[-1]-n_i_o[0])
     c = (c_a[-1]-c_a[0])/(c_o[-1]-c_o[0]) #N de internações nos últimos 7 dias / N de internações nos 7 dias anteriores (peso 4);
     o = (o_a[-1]-o_a[0])/(o_o[-1]-o_o[0]) #N de internações nos últimos 7 dias / N de internações nos 7 dias anteriores (peso 4);
-    print(i)
-    print(c)
-    print(o)
-    
+ 
     indicePropagacaodoenca = ((c*4)+(i*4)+(o*2))/(4+4+2)
     return indicePropagacaodoenca
 
@@ -269,5 +264,5 @@ def respSaude(dfL):
     iuti_capacidade = np.int_(dfL['capacidade_uti'])[-1]
     ilr_capacidade = np.int_(dfL['capacidade_respiradores'])[-1]
     
-    indice = (((iuti/iuti_capacidade)*400)+(ilc/ilc_capacidade)*400+(ilr_capacidade/3.273227)*2)/(4+4+2)
+    indice = (((1-(iuti/iuti_capacidade))*400)+(1-(ilc/ilc_capacidade))*400+(ilr_capacidade/3.273227)*2)/(4+4+2)
     return indice

@@ -256,7 +256,12 @@ def site_view(request):
     prop_doen = round(propDoen(leitos_dict, dados_estado_dict),2)
     resp_saude = round(respSaude(leitos_dict),2)
     
-    
+    quantidade_confirmados = casos_cidade.exclude(confirmados=0).count()
+    quantidade_obitos = casos_cidade.exclude(obitos=0).count()
+
+    percentual_confirmados = quantidade_confirmados/224
+    percentual_obitos = quantidade_obitos/224
+
 
     context = {
         'google_api_key': GOOGLE_API_KEY,
@@ -280,6 +285,8 @@ def site_view(request):
         'altas_novos':altas_novos,
         'prop_doen':prop_doen,
         'resp_saude':resp_saude,
+        'percentual_confirmados':percentual_confirmados,
+        'percentual_obitos':percentual_obitos,
     }
     
     return render(request, 'dashboard/index.html', context)

@@ -96,6 +96,7 @@ def generateCityDataTable(sheets):
         'Confirmados':df['Confirmados'].to_list(),
         'Óbitos':df['Óbitos'].to_list(),
         'Incidência':df['Incidência'].to_list(),
+        'População':df['População'].to_list(),
         'CEP':df['CEP'].to_list()
     }
 

@@ -22,6 +22,7 @@ class CasosCidade(AuditModel):
     incidencia = models.FloatField("Incidencia", null=True, blank=True, default=0)
     cep = models.CharField("CEP", max_length=9,null=True, blank=True)
     coordenadas = models.TextField("Coordenadas")
+    populacao = models.IntegerField("População", null=True, blank=True, default=0)
     regiao = models.ForeignKey("dashboard.CasosRegioes", verbose_name="Região", on_delete=models.DO_NOTHING, null=True)
     
     def __str__(self):
@@ -32,6 +33,8 @@ class CasosRegioes(AuditModel):
     confirmados = models.IntegerField("Confirmados",null=True, blank=True, default=0)
     obitos = models.IntegerField("Obitos",null=True, blank=True, default=0)
     coordenadas = models.TextField("Coordenadas")
+    incidencia = models.FloatField("Incidencia", null=True, blank=True, default=0)
+
     
     def __str__(self):
         return self.nome

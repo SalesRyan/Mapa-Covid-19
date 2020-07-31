@@ -22,5 +22,20 @@
 })(jQuery);
 
 $(document).ready(function() {
-    $('#dataTable').DataTable();
+    $('#dataTable').DataTable({
+        'bLengthChange':false,
+        "language": {
+            "decimal": ",",
+            "search":"Buscar:",
+            "thousands":".",
+            "info": "_START_ - _END_ de _TOTAL_",
+            "infoFiltered": "(Filtrado de _MAX_ valores)",
+            "paginate": {
+                "first": "Primeira",
+                "last": "Última",
+                "next": "Próxima",
+                "previous": "Anterior" 
+            }
+        }
+    });
 });

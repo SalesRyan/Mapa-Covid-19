@@ -41,10 +41,11 @@ def atualizarCasosCidade(d):
         CasosCidade.objects.update_or_create(
             nome=unidecode(str(line[0])),
             defaults = {
-                'cep':line[4],
+                'cep':line[5],
                 'confirmados':line[1],
                 'obitos':line[2],
                 'incidencia':str(line[3]).replace(',','.'),
+                'populacao':line[4]
             }
         )
 

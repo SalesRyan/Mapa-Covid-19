@@ -41,7 +41,8 @@ dataset = [CasosCidade.objects.update_or_create(
         'confirmados':d[1], 
         'obitos':d[2],
         'incidencia':str(d[3]).replace(',', '.'),
-        'cep':d[4],
+        'populacao':d[4],
+        'cep':d[5],
     }) for d in df.values]
 
 print("Povoando a data de atualização")
@@ -143,6 +144,8 @@ for key, value in regioes.items():
         )
 
 for obj in CasosRegioes.objects.all():
-    obj.obitos = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('obitos'))['obitos__sum']
-    obj.confirmados = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('confirmados'))['confirmados__sum']
+    casos_cidade = CasosCidade.objects.filter(regiao=obj)
+    obj.obitos = casos_cidade.aggregate(Sum('obitos'))['obitos__sum']
+    obj.confirmados = casos_cidade.aggregate(Sum('confirmados'))['confirmados__sum']
+    obj.incidencia = obj.confirmados*10000/(sum([casos.populacao for casos in casos_cidade]))
     obj.save()

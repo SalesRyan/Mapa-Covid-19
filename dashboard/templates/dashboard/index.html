@@ -131,7 +131,7 @@
                                         </svg>
                                     </div>
                                     <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Cap. de aúde</h1>
+                                        <h2 style="word-wrap: normal !important;">Cap. de Saúde</h1>
                                     </div>
                                     <div class="card-footer border-0 blue-background d-flex" style="background-color: #fa824c;">
                                         <h2 class="font-weight-bold">{{ resp_saude }}%</h2>
@@ -157,18 +157,19 @@
                                     </div>
                                 </div> 
                             </div>
-                            <div class="col-xl-6 mb-4">
-                                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0;" >
+                            <div class="col-xl-6 mb-4" style="height: 750px;">
+                                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
                                     <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
                                     <div class="card-body overflow-auto">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <table class="table table-bordered" id="dataTable" width="100%" style="max-height: 700px;" cellspacing="0">
                                                 <thead>
                                                     <tr>
                                                         <th>Cidade</th>
                                                         <th>Confirmados</th>
                                                         <th>Óbitos</th>
                                                         <th>Incidência</th>
+                                                        <th style="display: none;">Região</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -178,6 +179,7 @@
                                                             <td>{{ object.confirmados }}</td>
                                                             <td>{{ object.obitos }}</td>
                                                             <td>{{ object.incidencia }}</td>
+                                                            <td style="display: none;">{{ object.regiao }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>

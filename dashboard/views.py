@@ -134,15 +134,14 @@ def site_view(request):
             }  for coordenadas in objeto.coordenadas.split(' ')]
         }
    
+    referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
     def prepareRegioesJson(objeto):
         return {
             "nome": objeto.nome,
             "obitos": objeto.obitos,
             "confirmados": objeto.confirmados,
-            # "incidencia": objeto.incidencia,
-            "incidencia": 1,
-            # "classe": int(objeto.incidencia*10/(2*referencia)),
-            "classe": 1,
+            "incidencia": objeto.incidencia,
+            "classe": int(objeto.incidencia*10/(2*referencia_regioes)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),
                 "lat":float(coordenadas.split(',')[1])
@@ -156,26 +155,6 @@ def site_view(request):
     data_mapa_regioes = {
         'data': [prepareRegioesJson(obj) for obj in casos_regioes]
     }
-
-    """ sum_object = leitos.aggregate(Sum('capacidade_clinicos'),
-        Sum('capacidade_uti'),
-        Sum('capacidade_estabilizacao'),
-        Sum('capacidade_respiradores'),
-        Sum('ocupados_clinicos'),
-        Sum('ocupados_uti'),
-        Sum('ocupados_estabilizacao'),
-        Sum('ocupados_respiradores')
-    )
-
-    capacidade = sum_object['capacidade_clinicos__sum']
-    capacidade += sum_object['capacidade_uti__sum']
-    capacidade += sum_object['capacidade_estabilizacao__sum']
-    capacidade += sum_object['capacidade_respiradores__sum']
-    
-    ocupacao = sum_object['ocupados_clinicos__sum']
-    ocupacao += sum_object['ocupados_uti__sum']
-    ocupacao += sum_object['ocupados_estabilizacao__sum']
-    ocupacao += sum_object['ocupados_respiradores__sum'] """
 
     ocupacao = last_leitos.ocupados_clinicos
     ocupacao += last_leitos.ocupados_uti

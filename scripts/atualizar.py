@@ -139,16 +139,16 @@ def atualizarPredLeitos(d):
 def verification():
     dfs = check()
     if not True in map(lambda df : df.empty, dfs.values()):
-        try:
-            if atualizarDataUpdate(dfs['Data'].values):
-                atualizarDadosEstado(dfs['DadosEstado'].values)
-                atualizarCasosCidade(dfs['CasosCidade'].values)
-                atualizarLeitos(dfs['Leitos'].values)
-                atualizarCasosSexo(dfs['CasosSexo'].values)
-                atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
-                atualizarComorbidades(dfs['Comorbidades'].values)
-                atualizarPred(dfs['DadosEstado'])
-                atualizarPredLeitos(dfs['Leitos'])
-                atualizarCasosRegioes()
-        except Exception as e:
-            mail('Exception on atualizar.verification', str(e))
+        # try:
+        if atualizarDataUpdate(dfs['Data'].values):
+            atualizarDadosEstado(dfs['DadosEstado'].values)
+            atualizarCasosCidade(dfs['CasosCidade'].values)
+            atualizarLeitos(dfs['Leitos'].values)
+            atualizarCasosSexo(dfs['CasosSexo'].values)
+            atualizarCasosFaixaEtaria(dfs['CasosFaixaEtaria'].values)
+            atualizarComorbidades(dfs['Comorbidades'].values)
+            atualizarPred(dfs['DadosEstado'])
+            atualizarPredLeitos(dfs['Leitos'])
+            atualizarCasosRegioes()
+        # except Exception as e:
+        #     mail('Exception on atualizar.verification', str(e))

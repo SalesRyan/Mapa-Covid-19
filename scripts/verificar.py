@@ -74,6 +74,7 @@ def generateCityDataTableCheck(sheets):
             'Confirmados', 
             'Óbitos', 
             'Incidência',
+            'População',
             'CEP'] != list(var):
             mail('Error on Verificar.generateCityDataTable', 'Cabeçalho incorreto')
             return pd.DataFrame({'':[]})

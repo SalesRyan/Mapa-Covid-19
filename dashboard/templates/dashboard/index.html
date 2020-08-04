@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load float_filter_tag %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -178,7 +179,7 @@
                                                             <td>{{ object.nome }}</td>
                                                             <td>{{ object.confirmados }}</td>
                                                             <td>{{ object.obitos }}</td>
-                                                            <td>{{ object.incidencia }}</td>
+                                                            <td>{{ object.incidencia|float_filter_tag }}</td>
                                                             <td style="display: none;">{{ object.regiao }}</td>
                                                         </tr>
                                                     {% endfor %}
@@ -291,11 +292,8 @@
                 listadepoligonos.forEach(element => {
                     element.setMap(null)
                 })
-
-                /* div = document.getElementById(idbuttonNone)
-                div.classList.add("d-none")
-                div = document.getElementById(idbutton)
-                div.classList.remove("d-none") */
+                
+                infowindow.close();
 
                 id = iddiv
                 poligono(infowindow,map)

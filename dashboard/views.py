@@ -126,7 +126,7 @@ def site_view(request):
             "nome": objeto.nome,
             "obitos": objeto.obitos,
             "confirmados": objeto.confirmados,
-            "incidencia": objeto.incidencia,
+            "incidencia": str(objeto.incidencia).replace('.',','),
             "classe": int(objeto.incidencia*10/(2*referencia)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),
@@ -140,7 +140,7 @@ def site_view(request):
             "nome": objeto.nome,
             "obitos": objeto.obitos,
             "confirmados": objeto.confirmados,
-            "incidencia": objeto.incidencia,
+            "incidencia": str(round(objeto.incidencia,2)).replace('.',','),
             "classe": int(objeto.incidencia*10/(2*referencia_regioes)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),

@@ -3,6 +3,7 @@ Download planilha/creds.json
 env/
 */migrations/*
 */__pycache__/*
+**/__pycache__/*
 aquivos_auxiliares/An�lise Explorat�ria/.ipynb_checkpoints
 aquivos_auxiliares/Download planilha/.ipynb_checkpoints
 aquivos_auxiliares/Predi��es/.ipynb_checkpoints

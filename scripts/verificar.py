@@ -137,6 +137,21 @@ def generateGenderTableCheck(sheets):
             return pd.DataFrame({'':[]})
     return var
 
+def generateHistoryTableCheck(sheets):
+    try:
+        var = generateHistoryTable(sheets)
+    except Exception as e:
+        mail('Exception on Verificar.generateGenderTableCheck', str(e))
+        return pd.DataFrame({'':[]})
+    else:
+        if ['DATA',
+            'MUNICÍPIO',
+            'CASOS CONFIRMADOS',
+            'TOTAL DE ÓBITOS'] != list(var):
+            mail('Error on Verificar.generateHistoryTableCheck', 'Cabeçalho Incorreto')
+            return pd.DataFrame({'':[]})
+    return var
+
 
 
 def check():
@@ -149,4 +164,5 @@ def check():
         'Comorbidades':generateComorbidityTableCheck(sheets),
         'CasosFaixaEtaria':generateAgeRangeTableCheck(sheets),
         'CasosSexo':generateGenderTableCheck(sheets)
+        'HistoricoDiario':generateHistoryTableCheck(sheets)
     }

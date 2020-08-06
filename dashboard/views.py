@@ -269,3 +269,36 @@ def site_view(request):
     }
     
     return render(request, 'dashboard/index.html', context)
+
+def detalhes_view(request, pk):
+    print("\n\n",pk)
+    casos_regioes = HistoricoDiario.objects.get(regiao__id=pk)
+    casos_cidade = CasosCidade.objects.filter(regiao=casos_regioes.regiao)
+    confirmados_atual = ""
+    confirmados_novos = ""
+    obitos_atual = ""
+    obitos_novos = ""
+    dados = casos_regioes.dados[1:-1]
+    dados = dados.split(", [")
+    print((dados[0]))
+    data_historico_diario = {
+        'data': [{
+            'date':str(obj.split(",")[0].replace("'","")),
+            'confirmados':obj.split(",")[1],
+            'obitos':obj.split(",")[2],
+        } for obj in dados]
+    }
+    data_historico_diario['data'][-1]['lineDash'] = '2,2'
+    print(casos_regioes.regiao.id)
+    context = {
+        'confirmados_atual':1000,
+        'confirmados_novos':1000,
+        'obitos_atual':1000,
+        'obitos_novos':1000,
+        'data_historico_diario':json.dumps(data_historico_diario),
+        'casos_cidade':casos_cidade,
+        'nome':casos_regioes.regiao.nome,
+    }
+    return render(request, 'dashboard/detalhes.html',context)
+
+

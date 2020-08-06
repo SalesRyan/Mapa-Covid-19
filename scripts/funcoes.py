@@ -13,6 +13,8 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from warnings import filterwarnings
+from unidecode import unidecode
+
 filterwarnings("ignore")
 
 def CheckValue(df,column): #Função para salvar a coluna caso o valor esteja vazio
@@ -142,6 +144,41 @@ def generateGenderTable(sheets):
         'Confirmados Feminino':list(df1[df1.Sexo=="Feminino"].Quantidade),
     }
     return pd.DataFrame(data=d).replace({'': 0})
+
+def generateHistoryTable(sheets):
+    df = getData(sheets,index=30)
+    d = {
+        'DATA':df['DATA'].to_list(),
+        'MUNICÍPIO':df['MUNICÍPIO'].to_list(),
+        'CASOS CONFIRMADOS':df['CASOS CONFIRMADOS'].to_list(),
+        'TOTAL DE ÓBITOS':df['TOTAL DE ÓBITOS'].to_list(),
+    }   
+    """
+        Modelo de Json:
+        {
+            regiao: [[Data, conf, obitos],[data, conf, obitos],...]
+            regiao: ...
+        }
+    """
+    df = pd.DataFrame(data=d).replace({'': 0})
+    df = df.replace({'Dermerval Lobão': "DEMERVAL LOBAO"})
+    df = df.replace({'DERMERVAL LOBAO': "DEMERVAL LOBAO"})
+    df = df.replace({'Bertolínea': "Bertolínia"})
+    df = df.replace({'BERTOLINEA': "Bertolínia"})
+    df = df.replace({'CAPITAO GERVASIO DE OLIVEIRA': "CAPITAO GERVASIO OLIVEIRA"})
+    df = df.replace({'sao braz': "sao braz do piaui"})
+    hashmap = json.loads(open('scripts/arquivos/hashmap.json', 'r').read())
+    dicio = {}
+    for regiao in set(hashmap.values()):
+        dicio[regiao] = []
+    for idx, line in enumerate(df.values):
+        regiao = hashmap[unidecode(str(line[1])).upper()]
+        try:
+            dicio[regiao].append([line[0],int(line[2])+dicio[regiao][-1][1], int(line[3])+dicio[regiao][-1][2]])
+        except: 
+            dicio[regiao].append([line[0],int(line[2]), int(line[3])])
+    return dicio
+    # return df
 
 def getData(sheets,index=0):
 

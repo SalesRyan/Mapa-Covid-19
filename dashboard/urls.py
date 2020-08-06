@@ -5,5 +5,6 @@ from .views import *
 app_name = 'dashboard'
 
 urlpatterns = [
-    path('', site_view, name='site')
+    path('', site_view, name='site'),
+    path('detalhes/<int:pk>', detalhes_view, name='detalhes')
 ]

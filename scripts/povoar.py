@@ -66,7 +66,7 @@ dataset = [Leitos.objects.create(
     ).save() for d in df_c.values]
 
     
-print('povoando DadosEstado')
+# print('povoando DadosEstado')
 df = generateStateDataTable(sheets)
 dataset = [DadosEstado.objects.create(
     data=datetime(2020, int(d[0].split('/')[1]), int(d[0].split('/')[0])),
@@ -95,11 +95,6 @@ dataset = [CasosSexo.objects.create(
         casos_femininos=d[3],
     ).save() for d in generateGenderTable(sheets).values]
 
-print("Povoando historico diario")
-historico_diario_dict = generateHistoryTable(sheets)
-[HistoricoDiario.objects.create(
-    regiao=CasosRegioes.objects.get(nome=target_list),
-    dados=historico_diario_dict[target_list]) for target_list in historico_diario_dict]
 
 
 pred_confirmados = PredFull(df,mode=14,name='Confirmados')
@@ -156,3 +151,9 @@ for obj in CasosRegioes.objects.all():
     obj.confirmados = casos_cidade.aggregate(Sum('confirmados'))['confirmados__sum']
     obj.incidencia = obj.confirmados*10000/(sum([casos.populacao for casos in casos_cidade]))
     obj.save()
+
+print("Povoando historico diario")
+historico_diario_dict = generateHistoryTable(sheets)
+[HistoricoDiario.objects.create(
+    regiao=CasosRegioes.objects.get(nome=target_list),
+    dados=historico_diario_dict[target_list]) for target_list in historico_diario_dict]

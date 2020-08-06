@@ -162,6 +162,9 @@
                                 <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
                                     <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
                                     <div class="card-body overflow-auto">
+                                        <!-- <div style="position: relative; display: block;" >
+                                           <button class="btn btn-warning"> porcentagem </button>     
+                                        </div> -->
                                         <div class="table-responsive">
                                             <table class="table table-bordered" id="dataTable" width="100%" style="max-height: 700px;" cellspacing="0">
                                                 <thead>
@@ -293,6 +296,10 @@
                     element.setMap(null)
                 })
                 
+                let busca = document.querySelector("#dataTable_filter > label > input")
+                busca.value = ''
+                busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
+
                 infowindow.close();
 
                 id = iddiv
@@ -302,6 +309,9 @@
             function poligono(infowindow,mapa) {
                 // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
                 google.maps.event.addListener(mapa, 'click', function () {
+                    let busca = document.querySelector("#dataTable_filter > label > input")
+                    busca.value = ''
+                    busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
                     infowindow.close();
                 });
                 let ctx = document.getElementById(id)
@@ -326,9 +336,14 @@
                     cidades_poligono.addListener('click', function (event) {
                         var contentString = '<div id="content">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
                             String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
-                            "Incidência: " + String(element.incidencia) + '</div>';
+                            "Incidência: " + String(element.incidencia)+
+                            '<br><br>'+ '<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>' + '</div>';
+                        let busca = document.querySelector("#dataTable_filter > label > input")
+                        busca.value = element.nome
+                        busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
                         infowindow.setContent(contentString);
                         infowindow.setPosition(event.latLng);
+                        
                         infowindow.open(mapa);
                     });
                 });

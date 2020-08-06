@@ -24,10 +24,9 @@
     </head>
     <body class="">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Painel Covid-19 Piauí</a>
+            <a class="navbar-brand" href="{% url 'dashboard:site' %}">Painel Covid-19 Piauí</a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#map">Mapa</a>
                     <a class="nav-item nav-link" href="#tabela">Tabela</a>
                     <a class="nav-item nav-link" href="#graficos">Gráficos</a>
                 </div>
@@ -38,14 +37,16 @@
             <div class="w-100">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4 text-md-center mb-4">Mapa Covid-19 Piauí</h1>
+                        <div class="mt-4 text-md-center mb-4">
+                            <h1 class="">REGIÃO: {{nome}}</h1>
+                        </div>
                         <h6 class="mt-4 text-md-center mb-4">
-                            {{nome}}
+                            {{data_atualizacao.data}}
                         </h6>
                         <div class="row flex d-flex-align-items-stretch">
                             <div class="col-xl-6 col-md-6 flex-shrink-0">
                                 <div class="card yellow-background mb-4 text-white  rounded card-hover">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Números de confirmados na data de atualização (Variação em relação ao dia anterior)">
+                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Números de confirmados registrados até a data de atualização (Variação em relação ao último registro)">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
@@ -61,7 +62,7 @@
                             </div>
                             <div class="col-xl-6 col-md-6 flex-shrink-0">
                                 <div class="card red-background text-white mb-4 rounded card-hover">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Número de óbitos até a data de atualização (Variação em relação ao dia anterior)">
+                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Número de óbitos até a data de atualização (Variação em relação ao último registro)">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
@@ -78,17 +79,7 @@
                         </div>
                         
                         <div class="row d-flex d-flex-align-items-stretch">
-                            <div class="col-xl-6 mb-4" id="map-container" style="height: 550px !important;">
-                                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0" style="height: 550px !important;">
-                                    <div class="flex-grow-1 flex-shrink-0 pl-0"  style="height: 550px !important;">
-                                       <div class="card mb-6" style="height: 550px !important;">
-                                            <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
-                                            <div class="chart" id="chart-1" dados="{{ data_historico_diario }}" ></div>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="col-xl-6 mb-4" style="height: 550px;">
+                            <div class="col-xl-6 mb-4" style="height: 650px;">
                                 <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
                                     <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
                                     <div class="card-body overflow-auto">
@@ -119,14 +110,18 @@
                                     </div>
                                 </div>
                             </div>
-                            {% comment %} <div class="col-xl-6 mb-4" style="height: 750px;">
-                                
-                            </div> {% endcomment %}
+                            <div class="col-xl-6 mb-4" id="map-container" style="height: 650px !important;">
+                                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0" style="height: 650px !important;">
+                                    <div class="flex-grow-1 flex-shrink-0 pl-0"  style="height: 650px !important;">
+                                       <div class="card mb-6" style="height: 650px !important;" id="graficos">
+                                            <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
+                                            <div class="chart" id="chart-1" dados="{{ data_historico_diario }}" ></div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
                         </div>
 
-                        {% comment %} <div class="row" id="graficos">
-                            
-                        </div> {% endcomment %}
                     </div>
                     
                 </main>

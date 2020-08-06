@@ -15,6 +15,7 @@ class DadosEstadoPredicao(AuditModel):
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
+    
 class CasosCidade(AuditModel):
     nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True, unique=True)
     confirmados = models.IntegerField("Confirmados",null=True, blank=True, default=0)
@@ -23,7 +24,7 @@ class CasosCidade(AuditModel):
     cep = models.CharField("CEP", max_length=9,null=True, blank=True)
     coordenadas = models.TextField("Coordenadas")
     populacao = models.IntegerField("População", null=True, blank=True, default=0)
-    regiao = models.ForeignKey("dashboard.CasosRegioes", verbose_name="Região", on_delete=models.DO_NOTHING, null=True)
+    regiao = models.ForeignKey("dashboard.CasosRegioes", on_delete=models.DO_NOTHING, null=True)
     
     def __str__(self):
         return self.nome
@@ -38,7 +39,6 @@ class CasosRegioes(AuditModel):
     
     def __str__(self):
         return self.nome
-    
 
 class Leitos(AuditModel):
     data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False)
@@ -85,5 +85,8 @@ class HistoricoDiario(AuditModel): #por regiao
     dados = models.CharField("Data de Postagem",null=True, blank=True,max_length=1000000)
     # confirmados = models.IntegerField("Confirmados", null=True, blank=True, default=0)
     # obitos = models.IntegerField("Óbitos", null=True, blank=True, default=0)
+
+    def __str__(self):
+        return self.regiao.nome
 
  

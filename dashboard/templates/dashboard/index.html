@@ -24,7 +24,7 @@
     </head>
     <body class="">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Painel Covid-19 Piauí</a>
+            <a class="navbar-brand" href="{% url 'dashboard:site' %}">Painel Covid-19 Piauí</a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="#map">Mapa</a>
@@ -337,7 +337,7 @@
                         var contentString = '<div id="content">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
                             String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
                             "Incidência: " + String(element.incidencia)+
-                            '<br><br>'+ '<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>' + '</div>';
+                            '<br><br>'+ '<a href="detalhes/'+String(element.nome)+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'+ '</div>';
                         let busca = document.querySelector("#dataTable_filter > label > input")
                         busca.value = element.nome
                         busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))

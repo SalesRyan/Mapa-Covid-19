@@ -169,14 +169,17 @@ def generateHistoryTable(sheets):
     df = df.replace({'sao braz': "sao braz do piaui"})
     hashmap = json.loads(open('scripts/arquivos/hashmap.json', 'r').read())
     dicio = {}
+
     for regiao in set(hashmap.values()):
         dicio[regiao] = []
+
     for idx, line in enumerate(df.values):
         regiao = hashmap[unidecode(str(line[1])).upper()]
-        try:
-            dicio[regiao].append([line[0],int(line[2])+dicio[regiao][-1][1], int(line[3])+dicio[regiao][-1][2]])
-        except: 
+        if dicio[regiao] and line[0] in dicio[regiao][-1]:
+            dicio[regiao][-1] = [line[0],int(line[2])+dicio[regiao][-1][1], int(line[3])+dicio[regiao][-1][2]]
+        else:
             dicio[regiao].append([line[0],int(line[2]), int(line[3])])
+            
     return dicio
     # return df
 

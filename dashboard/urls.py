@@ -6,5 +6,5 @@ app_name = 'dashboard'
 
 urlpatterns = [
     path('', site_view, name='site'),
-    path('detalhes/<int:pk>', detalhes_view, name='detalhes')
+    path('detalhes/<str:nome>', detalhes_view, name='detalhes')
 ]

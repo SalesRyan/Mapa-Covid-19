@@ -306,6 +306,13 @@
                 poligono(infowindow,map)
             }
 
+            function buttonVerMais(nome){
+                if(id=="map"){
+                    return ''
+                }
+                return '<a href="detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
+            }
+
             function poligono(infowindow,mapa) {
                 // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
                 google.maps.event.addListener(mapa, 'click', function () {
@@ -337,7 +344,7 @@
                         var contentString = '<div id="content">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
                             String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
                             "Incidência: " + String(element.incidencia)+
-                            '<br><br>'+ '<a href="detalhes/'+String(element.nome)+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'+ '</div>';
+                            '<br><br>'+ buttonVerMais(String(element.nome)) + '</div>';
                         let busca = document.querySelector("#dataTable_filter > label > input")
                         busca.value = element.nome
                         busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))

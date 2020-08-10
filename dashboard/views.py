@@ -306,4 +306,11 @@ def detalhes_view(request, nome):
     }
     return render(request, 'dashboard/detalhes.html',context)
 
+def regiao_list_view(request):
+    regioes = CasosRegioes.objects.all()
 
+    context = {
+        'regioes':regioes
+    }
+    
+    return render(request, 'dashboard/list_regioes.html', context)

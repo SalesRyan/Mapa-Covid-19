@@ -1,384 +1,349 @@
+{% extends 'core/base.html' %}
 {% load staticfiles %}
 {% load float_filter_tag %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Mapa Coronavírus Piauí</title>        
-        <link href= "{% static 'css/styles.css' %}" rel="stylesheet" />
-        <link href= "{% static 'css/graficos.css' %}" rel="stylesheet" />
-        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
-        <style>
-            /* Always set the map height explicitly to define the size of the div
-            * element that contains the map. */
-            #map {
-                height: 100%;
-                min-width: 50%;
-            }
-        </style>
-    </head>
-    <body class="">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{% url 'dashboard:site' %}">Painel Covid-19 Piauí</a>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#map">Mapa</a>
-                    <a class="nav-item nav-link" href="#tabela">Tabela</a>
-                    <a class="nav-item nav-link" href="#graficos">Gráficos</a>
+{% block title %}
+{% endblock title %}  
+{% block head %}
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 100%;
+            min-width: 50%;
+        }
+    </style>
+    <link href= "{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href= "{% static 'css/graficos.css' %}" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+{% endblock head %}  
+{% block body %}
+    <div class="container-fluid">
+        <h1 class="mt-4 text-md-center mb-4">Mapa Covid-19 Piauí</h1>
+        <h6 class="mt-4 text-md-center mb-4">
+            {{data_atualizacao.data}}
+        </h6>
+        <div class="row flex d-flex-align-items-stretch">
+            <div class="col-xl-4 col-md-6 flex-shrink-0">
+                <div class="card yellow-background mb-4 text-white  rounded card-hover">
+                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Números de confirmados na data de atualização (Variação em relação ao dia anterior)">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h2>Confirmados</h1>
+                    </div>
+                    <div class="card-footer yellow-background border-0 d-flex">
+                        <h2 class="font-weight-bold">{{ confirmados_atual }}</h2><h2 class="new-right font-weight-bold"> (+{{ confirmados_novos}})</h2>
+                    </div>
                 </div>
-            </div>  
-        </nav>
-
-        <div id="layoutSidenav">
-            <div class="w-100">
-                <main>
-                    <div class="container-fluid">
-                        <h1 class="mt-4 text-md-center mb-4">Mapa Covid-19 Piauí</h1>
-                        <h6 class="mt-4 text-md-center mb-4">
-                            {{data_atualizacao.data}}
-                        </h6>
-                        <div class="row flex d-flex-align-items-stretch">
-                            <div class="col-xl-4 col-md-6 flex-shrink-0">
-                                <div class="card yellow-background mb-4 text-white  rounded card-hover">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Números de confirmados na data de atualização (Variação em relação ao dia anterior)">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="card-body">
-                                        <h2>Confirmados</h1>
-                                    </div>
-                                    <div class="card-footer yellow-background border-0 d-flex">
-                                        <h2 class="font-weight-bold">{{ confirmados_atual }}</h2><h2 class="new-right font-weight-bold"> (+{{ confirmados_novos}})</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 flex-shrink-0">
-                                <div class="card red-background text-white mb-4 rounded card-hover">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Número de óbitos até a data de atualização (Variação em relação ao dia anterior)">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="card-body">
-                                        <h2>Óbitos</h1>
-                                    </div>  
-                                    <div class="card-footer border-0 red-background d-flex">
-                                        <h2 class="font-weight-bold">{{ obitos_atual }}</h2><h2 class="new-right font-weight-bold"> (+{{ obitos_novos }})</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 flex-shrink-0">
-                                <div class="card green-background text-white mb-4 rounded card-hover">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Quantidade de pessoas que tiveram alta hospitalar (Variação em relação ao dia anterior)">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Altas</h1>
-                                    </div>
-                                    <div class="card-footer border-0 green-background d-flex">
-                                        <h2 class="font-weight-bold">{{ altas_atual }}</h2><h2 class="new-right font-weight-bold"> (+{{  altas_novos }})</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 flex-shrink-0">
-                                <div class="card blue-background text-white mb-4 rounded card-hover">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="percentual de leitos ocupados em relação ao total disponível (Variação em relação ao dia anterior)">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Ocupação</h1>
-                                    </div>
-                                    <div class="card-footer border-0 blue-background d-flex">
-                                        <h2 class="font-weight-bold">{{ ocupacao_atual }}%</h2> <h2 class="new-right font-weight-bold"> ({{ ocupacao_novos }}%)</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 flex-shrink-0">
-                                <div class="card blue-background text-white mb-4 rounded card-hover" style="background-color: #ff006e;">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Índice de propagação da doença no estado do Piauí. // 0 - 0,5: Baixo // 0,5 - 1: Situação de alerta // 1 - 1,5: Alta // 1,5+: Muito alta">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Propagação</h1>
-                                    </div>
-                                    <div class="card-footer border-0 blue-background d-flex" style="background-color: #ff006e;">
-                                        <h2 class="font-weight-bold">{{ prop_doen }}</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 flex-shrink-0">
-                                <div class="card blue-background text-white mb-4 rounded card-hover" style="background-color: #fa824c;">
-                                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Índice de Capacidade dos serviços de saúde. // 75-100%: Alta // 50-75%: Moderada // 25-50%: Baixa // 0-25%: Muito Baixa">
-                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="card-body">
-                                        <h2 style="word-wrap: normal !important;">Cap. de Saúde</h1>
-                                    </div>
-                                    <div class="card-footer border-0 blue-background d-flex" style="background-color: #fa824c;">
-                                        <h2 class="font-weight-bold">{{ resp_saude }}%</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row d-flex d-flex-align-items-stretch">
-                            <div class="col-xl-6 mb-4" id="map-container" >
-                                <div class="btn-group btn-group-toggle" style="position: absolute;z-index: 80000; margin: 10px; height: 40px; border-radius: 2px;" data-toggle="buttons">
-                                    <label class="btn btn-secondary active" style="border-radius: 2px; height: 100%;">
-                                      <input type="radio" name="options" onchange="alterMap('map')" id="option1" autocomplete="off" checked> Municípios
-                                    </label>
-                                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
-                                      <input type="radio" name="options" onchange="alterMap('map-regioes')"  id="option2" autocomplete="off"> Regiões
-                                    </label>
-                                </div>
-                                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
-                                    <div class="flex-grow-1 flex-shrink-0 pl-0" >
-                                        <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
-                                        <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="d-none"></div>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="col-xl-6 mb-4" style="height: 750px;">
-                                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
-                                    <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
-                                    <div class="card-body overflow-auto">
-                                        <!-- <div style="position: relative; display: block;" >
-                                           <button class="btn btn-warning"> porcentagem </button>     
-                                        </div> -->
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered" id="dataTable" width="100%" style="max-height: 700px;" cellspacing="0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Cidade</th>
-                                                        <th>Confirmados</th>
-                                                        <th>Óbitos</th>
-                                                        <th>Incidência</th>
-                                                        <th style="display: none;">Região</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for object in casos_cidade %}
-                                                        <tr>
-                                                            <td>{{ object.nome }}</td>
-                                                            <td>{{ object.confirmados }}</td>
-                                                            <td>{{ object.obitos }}</td>
-                                                            <td>{{ object.incidencia|float_filter_tag }}</td>
-                                                            <td style="display: none;">{{ object.regiao }}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row" id="graficos">
-                            <div class="col-xl-6 mb-4">
-                                <div class="card mb-6">
-                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
-                                    <div class="chart" id="chart-1" dados="{{ data_casos_cidade }}" ></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 mb-4">
-                                <div class="card mb-6">
-                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Ocupação dos Leitos no Piauí</div>
-                                    <div class="chart" id="chartdivleitos" dados="{{ data_leitos }}"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-xl-6 mb-4">
-                                <div class="card mb-6">
-                                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Casos por Idade</div>
-                                    <div class="chart" id="chartdivfaixaetaria" dados="{{ data_faixa }}"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 mb-4">
-                                <div class="card mb-6" >
-                                    <div class="card-header" ><i class="fas fa-chart-bar mr-1"></i>Distribuição por Sexo</div>
-                                    <div class="pizza d-flex">
-                                        <div class="pizza-chart" id="chartdivsexocasos" dados="{{ data_sexo_casos }}" ></div>
-                                        <div class="pizza-chart" id="chartdivsexoobitos" dados="{{ data_sexo_obitos }}"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Comorbidades no Piauí</div>
-                            <div class="comorbidity-chart" id="chartdivcomorbidades" dados="{{ data_comorbidades }}"></div>
-                        </div>
+            </div>
+            <div class="col-xl-4 col-md-6 flex-shrink-0">
+                <div class="card red-background text-white mb-4 rounded card-hover">
+                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Número de óbitos até a data de atualização (Variação em relação ao dia anterior)">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                        </svg>
                     </div>
-                    
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2019</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <h2>Óbitos</h1>
+                    </div>  
+                    <div class="card-footer border-0 red-background d-flex">
+                        <h2 class="font-weight-bold">{{ obitos_atual }}</h2><h2 class="new-right font-weight-bold"> (+{{ obitos_novos }})</h2>
                     </div>
-                </footer>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 flex-shrink-0">
+                <div class="card green-background text-white mb-4 rounded card-hover">
+                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Quantidade de pessoas que tiveram alta hospitalar (Variação em relação ao dia anterior)">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h2 style="word-wrap: normal !important;">Altas</h1>
+                    </div>
+                    <div class="card-footer border-0 green-background d-flex">
+                        <h2 class="font-weight-bold">{{ altas_atual }}</h2><h2 class="new-right font-weight-bold"> (+{{  altas_novos }})</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 flex-shrink-0">
+                <div class="card blue-background text-white mb-4 rounded card-hover">
+                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="percentual de leitos ocupados em relação ao total disponível (Variação em relação ao dia anterior)">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h2 style="word-wrap: normal !important;">Ocupação</h1>
+                    </div>
+                    <div class="card-footer border-0 blue-background d-flex">
+                        <h2 class="font-weight-bold">{{ ocupacao_atual }}%</h2> <h2 class="new-right font-weight-bold"> ({{ ocupacao_novos }}%)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 flex-shrink-0">
+                <div class="card blue-background text-white mb-4 rounded card-hover" style="background-color: #ff006e;">
+                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Índice de propagação da doença no estado do Piauí. // 0 - 0,5: Baixo // 0,5 - 1: Situação de alerta // 1 - 1,5: Alta // 1,5+: Muito alta">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h2 style="word-wrap: normal !important;">Propagação</h1>
+                    </div>
+                    <div class="card-footer border-0 blue-background d-flex" style="background-color: #ff006e;">
+                        <h2 class="font-weight-bold">{{ prop_doen }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 flex-shrink-0">
+                <div class="card blue-background text-white mb-4 rounded card-hover" style="background-color: #fa824c;">
+                    <div class="tooltip-right" data-toggle="tooltip" data-placement="top" title="Índice de Capacidade dos serviços de saúde. // 75-100%: Alta // 50-75%: Moderada // 25-50%: Baixa // 0-25%: Muito Baixa">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h2 style="word-wrap: normal !important;">Cap. de Saúde</h1>
+                    </div>
+                    <div class="card-footer border-0 blue-background d-flex" style="background-color: #fa824c;">
+                        <h2 class="font-weight-bold">{{ resp_saude }}%</h2>
+                    </div>
+                </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="{% static 'js/scripts.js' %}"></script>
-        <script src="{% static 'js/style_map.js' %}"></script>
         
-        <script>
-            var id = "map"
-            var infowindow
-            var map;
-            var listadepoligonos = []
+        <div class="row d-flex d-flex-align-items-stretch">
+            <div class="col-xl-6 mb-4" id="map-container" >
+                <div class="btn-group btn-group-toggle" style="position: absolute;z-index: 80000; margin: 10px; height: 40px; border-radius: 2px;" data-toggle="buttons">
+                    <label class="btn btn-secondary active" style="border-radius: 2px; height: 100%;">
+                        <input type="radio" name="options" onchange="alterMap('map')" id="option1" autocomplete="off" checked> Municípios
+                    </label>
+                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
+                        <input type="radio" name="options" onchange="alterMap('map-regioes')"  id="option2" autocomplete="off"> Regiões
+                    </label>
+                </div>
+                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
+                    <div class="flex-grow-1 flex-shrink-0 pl-0" >
+                        <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
+                        <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="d-none"></div>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-xl-6 mb-4" style="height: 750px;">
+                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
+                    <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
+                    <div class="card-body overflow-auto">
+                        <!-- <div style="position: relative; display: block;" >
+                            <button class="btn btn-warning"> porcentagem </button>     
+                        </div> -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" style="max-height: 700px;" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Cidade</th>
+                                        <th>Confirmados</th>
+                                        <th>Óbitos</th>
+                                        <th>Incidência</th>
+                                        <th style="display: none;">Região</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for object in casos_cidade %}
+                                        <tr>
+                                            <td>{{ object.nome }}</td>
+                                            <td>{{ object.confirmados }}</td>
+                                            <td>{{ object.obitos }}</td>
+                                            <td>{{ object.incidencia|float_filter_tag }}</td>
+                                            <td style="display: none;">{{ object.regiao }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            function initMap() {
-                var antes = Date.now();
-                let styledMap = new google.maps.StyledMapType(style)
+        <div class="row" id="graficos">
+            <div class="col-xl-6 mb-4">
+                <div class="card mb-6">
+                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
+                    <div class="chart" id="chart-1" dados="{{ data_casos_cidade }}" ></div>
+                </div>
+            </div>
+            <div class="col-xl-6 mb-4">
+                <div class="card mb-6">
+                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Ocupação dos Leitos no Piauí</div>
+                    <div class="chart" id="chartdivleitos" dados="{{ data_leitos }}"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-6 mb-4">
+                <div class="card mb-6">
+                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Casos por Idade</div>
+                    <div class="chart" id="chartdivfaixaetaria" dados="{{ data_faixa }}"></div>
+                </div>
+            </div>
+            <div class="col-xl-6 mb-4">
+                <div class="card mb-6" >
+                    <div class="card-header" ><i class="fas fa-chart-bar mr-1"></i>Distribuição por Sexo</div>
+                    <div class="pizza d-flex">
+                        <div class="pizza-chart" id="chartdivsexocasos" dados="{{ data_sexo_casos }}" ></div>
+                        <div class="pizza-chart" id="chartdivsexoobitos" dados="{{ data_sexo_obitos }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Comorbidades no Piauí</div>
+            <div class="comorbidity-chart" id="chartdivcomorbidades" dados="{{ data_comorbidades }}"></div>
+        </div>
+    </div>
+{% endblock body %}  
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/style_map.js' %}"></script>
+    
+    <script>
+        var id = "map"
+        var infowindow
+        var map;
+        var listadepoligonos = []
 
-                map = new google.maps.Map(document.querySelector('div#map'), {
-                    center: { lat: -7.0364390, lng: -42.822612 },
-                    zoom: 6.1,
-                    streetViewControl: false,
-                    mapTypeControl: false
-                });
-                map.mapTypes.set('styled_map', styledMap)
-                map.setMapTypeId('styled_map')
-                infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
+        function initMap() {
+            var antes = Date.now();
+            let styledMap = new google.maps.StyledMapType(style)
 
-                var duracao = Date.now() - antes;
-                console.log("initmapa:",duracao)
-                antes = Date.now();
-                poligono(infowindow,map)
-                duracao = Date.now() - antes;
-                console.log("poligono:",duracao)
+            map = new google.maps.Map(document.querySelector('div#map'), {
+                center: { lat: -7.0364390, lng: -42.822612 },
+                zoom: 6.1,
+                streetViewControl: false,
+                mapTypeControl: false
+            });
+            map.mapTypes.set('styled_map', styledMap)
+            map.setMapTypeId('styled_map')
+            infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
+
+            var duracao = Date.now() - antes;
+            console.log("initmapa:",duracao)
+            antes = Date.now();
+            poligono(infowindow,map)
+            duracao = Date.now() - antes;
+            console.log("poligono:",duracao)
+        }
+        function criaPoligono(path, cor) {
+            var cidades_poligonoreal = new google.maps.Polygon({
+                paths: path,
+                strokeColor: cor,
+                strokeOpacity: 0.8,
+                strokeWeight: 3,
+                fillColor: cor,
+                fillOpacity: 0.35
+            });
+            return cidades_poligonoreal
+        }
+
+        function alterMap(iddiv){
+            listadepoligonos.forEach(element => {
+                element.setMap(null)
+            })
+            
+            let busca = document.querySelector("#dataTable_filter > label > input")
+            busca.value = ''
+            busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
+
+            infowindow.close();
+
+            id = iddiv
+            poligono(infowindow,map)
+        }
+
+        function buttonVerMais(nome){
+            if(id=="map"){
+                return ''
             }
-            function criaPoligono(path, cor) {
-                var cidades_poligonoreal = new google.maps.Polygon({
-                    paths: path,
-                    strokeColor: cor,
-                    strokeOpacity: 0.8,
-                    strokeWeight: 3,
-                    fillColor: cor,
-                    fillOpacity: 0.35
-                });
-                return cidades_poligonoreal
-            }
+            return '<a href="detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
+        }
 
-            function alterMap(iddiv){
-                listadepoligonos.forEach(element => {
-                    element.setMap(null)
-                })
-                
+        function LimparCampo() {
+            let busca = document.querySelector("#dataTable_filter > label > input");
+            busca.value = '';
+            busca.dispatchEvent(new Event('keyup', {'key':'Enter'}));
+        }
+        function poligono(infowindow,mapa) {
+            // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
+            google.maps.event.addListener(mapa, 'click', function () {
                 let busca = document.querySelector("#dataTable_filter > label > input")
                 busca.value = ''
                 busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
-
                 infowindow.close();
-
-                id = iddiv
-                poligono(infowindow,map)
+            });
+            let ctx = document.getElementById(id)
+            let value = ctx.getAttribute('dados')
+            let data = JSON.parse(value).data
+            let dicionario = {
+                0:'#e85d04',
+                1:'#dc2f02',
+                2:'#9d0208',
+                3:'#6a040f',
+                4:'#370617',
+                5:'#370617',
             }
+            
+            data.forEach(element => {
+                cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
+                cidades_poligono.setMap(mapa);
 
-            function buttonVerMais(nome){
-                if(id=="map"){
-                    return ''
-                }
-                return '<a href="detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
-            }
-
-            function LimparCampo() {
-                let busca = document.querySelector("#dataTable_filter > label > input");
-                busca.value = '';
-                busca.dispatchEvent(new Event('keyup', {'key':'Enter'}));
-            }
-            function poligono(infowindow,mapa) {
-                // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
-                google.maps.event.addListener(mapa, 'click', function () {
-                    let busca = document.querySelector("#dataTable_filter > label > input")
-                    busca.value = ''
-                    busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
-                    infowindow.close();
-                });
-                let ctx = document.getElementById(id)
-                let value = ctx.getAttribute('dados')
-                let data = JSON.parse(value).data
-                let dicionario = {
-                    0:'#e85d04',
-                    1:'#dc2f02',
-                    2:'#9d0208',
-                    3:'#6a040f',
-                    4:'#370617',
-                    5:'#370617',
-                }
+                listadepoligonos.push(cidades_poligono)
                 
-                data.forEach(element => {
-                    cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
-                    cidades_poligono.setMap(mapa);
-
-                    listadepoligonos.push(cidades_poligono)
-                    
-                    // Evento para exibir a infowindow com o nome da UBS e a quantidade cada um dos tipos de notificações
-                    cidades_poligono.addListener('click', function (event) {
-                        var contentString = '<div id="content" onunload="LimparCampo()">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
-                            String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
-                            "Incidência: " + String(element.incidencia)+
-                            '<br><br>'+ buttonVerMais(String(element.nome)) + '</div>';
-                        let busca = document.querySelector("#dataTable_filter > label > input")
-                        busca.value = element.nome
-                        busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
-                        infowindow.setContent(contentString);
-                        infowindow.setPosition(event.latLng);
-                        infowindow.open(mapa);
-                        google.maps.event.addListener(infowindow, 'closeclick', LimparCampo)
-                    });
+                // Evento para exibir a infowindow com o nome da UBS e a quantidade cada um dos tipos de notificações
+                cidades_poligono.addListener('click', function (event) {
+                    var contentString = '<div id="content" onunload="LimparCampo()">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
+                        String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
+                        "Incidência: " + String(element.incidencia)+
+                        '<br><br>'+ buttonVerMais(String(element.nome)) + '</div>';
+                    let busca = document.querySelector("#dataTable_filter > label > input")
+                    busca.value = element.nome
+                    busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
+                    infowindow.setContent(contentString);
+                    infowindow.setPosition(event.latLng);
+                    infowindow.open(mapa);
+                    google.maps.event.addListener(infowindow, 'closeclick', LimparCampo)
                 });
-               
-            }
+            });
+            
+        }
 
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
-        <script src="https://www.amcharts.com/lib/4/core.js" ></script>
-        <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-        <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
-        {% comment %} <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script> {% endcomment %}
-        <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js" ></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
+    {% comment %} <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script> {% endcomment %}
+    <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
 
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="{% static 'js/lineChart.js' %}"></script>
-        <script>
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/lineChart.js' %}"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
 
-        </script>
-
-    </body>
-</html>
+    </script>
+{% endblock scripts %}              

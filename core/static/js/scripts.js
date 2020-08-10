@@ -39,3 +39,47 @@ $(document).ready(function() {
         }
     });
 });
+
+$(document).ready(function() {
+    $('#dataTableRegioes').DataTable({
+        'bLengthChange':false,
+        "ordering":false,
+        "paging":false,
+        "info":false,
+        "searching":false,
+        "language": {
+            "decimal": ",",
+            "search":"Buscar:",
+            "thousands":".",
+            "info": "_START_ - _END_ de _TOTAL_",
+            "infoFiltered": "(Filtrado de _MAX_ valores)",
+            "paginate": {
+                "first": "Primeira",
+                "last": "Última",
+                "next": "Próxima",
+                "previous": "Anterior" 
+            }
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#dataTableDetalhes').DataTable({
+        'bLengthChange':false,
+        "paging":false,
+        "searching":false,
+        "language": {
+            "decimal": ",",
+            "search":"Buscar:",
+            "thousands":".",
+            "info": "_START_ - _END_ de _TOTAL_",
+            "infoFiltered": "(Filtrado de _MAX_ valores)",
+            "paginate": {
+                "first": "Primeira",
+                "last": "Última",
+                "next": "Próxima",
+                "previous": "Anterior" 
+            }
+        }
+    });
+});

@@ -179,7 +179,6 @@ def generateHistoryTable(sheets):
             dicio[regiao][-1] = [line[0],int(line[2])+dicio[regiao][-1][1], int(line[3])+dicio[regiao][-1][2]]
         else:
             dicio[regiao].append([line[0],int(line[2]), int(line[3])])
-            
     return dicio
     # return df
 

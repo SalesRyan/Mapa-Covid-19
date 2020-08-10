@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+{% load float_filter_tag %}
+{% block title %}
+    | Listagem de Regiões
+{% endblock title %}      
+{% block body %}
+    <div class="container-fluid">
+        <div class="mt-4 text-md-center mb-4">
+            <h1 class="">Listagem de Regiões</h1>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 mb-4">
+                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0;" >
+                    <div class="card-header"><i class="fas fa-table mr-1"></i>Regiões</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTableRegioes" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: large;">Nome</th>
+                                        <th width="7%">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for object in regioes %}
+                                        <tr>
+                                            <td style="padding: 1.5%;">{{ object.nome }}</td>
+                                            <td> <a href="{% url 'dashboard:detalhes' object.nome %}"><button title="Ver Detalhes" class="btn btn-primary" ><i class="fa fa-eye"></i></button></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/style_map.js' %}"></script>
+    
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/lineChart.js' %}"></script>
+{% endblock scripts %}

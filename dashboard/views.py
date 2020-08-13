@@ -314,3 +314,6 @@ def regiao_list_view(request):
     }
     
     return render(request, 'dashboard/list_regioes.html', context)
+
+def sobre_view(request):
+    return render(request, 'dashboard/sobre.html')

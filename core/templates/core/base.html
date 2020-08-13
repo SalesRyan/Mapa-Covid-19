@@ -20,7 +20,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="{% url 'dashboard:list_regioes' %}">Regiões</a>
-                    <a class="nav-item nav-link disabled" href="#">Sobre</a>
+                    <a class="nav-item nav-link" href="{% url 'dashboard:sobre' %}">Sobre</a>
                 </div>
             </div>  
         </nav>
@@ -30,14 +30,16 @@
                     {% block body %}
                     {% endblock body %}
                 </main>
-                <footer class="py-4 bg-light mt-auto">
+                <footer class="py-4 bg-light mt-auto text-md-center ">
                     <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2019</div>
+                        <div class="small">
+                            <div class="text-muted">Copyright &copy; 2020</div>
                             <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
+                                <strong><a href="http://github.com/hector2506"><span class="fab fa-github"></span> Hector Batista</a> </strong>
+                                <strong><a href="http://github.com/lucasbezerra26"><span class="fab fa-github"></span> Lucas Bezerra</a> </strong>
+                                <strong><a href="http://github.com/SalesRyan"><span class="fab fa-github"></span> Patrick Ryan</a> </strong>
+                                <strong><a href="http://github.com/spbdlelis"><span class="fab fa-github"></span> Samuel Lélis</a> </strong>
+                                <p> Todos os direitos reservados.</p>
                             </div>
                         </div>
                     </div>

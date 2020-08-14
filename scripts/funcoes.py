@@ -9,6 +9,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 
 import numpy as np
+from sklearn.metrics import explained_variance_score
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
@@ -223,6 +224,38 @@ def getcolumn(df,column,verbose=0): #Retorna o X e  y respectivamente
         print("column: {} CSV X shape: {} Max: {} Min: {}".format(column,X.shape,X.max(),X.min()))
         print("column: {} CSV y shape: {} Max: {} Min: {}".format(column,y.shape,y.max(),y.min()))
     return X,y
+
+# def prediction(X_train, X_test, y_train, degree, verbose):
+#     modelo_polinomial = make_pipeline(PolynomialFeatures(degree), Ridge())
+#     modelo_polinomial.fit(X_train, y_train)
+
+#     pred_values = modelo_polinomial.predict(X_test)
+#     if verbose:
+#         print(pred_values)
+#     return pred_values
+
+# def pred(df,column, verbose=False):
+    
+#     X = df.index.values
+#     y = df[column].values
+    
+#     X_train = X[-14:-7].reshape(-1,1)
+#     X_test = X[-7:].reshape(-1,1)
+    
+#     y_train = y[-14:-7].reshape(-1,1)
+#     y_test = y[-7:].reshape(-1,1)
+
+#     pred_values = prediction(X_train,X_test,y_train,1, verbose)
+#     if verbose:
+#         print(explained_variance_score(y_test,pred_values))
+        
+#         plt.plot(X_train,y_train,color='red')
+#         plt.plot(X_test,y_test,color='pink')
+#         plt.plot(X_test,pred_values,color='black')
+#         plt.show()
+#     return pred_values
+    
+
 
 def Pred(X_train, X_test, y_train, y_test=None):
     

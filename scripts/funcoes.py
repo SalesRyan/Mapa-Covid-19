@@ -145,7 +145,7 @@ def generateGenderTable(sheets):
     }
     return pd.DataFrame(data=d).replace({'': 0})
 
-def generateHistoryTable(sheets):
+def cabecalhoGenerateHistory():
     df = getData(sheets,index=30)
     d = {
         'DATA':df['DATA'].to_list(),
@@ -153,13 +153,6 @@ def generateHistoryTable(sheets):
         'CASOS CONFIRMADOS':df['CASOS CONFIRMADOS'].to_list(),
         'TOTAL DE ÓBITOS':df['TOTAL DE ÓBITOS'].to_list(),
     }   
-    """
-        Modelo de Json:
-        {
-            regiao: [[Data, conf, obitos],[data, conf, obitos],...]
-            regiao: ...
-        }
-    """
     df = pd.DataFrame(data=d).replace({'': 0})
     df = df.replace({'Dermerval Lobão': "DEMERVAL LOBAO"})
     df = df.replace({'DERMERVAL LOBAO': "DEMERVAL LOBAO"})
@@ -167,6 +160,18 @@ def generateHistoryTable(sheets):
     df = df.replace({'BERTOLINEA': "Bertolínia"})
     df = df.replace({'CAPITAO GERVASIO DE OLIVEIRA': "CAPITAO GERVASIO OLIVEIRA"})
     df = df.replace({'sao braz': "sao braz do piaui"})
+
+    return df
+
+def generateHistoryTable(sheets):
+    """
+        Modelo de Json:
+        {
+            regiao: [[Data, conf, obitos],[data, conf, obitos],...]
+            regiao: ...
+        }
+    """
+    df = cabecalhoGenerateHistory()
     hashmap = json.loads(open('scripts/arquivos/hashmap.json', 'r').read())
     dicio = {}
 
@@ -180,8 +185,26 @@ def generateHistoryTable(sheets):
         else:
             dicio[regiao].append([line[0],int(line[2]), int(line[3])])
     return dicio
-    # return df
+    
+def generateHistoryCidadesTable(sheets):
+    """
+        Modelo de Json:
+        {
+            cidade: [[Data, conf, obitos],[data, conf, obitos],...]
+            cidade: ...
+        }
+    """
+    df = cabecalhoGenerateHistory()
+    dicio_cidades = {}
 
+    for idx, line in enumerate(df.values):
+        cidade = line[1]
+        try:
+            dicio_cidades[cidade].append([line[0],int(line[2]), int(line[3])])
+        except:
+            dicio_cidades[cidade] = [[line[0],int(line[2]), int(line[3])]]
+    return dicio_cidades
+    
 def getData(sheets,index=0):
 
     #Convertendo os dados da planilha para um DataFrame Para pegar todas basta iterar sobre sheets.worksheets()

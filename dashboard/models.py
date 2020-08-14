@@ -82,9 +82,14 @@ class Comorbidades(AuditModel):
 
 class HistoricoDiario(AuditModel): #por regiao
     regiao = models.ForeignKey("dashboard.CasosRegioes", verbose_name="Regiao", on_delete=models.DO_NOTHING, null=True)
-    dados = models.CharField("Data de Postagem",null=True, blank=True,max_length=1000000)
-    # confirmados = models.IntegerField("Confirmados", null=True, blank=True, default=0)
-    # obitos = models.IntegerField("Óbitos", null=True, blank=True, default=0)
+    dados = models.CharField("Dados",null=True, blank=True,max_length=1000000)
+
+    def __str__(self):
+        return self.regiao.nome
+
+class HistoricoCidadesDiario(AuditModel): #por regiao
+    cidade = models.ForeignKey("dashboard.CasosCidade", verbose_name="Cidade", on_delete=models.DO_NOTHING, null=True)
+    dados = models.CharField("Dados",null=True, blank=True,max_length=1000000)
 
     def __str__(self):
         return self.regiao.nome

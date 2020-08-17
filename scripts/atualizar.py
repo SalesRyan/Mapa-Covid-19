@@ -143,11 +143,18 @@ def atualizarHistory(d):
             'dados':d[target_list]        
         }) for target_list in d]
 
+def atualizarCityHistory(d):
+    [HistoricoCidadesDiario.objects.update_or_create(
+        cidade=CasosCidade.objects.get(nome=target_list),
+        defaults={
+            'dados':d[target_list]        
+        }) for target_list in d]
+
     
 def verification():
     dfs = check()
     
-    if not True in map(lambda df : df.empty, list(dfs.values())[:-1]):
+    if not True in map(lambda df : df.empty, list(dfs.values())[:-2]):
         try:
             if atualizarDataUpdate(dfs['Data'].values):
                 atualizarDadosEstado(dfs['DadosEstado'].values)
@@ -160,6 +167,7 @@ def verification():
                 atualizarPredLeitos(dfs['Leitos'])
                 atualizarCasosRegioes()
                 atualizarHistory(dfs['HistoricoDiario'])
+                atualizarCityHistory(dfs['HistoricoDiarioCidades'])
 
         except Exception as e:
             mail('Exception on atualizar.verification', str(e))

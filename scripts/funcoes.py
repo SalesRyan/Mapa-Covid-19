@@ -94,6 +94,7 @@ def generateCityDataTable(sheets):
     df = getData(sheets,index=6)
     df = df[df['Município']!='PIAUÍ']
     df = df[df['Município']!='']
+    df = df[df['Município'] != 'Total geral']   
     d = {
         'Município':df['Município'].to_list(),
         'Confirmados':df['Confirmados'].to_list(),
@@ -146,7 +147,7 @@ def generateGenderTable(sheets):
     }
     return pd.DataFrame(data=d).replace({'': 0})
 
-def cabecalhoGenerateHistory():
+def cabecalhoGenerateHistory(sheets):
     df = getData(sheets,index=30)
     d = {
         'DATA':df['DATA'].to_list(),
@@ -172,7 +173,7 @@ def generateHistoryTable(sheets):
             regiao: ...
         }
     """
-    df = cabecalhoGenerateHistory()
+    df = cabecalhoGenerateHistory(sheets)
     hashmap = json.loads(open('scripts/arquivos/hashmap.json', 'r').read())
     dicio = {}
 
@@ -187,7 +188,7 @@ def generateHistoryTable(sheets):
             dicio[regiao].append([line[0],int(line[2]), int(line[3])])
     return dicio
     
-def generateHistoryCidadesTable(sheets):
+def generateHistoryCityTable(sheets):
     """
         Modelo de Json:
         {
@@ -195,11 +196,11 @@ def generateHistoryCidadesTable(sheets):
             cidade: ...
         }
     """
-    df = cabecalhoGenerateHistory()
+    df = cabecalhoGenerateHistory(sheets)
     dicio_cidades = {}
 
     for idx, line in enumerate(df.values):
-        cidade = line[1]
+        cidade = unidecode(line[1]).upper()
         try:
             dicio_cidades[cidade].append([line[0],int(line[2]), int(line[3])])
         except:
@@ -254,8 +255,6 @@ def getcolumn(df,column,verbose=0): #Retorna o X e  y respectivamente
 #         plt.plot(X_test,pred_values,color='black')
 #         plt.show()
 #     return pred_values
-    
-
 
 def Pred(X_train, X_test, y_train, y_test=None):
     

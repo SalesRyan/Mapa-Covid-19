@@ -92,6 +92,7 @@ class HistoricoCidadesDiario(AuditModel): #por regiao
     dados = models.CharField("Dados",null=True, blank=True,max_length=1000000)
 
     def __str__(self):
-        return self.regiao.nome
+        return self.cidade.nome
 
- 
+    class Meta:
+        ordering = ['-cidade']

@@ -159,7 +159,7 @@ historico_diario_dict = generateHistoryTable(sheets)
     dados=historico_diario_dict[target_list]) for target_list in historico_diario_dict]
 
 print("Povoando historico de cidade diario")
-historico_diario_dict = HistoricoCidadesDiario(sheets)
+historico_diario_dict = generateHistoryCityTable(sheets)
 [HistoricoCidadesDiario.objects.create(
-    regiao=CasosCidades.objects.get(nome=target_list),
+    cidade=CasosCidade.objects.get(nome=unidecode(target_list).upper()),
     dados=historico_diario_dict[target_list]) for target_list in historico_diario_dict]

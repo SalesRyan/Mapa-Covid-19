@@ -152,6 +152,21 @@ def generateHistoryTableCheck(sheets):
         mail('Error on Verificar.generateHistoryTableCheck', 'Cabeçalho Incorreto')
         return pd.DataFrame({'':[]})
 
+def generateHistoryCityTableCheck(sheets):
+    try:
+        var = generateHistoryCityTable(sheets)
+        return var
+    except Exception as e:
+        mail('Exception on Verificar.generateGenderTableCheck', str(e))
+        return pd.DataFrame({'':[]})
+    else:
+        # if ['DATA',
+        #     'MUNICÍPIO',
+        #     'CASOS CONFIRMADOS',
+        #     'TOTAL DE ÓBITOS'] != list(var):
+        mail('Error on Verificar.generateHistoryCityTableCheck', 'Cabeçalho Incorreto')
+        return pd.DataFrame({'':[]})
+
 
 
 def check():
@@ -164,5 +179,6 @@ def check():
         'Comorbidades':generateComorbidityTableCheck(sheets),
         'CasosFaixaEtaria':generateAgeRangeTableCheck(sheets),
         'CasosSexo':generateGenderTableCheck(sheets),
-        'HistoricoDiario':generateHistoryTableCheck(sheets)
+        'HistoricoDiario':generateHistoryTableCheck(sheets),
+        'HistoricoDiarioCidades':generateHistoryCityTableCheck(sheets),
     }

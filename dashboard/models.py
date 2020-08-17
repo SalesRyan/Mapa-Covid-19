@@ -95,4 +95,4 @@ class HistoricoCidadesDiario(AuditModel): #por regiao
         return self.cidade.nome
 
     class Meta:
-        ordering = ['-cidade']
+        ordering = ['cidade']

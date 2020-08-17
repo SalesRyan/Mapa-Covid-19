@@ -6,6 +6,7 @@ import json
 from django.db.models import Max,Sum
 from scripts.funcoes import propDoen, respSaude
 import pandas as pd
+from ast import literal_eval
 
 # Create your views here.
 
@@ -272,19 +273,15 @@ def site_view(request):
 
 def detalhes_view(request, nome):
     data_atualizacao = DataAtualizacao.objects.last()
-    try:
-        casos_regioes = HistoricoDiario.objects.get(regiao__nome=nome)
-    except:
-        regiao = CasosCidade.objects.get(nome=nome).regiao
-        casos_regioes = HistoricoDiario.objects.get(regiao__nome=regiao)
-    casos_cidade = CasosCidade.objects.filter(regiao=casos_regioes.regiao)
-    dados = casos_regioes.dados[1:-1]
-    dados = dados.split(", [")
+    casos_regioes = HistoricoDiario.objects.get(regiao__nome=nome)
+    casos_cidade = CasosCidade.objects.filter(regiao=casos_regioes.regiao).values("nome","confirmados","obitos","incidencia","regiao")
+
+    dados = literal_eval(casos_regioes.dados)
     data_historico_diario = {
         'data': [{
-            'date':str(obj.split(",")[0].replace("'","")),
-            'confirmados':obj.split(",")[1].strip(),
-            'obitos':obj.split(",")[2].replace("]","").strip(),
+            'date':obj[0],
+            'confirmados':obj[1],
+            'obitos':obj[2],
         } for obj in dados]
     }
     data_historico_diario['data'][-1]['lineDash'] = '2,2'
@@ -304,7 +301,7 @@ def detalhes_view(request, nome):
         'nome':casos_regioes.regiao.nome,
         'data_atualizacao':data_atualizacao,
     }
-    return render(request, 'dashboard/detalhes.html',context)
+    return render(request, 'regioes/detalhes.html',context)
 
 def regiao_list_view(request):
     regioes = CasosRegioes.objects.all()
@@ -313,7 +310,47 @@ def regiao_list_view(request):
         'regioes':regioes
     }
     
-    return render(request, 'dashboard/list_regioes.html', context)
+    return render(request, 'regioes/list.html', context)
+
+def detalhes_cidade_view(request, nome):
+    data_atualizacao = DataAtualizacao.objects.last()
+    detalhe_cidade = HistoricoCidadesDiario.objects.get(cidade__nome=nome)
+
+    dados = literal_eval(detalhe_cidade.dados)
+    data_historico_diario = {
+        'data': [{
+            'date':obj[0],
+            'confirmados':obj[1],
+            'obitos':obj[2],
+        } for obj in dados]
+    }
+
+    data_historico_diario['data'][-1]['lineDash'] = '2,2'
+
+    confirmados_atual = data_historico_diario['data'][-1]['confirmados']
+    confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
+    obitos_atual = data_historico_diario['data'][-1]['obitos']
+    obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
+
+    context = {
+        'confirmados_atual':confirmados_atual,
+        'confirmados_novos':confirmados_novos,
+        'obitos_atual':obitos_atual,
+        'obitos_novos':obitos_novos,
+        'data_historico_diario':json.dumps(data_historico_diario),
+        'nome':detalhe_cidade.cidade.nome,
+        'data_atualizacao':data_atualizacao,
+    }
+    return render(request, 'cidades/detalhes.html',context)
+
+def cidades_list_view(request):
+    cidades = CasosCidade.objects.all()
+
+    context = {
+        'cidades':cidades
+    }
+    
+    return render(request, 'cidades/list.html', context)
 
 def sobre_view(request):
     return render(request, 'dashboard/sobre.html')

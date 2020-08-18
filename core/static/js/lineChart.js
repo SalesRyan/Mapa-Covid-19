@@ -64,7 +64,10 @@ $(function graficosLinhaSituacao() {
     chart.scrollbarX.series.push(series1);
     chart.scrollbarX.series.push(series2);
     chart.scrollbarX.parent = chart.bottomAxesContainer;
-    
+    console.log(chart)
+    chart.chartContainer.pixelMarginTop = 100
+    chart.chartContainer.MarginTop = 100
+    chart.chartContainer.relativeMarginTop = 100
     dateAxis.start = 0.79;
     dateAxis.keepSelection = true;
     

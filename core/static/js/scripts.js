@@ -24,6 +24,9 @@
 $(document).ready(function() {
     $('#dataTable').DataTable({
         'bLengthChange':false,
+        "search": {
+            "regex": true,
+        },
         "language": {
             "decimal": ",",
             "search":"Buscar:",
@@ -49,6 +52,9 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#dataTableRegioes').DataTable({
         'bLengthChange':false,
+        "search": {
+            "regex": true,
+        },
         // "ordering":false,
         "paging":false,
         "info":false,
@@ -81,7 +87,9 @@ $(document).ready(function() {
         // "paging":false,
         // "info":false,
         // "searching":false,
-        
+        "search": {
+            "regex": true,
+        },
         "language": {
             "decimal": ",",
             "search":"Buscar:",
@@ -108,6 +116,9 @@ $(document).ready(function() {
         'bLengthChange':false,
         // "paging":false,
         // "searching":false,
+        "search": {
+            "regex": true,
+        },
         "pageLength": 8,
         "language": {
             "decimal": ",",

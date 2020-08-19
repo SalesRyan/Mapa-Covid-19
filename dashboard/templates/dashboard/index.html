@@ -154,7 +154,7 @@
                                         <th>Confirmados</th>
                                         <th>Óbitos</th>
                                         <th>Incidência</th>
-                                        <th style="display: none;">Região</th>
+                                        <th class="d-none">Região</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -164,7 +164,7 @@
                                             <td>{{ object.confirmados }}</td>
                                             <td>{{ object.obitos }}</td>
                                             <td>{{ object.incidencia|float_filter_tag }}</td>
-                                            <td style="display: none;">{{ object.regiao }}</td>
+                                            <td class="d-none" disabled="true">{{ object.regiao }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -178,13 +178,13 @@
         <div class="row" id="graficos">
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6">
-                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Situação no Piauí</div>
+                    <div class="card-header"><i class="fas fa-chart-line mr-1"></i>Situação no Piauí</div>
                     <div class="chart" id="chart-1" dados="{{ data_casos_cidade }}" ></div>
                 </div>
             </div>
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6">
-                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Ocupação dos Leitos no Piauí</div>
+                    <div class="card-header"><i class="fas fa-chart-line mr-1"></i>Ocupação dos Leitos no Piauí</div>
                     <div class="chart" id="chartdivleitos" dados="{{ data_leitos }}"></div>
                 </div>
             </div>
@@ -193,13 +193,13 @@
         <div class="row">
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6">
-                    <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Casos por Idade</div>
+                    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Casos por Idade</div>
                     <div class="chart" id="chartdivfaixaetaria" dados="{{ data_faixa }}"></div>
                 </div>
             </div>
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6" >
-                    <div class="card-header" ><i class="fas fa-chart-bar mr-1"></i>Distribuição por Sexo</div>
+                    <div class="card-header" ><i class="fas fa-chart-pie mr-1"></i>Distribuição por Sexo</div>
                     <div class="pizza d-flex">
                         <div class="pizza-chart" id="chartdivsexocasos" dados="{{ data_sexo_casos }}" ></div>
                         <div class="pizza-chart" id="chartdivsexoobitos" dados="{{ data_sexo_obitos }}"></div>
@@ -208,7 +208,7 @@
             </div>
         </div>
         <div class="card mb-4">
-            <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Comorbidades no Piauí</div>
+            <div class="card-header"><i class="fas fa-male mr-1"></i>Comorbidades no Piauí</div>
             <div class="comorbidity-chart" id="chartdivcomorbidades" dados="{{ data_comorbidades }}"></div>
         </div>
     </div>
@@ -239,12 +239,7 @@
             map.setMapTypeId('styled_map')
             infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
 
-            var duracao = Date.now() - antes;
-            console.log("initmapa:",duracao)
-            antes = Date.now();
             poligono(infowindow,map)
-            duracao = Date.now() - antes;
-            console.log("poligono:",duracao)
         }
         function criaPoligono(path, cor) {
             var cidades_poligonoreal = new google.maps.Polygon({
@@ -305,6 +300,8 @@
                 5:'#370617',
             }
             
+
+
             data.forEach(element => {
                 cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
                 cidades_poligono.setMap(mapa);
@@ -318,7 +315,10 @@
                         "Incidência: " + String(element.incidencia)+
                         '<br><br>'+ buttonVerMais(String(element.nome)) + '</div>';
                     let busca = document.querySelector("#dataTable_filter > label > input")
-                    busca.value = element.nome
+                    if(id == "map")
+                        busca.value = `^${element.nome}`
+                    else
+                        busca.value = element.nome
                     busca.dispatchEvent(new Event('keyup', {'key':'Enter'}))
                     infowindow.setContent(contentString);
                     infowindow.setPosition(event.latLng);

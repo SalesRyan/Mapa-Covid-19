@@ -17,11 +17,14 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'dashboard:site' %}">Painel Covid-19 Piauí</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="{% url 'dashboard:list_cidades' %}">Cidades</a>
-                    <a class="nav-item nav-link" href="{% url 'dashboard:list_regioes' %}">Regiões</a>
-                    <a class="nav-item nav-link" href="{% url 'dashboard:sobre' %}">Sobre</a>
+                    <a class="nav-item nav-link text-white" href="{% url 'dashboard:list_cidades' %}">Cidades</a>
+                    <a class="nav-item nav-link text-white" href="{% url 'dashboard:list_regioes' %}">Regiões</a>
+                    <a class="nav-item nav-link text-white" href="{% url 'dashboard:sobre' %}">Sobre</a>
                 </div>
             </div>  
         </nav>

@@ -19,7 +19,7 @@ def site_view(request):
     data_atualizacao = DataAtualizacao.objects.last()
     dados_estado = DadosEstado.objects.all()
     casos_cidade = CasosCidade.objects.all()
-    leitos = Leitos.objects.all()
+    leitos = Leitos.objects.all().order_by("data")
     casos_sexo = CasosSexo.objects.all().last()
     casos_faixa_etaria = CasosFaixaEtaria.objects.all()
     comorbidades = Comorbidades.objects.all()

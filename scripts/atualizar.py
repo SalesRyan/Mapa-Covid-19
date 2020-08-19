@@ -56,10 +56,6 @@ def atualizarCasosRegioes():
         obj.confirmados = casos_cidade.aggregate(Sum('confirmados'))['confirmados__sum']
         obj.incidencia = obj.confirmados*10000/(sum([casos.populacao for casos in casos_cidade]))
         obj.save()
-    # for obj in CasosRegioes.objects.all():
-    #     obj.obitos = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('obitos'))['obitos__sum']
-    #     obj.confirmados = CasosCidade.objects.filter(regiao=obj).aggregate(Sum('confirmados'))['confirmados__sum']
-    #     obj.save()
 
 def atualizarLeitos(d):
     for line in d[-5:]:

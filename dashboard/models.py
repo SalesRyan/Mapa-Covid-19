@@ -5,16 +5,30 @@ from core.models import AuditModel
 class DataAtualizacao(models.Model):
     data = models.CharField("Data de atualização da planilha", max_length=45)
 
+    def __str__(self):
+        return self.data
+
 class DadosEstado(AuditModel):
     data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True,unique=True )
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)
     obitos = models.IntegerField("Obitos", null=True, blank=True)
+    
+    def __str__(self):
+        return self.data
+
+    class Meta:
+        ordering = ['data']
 
 class DadosEstadoPredicao(AuditModel):
     data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False,null=True, blank=True)
     confirmados = models.IntegerField("Confirmados", null=True, blank=True)
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
+    def __str__(self):
+        return self.data
+
+    class Meta:
+        ordering = ['data']
     
 class CasosCidade(AuditModel):
     nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True, unique=True)
@@ -29,6 +43,10 @@ class CasosCidade(AuditModel):
     def __str__(self):
         return self.nome
 
+    class Meta:
+        ordering = ['nome']
+    
+
 class CasosRegioes(AuditModel):
     nome = models.CharField("Nome da cidade", max_length=45,null=True, blank=True, unique=True)
     confirmados = models.IntegerField("Confirmados",null=True, blank=True, default=0)
@@ -39,6 +57,10 @@ class CasosRegioes(AuditModel):
     
     def __str__(self):
         return self.nome
+
+    class Meta:
+        ordering = ['nome']
+    
 
 class Leitos(AuditModel):
     data = models.DateTimeField("Data de modificação", auto_now=False, auto_now_add=False)
@@ -52,12 +74,25 @@ class Leitos(AuditModel):
     ocupados_respiradores = models.IntegerField("Ocupados Respiradores", null=True, blank=True)
     altas = models.IntegerField("Altas", null=True, blank=True)
 
+    def __str__(self):
+        return self.data
+
+    class Meta:
+        ordering = ['data']
+
+
 class LeitosPredicao(AuditModel):
     data = models.DateTimeField("Dia", null=True, blank=True)
     taxa_ocupados_clinicos = models.FloatField("Ocupados Clinicos", null=True, blank=True)
     taxa_ocupados_uti = models.FloatField("Ocupados UTI", null=True, blank=True)
     taxa_ocupados_estabilizacao = models.FloatField("Ocupados Estabilizacao", null=True, blank=True)
     taxa_ocupados_respiradores = models.FloatField("Ocupados Respiradores", null=True, blank=True)
+    
+    def __str__(self):
+        return self.data
+
+    class Meta:
+        ordering = ['data']
 
 class CasosSexo(AuditModel):
     obitos_masculinos = models.IntegerField("Obitos Masculinos", null=True, blank=True)
@@ -72,6 +107,9 @@ class CasosFaixaEtaria(AuditModel):
 
     def __str__(self):
         return self.faixa_etaria
+    
+    class Meta:
+        ordering = ['faixa_etaria']
 
 class Comorbidades(AuditModel):
     nome = models.CharField("Nome da Comorbidade", max_length=45,null=True, blank=True, unique=True)
@@ -80,12 +118,18 @@ class Comorbidades(AuditModel):
     def __str__(self):
         return self.nome
 
+    class Meta:
+        ordering = ['nome']
+
 class HistoricoDiario(AuditModel): #por regiao
     regiao = models.ForeignKey("dashboard.CasosRegioes", verbose_name="Regiao", on_delete=models.DO_NOTHING, null=True)
     dados = models.CharField("Dados",null=True, blank=True,max_length=1000000)
 
     def __str__(self):
         return self.regiao.nome
+
+    class Meta:
+        ordering = ['regiao']
 
 class HistoricoCidadesDiario(AuditModel): #por regiao
     cidade = models.ForeignKey("dashboard.CasosCidade", verbose_name="Cidade", on_delete=models.DO_NOTHING, null=True)

@@ -4,19 +4,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from scripts.email import mail
 from unidecode import unidecode
-from scripts.funcoes import PredFull, pred_clinical
+from scripts.funcoes import *
 from django.db.models import Sum
-
-
-
-""" 
-'Leitos':generateInternedDataTableCheck(sheets),
-'CasosCidade':generateCityDataTableCheck(sheets),
-'DadosEstado':generateStateDataTableCheck(sheets),
-'Comorbidades':generateComorbidityTableCheck(sheets),
-'CasosFaixaEtaria':generateAgeRangeTableCheck(sheets),
-'CasosSexo':generateGenderTableCheck(sheets)
-"""
 
 def atualizarDataUpdate(d):
     if(DataAtualizacao.objects.all().last().data != d[0][0]):
@@ -102,8 +91,8 @@ def atualizarComorbidades(d):
         )
 
 def atualizarPred(d):
-    pred_confirmados = PredFull(d,mode=14,name='Confirmados')
-    pred_obitos = PredFull(d,mode=14,name='Óbitos')
+    pred_confirmados = pred(d,'Confirmados')
+    pred_obitos = pred(d,'Óbitos')
     last_date = list(d['Dias'])[-1]
     last_date = datetime.strptime(str(last_date)+'/2020','%d/%m/%Y')
     predicoes = DadosEstadoPredicao.objects.all()
@@ -146,6 +135,10 @@ def atualizarCityHistory(d):
             'dados':d[target_list]        
         }) for target_list in d]
 
+def atualizarRecovered(d):
+    Recuperados.objects.all().update(
+        quantidade=d[0][0],
+    )
     
 def verification():
     dfs = check()
@@ -162,6 +155,7 @@ def verification():
                 atualizarPred(dfs['DadosEstado'])
                 atualizarPredLeitos(dfs['Leitos'])
                 atualizarCasosRegioes()
+                atualizarRecovered(dfs['Recuperados'].values)
                 atualizarHistory(dfs['HistoricoDiario'])
                 atualizarCityHistory(dfs['HistoricoDiarioCidades'])
 

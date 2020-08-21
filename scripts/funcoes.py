@@ -226,35 +226,27 @@ def getcolumn(df,column,verbose=0): #Retorna o X e  y respectivamente
         print("column: {} CSV y shape: {} Max: {} Min: {}".format(column,y.shape,y.max(),y.min()))
     return X,y
 
-# def prediction(X_train, X_test, y_train, degree, verbose):
-#     modelo_polinomial = make_pipeline(PolynomialFeatures(degree), Ridge())
-#     modelo_polinomial.fit(X_train, y_train)
+def prediction(X_train, X_test, y_train, degree):
 
-#     pred_values = modelo_polinomial.predict(X_test)
-#     if verbose:
-#         print(pred_values)
-#     return pred_values
+    modelo_polinomial = make_pipeline(PolynomialFeatures(degree), Ridge())
+    modelo_polinomial.fit(X_train, y_train)
 
-# def pred(df,column, verbose=False):
-    
-#     X = df.index.values
-#     y = df[column].values
-    
-#     X_train = X[-14:-7].reshape(-1,1)
-#     X_test = X[-7:].reshape(-1,1)
-    
-#     y_train = y[-14:-7].reshape(-1,1)
-#     y_test = y[-7:].reshape(-1,1)
+    pred_values = modelo_polinomial.predict(X_test)
+    return pred_values
 
-#     pred_values = prediction(X_train,X_test,y_train,1, verbose)
-#     if verbose:
-#         print(explained_variance_score(y_test,pred_values))
-        
-#         plt.plot(X_train,y_train,color='red')
-#         plt.plot(X_test,y_test,color='pink')
-#         plt.plot(X_test,pred_values,color='black')
-#         plt.show()
-#     return pred_values
+def pred(df,column, verbose=False):
+    
+    X = df.index.values
+    y = df[column].values
+    
+    X_train = X[-7:].reshape(-1,1)
+    y_train = y[-7:].reshape(-1,1)
+    
+    X_test = np.asarray(range(X_train.max()+1,X_train.max()+8)).reshape(-1,1)
+
+    pred_values = prediction(X_train,X_test,y_train,1)
+    
+    return pred_values
 
 def Pred(X_train, X_test, y_train, y_test=None):
     
@@ -361,3 +353,13 @@ def respSaude(dfL):
     
     indice = (((1-(iuti/iuti_capacidade))*400)+(1-(ilc/ilc_capacidade))*400+(ilr_capacidade/3.273227)*2)/(4+4+2)
     return indice
+
+def generateRecoveredTable(sheets):
+    
+    df = getData(sheets,index=18)
+
+    d = {
+        'Recuperados':df['Recuperados'].to_list(),
+    }
+    
+    return pd.DataFrame(data=d).replace({'': 0})

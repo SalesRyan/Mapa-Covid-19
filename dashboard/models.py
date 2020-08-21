@@ -140,3 +140,6 @@ class HistoricoCidadesDiario(AuditModel): #por regiao
 
     class Meta:
         ordering = ['cidade']
+
+class Recuperados(AuditModel):
+    quantidade = models.IntegerField("Quantidades de Recuperados")

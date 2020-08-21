@@ -168,6 +168,17 @@ def generateHistoryCityTableCheck(sheets):
         return pd.DataFrame({'':[]})
 
 
+def generateRecoveredTableCheck(sheets):
+    try:
+        var = generateRecoveredTable(sheets)
+    except Exception as e:
+        mail('Exception on Verificar.generateRecoveredTableCheck', str(e))
+        return pd.DataFrame({'':[]}) 
+    else:
+        if ['Recuperados'] != list(var):
+            mail('Error on Verificar.generateRecoveredTableCheck', 'Cabeçalho incorreto')
+            return pd.DataFrame({'':[]})
+    return var
 
 def check():
     sheets = authenticCheck()
@@ -179,6 +190,7 @@ def check():
         'Comorbidades':generateComorbidityTableCheck(sheets),
         'CasosFaixaEtaria':generateAgeRangeTableCheck(sheets),
         'CasosSexo':generateGenderTableCheck(sheets),
+        'Recuperados': generateRecoveredTableCheck(sheets),
         'HistoricoDiario':generateHistoryTableCheck(sheets),
         'HistoricoDiarioCidades':generateHistoryCityTableCheck(sheets),
     }

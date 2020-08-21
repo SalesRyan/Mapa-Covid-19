@@ -97,8 +97,10 @@ dataset = [CasosSexo.objects.create(
 
 
 
-pred_confirmados = PredFull(df,mode=14,name='Confirmados')
-pred_obitos = PredFull(df,mode=14,name='Óbitos')
+pred_confirmados = pred(df,'Confirmados')
+pred_obitos = pred(df,'Óbitos')
+print(pred_confirmados, pred_obitos)
+
 last_date = list(df['Dias'])[-1]
 last_date = datetime.strptime(last_date+'/2020','%d/%m/%Y')
 count = 1
@@ -163,3 +165,8 @@ historico_diario_dict = generateHistoryCityTable(sheets)
 [HistoricoCidadesDiario.objects.create(
     cidade=CasosCidade.objects.get(nome=unidecode(target_list).upper()),
     dados=historico_diario_dict[target_list]) for target_list in historico_diario_dict]
+
+print("Povoando Recuperados")
+dataset = [Recuperados.objects.create(
+    quantidade=d[0],
+).save() for d in generateRecoveredTable(sheets).values]

@@ -18,14 +18,14 @@ def site_view(request):
 
     data_atualizacao = DataAtualizacao.objects.last()
     dados_estado = DadosEstado.objects.all()
-    casos_cidade = CasosCidade.objects.all()
+    casos_cidade = CasosCidade.objects.values("nome","confirmados","obitos","incidencia","coordenadas","regiao__nome")
     leitos = Leitos.objects.all().order_by("data")
     casos_sexo = CasosSexo.objects.all().last()
     casos_faixa_etaria = CasosFaixaEtaria.objects.all()
     comorbidades = Comorbidades.objects.all()
     dados_estado_pred = DadosEstadoPredicao.objects.all()
     dados_leitos_pred = LeitosPredicao.objects.all()
-    casos_regioes = CasosRegioes.objects.all()
+    casos_regioes = CasosRegioes.objects.all().values()
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos
@@ -43,7 +43,7 @@ def site_view(request):
         'data': [{
             'date':str(obj.data.strftime('%d-%m-%Y')),
             'confirmados':obj.confirmados,
-            'obitos':obj.obitos,
+            'obitos':obj.obitos, 
         } for obj in dados_estado]
     }
     data_casos_cidades['data'][-1]['lineDash'] = '2,2'
@@ -124,29 +124,29 @@ def site_view(request):
    
     def prepareJson(objeto):
         return {
-            "nome": objeto.nome,
-            "obitos": objeto.obitos,
-            "confirmados": objeto.confirmados,
-            "incidencia": str(objeto.incidencia).replace('.',','),
-            "classe": int(objeto.incidencia*10/(2*referencia)),
+            "nome": objeto['nome'],
+            "obitos": objeto['obitos'],
+            "confirmados": objeto['confirmados'],
+            "incidencia": str(objeto['incidencia']).replace('.',','),
+            "classe": int(objeto['incidencia']*10/(2*referencia)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),
                 "lat":float(coordenadas.split(',')[1])
-            }  for coordenadas in objeto.coordenadas.split(' ')]
+            }  for coordenadas in objeto['coordenadas'].split(' ')]
         }
    
     referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
     def prepareRegioesJson(objeto):
         return {
-            "nome": objeto.nome,
-            "obitos": objeto.obitos,
-            "confirmados": objeto.confirmados,
-            "incidencia": str(round(objeto.incidencia,2)).replace('.',','),
-            "classe": int(objeto.incidencia*10/(2*referencia_regioes)),
+            "nome": objeto['nome'],
+            "obitos": objeto['obitos'],
+            "confirmados": objeto['confirmados'],
+            "incidencia": str(round(objeto['incidencia'],2)).replace('.',','),
+            "classe": int(objeto['incidencia']*10/(2*referencia_regioes)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),
                 "lat":float(coordenadas.split(',')[1])
-            }  for coordenadas in objeto.coordenadas.split(' ')]
+            }  for coordenadas in objeto['coordenadas'].split(' ')]
         }
     
     data_mapa = {

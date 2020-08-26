@@ -275,7 +275,9 @@ def detalhes_view(request, nome):
     data_atualizacao = DataAtualizacao.objects.last()
     casos_regioes = HistoricoDiario.objects.get(regiao__nome=nome)
     casos_cidade = CasosCidade.objects.filter(regiao=casos_regioes.regiao).values("nome","confirmados","obitos","incidencia","regiao")
+    casos_regioes_pred = HistoricoDiarioPred.objects.get(regiao__nome=nome)
 
+    dados_pred = literal_eval(casos_regioes_pred.dados)
     dados = literal_eval(casos_regioes.dados)
     data_historico_diario = {
         'data': [{
@@ -285,6 +287,15 @@ def detalhes_view(request, nome):
         } for obj in dados]
     }
     data_historico_diario['data'][-1]['lineDash'] = '2,2'
+    for dia in dados_pred:
+        data_historico_diario['data'].append({
+            'date':dia[0],
+            'confirmados':dia[1],
+            'obitos':dia[2],
+            'additional': '(Projeção)',
+            'lineColor': '#f8cd3c',
+            'lineDash': '2,2',
+        })
 
     confirmados_atual = data_historico_diario['data'][-1]['confirmados']
     confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])

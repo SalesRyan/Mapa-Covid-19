@@ -26,7 +26,7 @@ def site_view(request):
     dados_estado_pred = DadosEstadoPredicao.objects.all()
     dados_leitos_pred = LeitosPredicao.objects.all()
     casos_regioes = CasosRegioes.objects.all().values()
-    recuperados = Recuperados.objects.last()        
+    recuperados = Recuperados.objects.last().quantidade      
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos

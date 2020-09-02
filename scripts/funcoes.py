@@ -72,6 +72,7 @@ def generateInternedDataTable(sheets):
     df = CheckValue(df,'Capacidade UTI')
     df = CheckValue(df,'Capacidade LE')
     df = CheckValue(df,'Capacidade Leitos Respiradores')
+    df = df.replace({'44075': "01/09/2020"})
 
     
 

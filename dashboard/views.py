@@ -26,6 +26,7 @@ def site_view(request):
     dados_estado_pred = DadosEstadoPredicao.objects.all()
     dados_leitos_pred = LeitosPredicao.objects.all()
     casos_regioes = CasosRegioes.objects.all().values()
+    recuperados = Recuperados.objects.last()        
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos
@@ -261,8 +262,9 @@ def site_view(request):
         'data_mapa_regioes': json.dumps(data_mapa_regioes),
         'ocupacao_atual':str(round(taxa_ocupacao,2)),
         'ocupacao_novos':taxa_ocupacao_penult,
-        'altas_atual':altas_atual,
-        'altas_novos':altas_novos,
+        # 'altas_atual':altas_atual,
+        # 'altas_novos':altas_novos,
+        'recuperados':recuperados,
         'prop_doen':prop_doen,
         'resp_saude':resp_saude,
         'percentual_confirmados':percentual_confirmados,

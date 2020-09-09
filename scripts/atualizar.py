@@ -6,6 +6,7 @@ from scripts.email import mail
 from unidecode import unidecode
 from scripts.funcoes import *
 from django.db.models import Sum
+from ast import literal_eval
 
 def atualizarDataUpdate(d):
     if(DataAtualizacao.objects.all().last().data != d[0][0]):
@@ -162,7 +163,30 @@ def atualizarPredCidades():
             cidade = cidades.cidade,
             dados = str(data)
         ).save()
+        
+def atualizarPredRegioes():
+    historicos = HistoricoDiario.objects.all()
+    HistoricoDiarioPred.objects.all().delete()
+    for regiao in historicos:
+        dados = literal_eval(regiao.dados)
+        data_historico_diario = pd.DataFrame({
+            'date':list(map(lambda x: x[0], dados)),
+            'confirmados':list(map(lambda x: x[1], dados)),
+            'obitos':list(map(lambda x: x[2], dados))
+        })
+        pred_confirmados = pred(data_historico_diario, 'confirmados')
+        pred_obitos = pred(data_historico_diario, 'obitos')
+        cont = 1
+        data = []
+        for conf, obt in zip(pred_confirmados, pred_obitos):
+            data.append([datetime.strftime(last_date+timedelta(days=cont), '%d/%m/%Y'), int(conf[0]), int(obt[0])])
+            cont+=1
+        HistoricoDiarioPred.objects.create(
+            regiao = regiao.regiao,
+            dados = str(data)
+        ).save()
 
+    
 def verification():
     dfs = check()
     
@@ -182,6 +206,6 @@ def verification():
                 atualizarHistory(dfs['HistoricoDiario'])
                 atualizarCityHistory(dfs['HistoricoDiarioCidades'])
                 atualizarPredCidades()
-
+                atualizarPredRegioes()
         except Exception as e:
             mail('Exception on atualizar.verification', str(e))

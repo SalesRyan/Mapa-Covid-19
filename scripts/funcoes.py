@@ -249,6 +249,20 @@ def pred(df,column, verbose=False):
     
     return pred_values
 
+def predCity(df,column, verbose=False):
+    
+    X = df.index.values
+    y = df[column].values
+    
+    X_train = X[-7:].reshape(-1,1)
+    y_train = y[-7:].reshape(-1,1)
+    
+    X_test = np.asarray(range(X_train.max()+1,X_train.max()+8)).reshape(-1,1)
+
+    pred_values = prediction(X_train,X_test,y_train,1)
+    
+    return pred_values
+
 def Pred(X_train, X_test, y_train, y_test=None):
     
     degree = 4

@@ -139,7 +139,30 @@ def atualizarRecovered(d):
     Recuperados.objects.all().update(
         quantidade=d[0][0],
     )
-    
+
+def atualizarPredCidades():
+    historicos = HistoricoCidadesDiario.objects.all()
+    HistoricoCidadesDiarioPred.objects.all().delete()
+    for cidades in historicos:
+        dados = literal_eval(cidades.dados)
+        data_historico_diario = pd.DataFrame({
+            'date':list(map(lambda x: x[0], dados)),
+            'confirmados':list(map(lambda x: x[1], dados)),
+            'obitos':list(map(lambda x: x[2], dados))
+        })
+        pred_confirmados = predCity(data_historico_diario, 'confirmados')
+        pred_obitos = predCity(data_historico_diario, 'obitos')
+        last_date = datetime.strptime(str(dados[-1][0]),"%d/%m/%Y")
+        cont = 1
+        data = []
+        for conf, obt in zip(pred_confirmados, pred_obitos):
+            data.append([datetime.strftime(last_date+timedelta(days=cont), '%d/%m/%Y'), int(conf[0]), int(obt[0])])
+            cont+=1
+        HistoricoCidadesDiarioPred.objects.create(
+            cidade = cidades.cidade,
+            dados = str(data)
+        ).save()
+
 def verification():
     dfs = check()
     
@@ -158,6 +181,7 @@ def verification():
                 atualizarRecovered(dfs['Recuperados'].values)
                 atualizarHistory(dfs['HistoricoDiario'])
                 atualizarCityHistory(dfs['HistoricoDiarioCidades'])
+                atualizarPredCidades()
 
         except Exception as e:
             mail('Exception on atualizar.verification', str(e))

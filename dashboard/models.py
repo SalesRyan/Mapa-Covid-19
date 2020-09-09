@@ -151,5 +151,16 @@ class HistoricoCidadesDiario(AuditModel): #por regiao
     class Meta:
         ordering = ['cidade']
 
+class HistoricoCidadesDiarioPred(AuditModel):
+    cidade = models.ForeignKey("dashboard.CasosCidade", verbose_name="Cidade", on_delete=models.DO_NOTHING, null=True)
+    dados = models.CharField("Dados",null=True, blank=True,max_length=1000000)
+
+
+    def __str__(self):
+        return self.cidade.nome
+
+    class Meta:
+        ordering = ['cidade']
+
 class Recuperados(AuditModel):
     quantidade = models.IntegerField("Quantidades de Recuperados")

@@ -178,6 +178,7 @@ def atualizarPredRegioes():
         pred_obitos = pred(data_historico_diario, 'obitos')
         cont = 1
         data = []
+        last_date = datetime.strptime(str(dados[-1][0]),"%d/%m/%Y")
         for conf, obt in zip(pred_confirmados, pred_obitos):
             data.append([datetime.strftime(last_date+timedelta(days=cont), '%d/%m/%Y'), int(conf[0]), int(obt[0])])
             cont+=1

@@ -17,6 +17,7 @@ from warnings import filterwarnings
 from scripts.funcoes import *
 from django.db.models import Sum
 from ast import literal_eval
+import json
 
 filterwarnings("ignore")
 sheets = authentic()
@@ -33,6 +34,13 @@ print('povoando casosCidade coordenadas')
 
 
 print('povoando casosCidade')
+def classSom(nome):
+    grupos = json.loads(open('scripts/arquivos/grupos.json', 'r').read())
+    for index,grupo in enumerate(grupos['data']):
+        if nome in grupo:
+            return index
+    return -1
+
 df = generateCityDataTable(sheets)
 dataset = [CasosCidade.objects.update_or_create(
     nome=d[0],
@@ -42,6 +50,7 @@ dataset = [CasosCidade.objects.update_or_create(
         'incidencia':str(d[3]).replace(',', '.'),
         'populacao':d[4],
         'cep':d[5],
+        'classe':classSom(d[0]),
     }) for d in df.values]
 
 print("Povoando a data de atualização")

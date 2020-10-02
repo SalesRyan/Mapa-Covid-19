@@ -18,7 +18,7 @@ def site_view(request):
 
     data_atualizacao = DataAtualizacao.objects.last()
     dados_estado = DadosEstado.objects.all()
-    casos_cidade = CasosCidade.objects.values("nome","confirmados","obitos","incidencia","coordenadas","regiao__nome")
+    casos_cidade = CasosCidade.objects.values("nome","confirmados","obitos","incidencia","coordenadas","regiao__nome","classe")
     leitos = Leitos.objects.all().order_by("data")
     casos_sexo = CasosSexo.objects.all().last()
     casos_faixa_etaria = CasosFaixaEtaria.objects.all()
@@ -129,6 +129,7 @@ def site_view(request):
             "obitos": objeto['obitos'],
             "confirmados": objeto['confirmados'],
             "incidencia": str(objeto['incidencia']).replace('.',','),
+            "classeSom": objeto['classe'],
             "classe": int(objeto['incidencia']*10/(2*referencia)),
             "coordenadas": [{
                 "lng":float(coordenadas.split(',')[0]),

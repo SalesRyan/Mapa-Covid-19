@@ -131,6 +131,9 @@
                     <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
                         <input type="radio" name="options" onchange="alterMap('map-regioes')"  id="option2" autocomplete="off"> Regiões
                     </label>
+                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
+                        <input type="radio" name="options" onchange="alterMap('map-som')"  id="option3" autocomplete="off"> SOM
+                    </label>
                 </div>
                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
@@ -289,6 +292,11 @@
                 infowindow.close();
             });
             let ctx = document.getElementById(id)
+            if(id=="map-som"){
+                ctx = document.getElementById("map")
+            }else{
+                ctx = document.getElementById(id)
+            }
             let value = ctx.getAttribute('dados')
             let data = JSON.parse(value).data
             let dicionario = {
@@ -299,11 +307,16 @@
                 4:'#370617',
                 5:'#370617',
             }
+            let dicionario_som = {0: '#67ad45', 1: '#f20089', 2: '#ff0000', 3: '#008bbf', 4: '#fca311',5:'#2d00f7'}
             
 
 
             data.forEach(element => {
-                cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
+                if(id=="map-som"){
+                    cidades_poligono = criaPoligono(element.coordenadas,dicionario_som[element.classeSom])
+                }else{
+                    cidades_poligono = criaPoligono(element.coordenadas,dicionario[element.classe])
+                }
                 cidades_poligono.setMap(mapa);
 
                 listadepoligonos.push(cidades_poligono)

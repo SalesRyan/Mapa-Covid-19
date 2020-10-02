@@ -39,6 +39,7 @@ class CasosCidade(AuditModel):
     coordenadas = models.TextField("Coordenadas")
     populacao = models.IntegerField("População", null=True, blank=True, default=0)
     regiao = models.ForeignKey("dashboard.CasosRegioes", on_delete=models.DO_NOTHING, null=True)
+    classe = models.IntegerField("Classe Som",null=True, blank=True)
     
     def __str__(self):
         return self.nome

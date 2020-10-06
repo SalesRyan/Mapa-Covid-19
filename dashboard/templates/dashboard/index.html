@@ -11,6 +11,15 @@
             height: 100%;
             min-width: 50%;
         }
+        #legend {
+            border: black 1px solid;
+            background: #efefef;
+            padding: 10px;
+            bottom: 5px !important;
+            left: 5px !important;
+            height: 35%;
+            width: 120px;
+        }
     </style>
     <link href= "{% static 'css/styles.css' %}" rel="stylesheet" />
     <link href= "{% static 'css/graficos.css' %}" rel="stylesheet" />
@@ -138,6 +147,30 @@
                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
                         <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
+                        <div id="legend" style="overflow: hidden;">
+                            <div class="d-flex flex-column justify-content-between h-100 w-100">
+                                <div class="d-flex justify-content-around">
+                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: #67ad45;"></span>
+                                    <h6 style="align-self: baseline;">Classe 1</h6>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #f20089;"></span>
+                                    <h6 style="align-self: baseline;">Classe 2</h6>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #ff0000;"></span>
+                                    <h6 style="align-self: baseline;">Classe 3</h6>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #008bbf;"></span>
+                                    <h6 style="align-self: baseline;">Classe 4</h6>
+                                </div>
+                                <div class="d-flex justify-content-around">
+                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #fca311;"></span>
+                                    <h6 style="align-self: baseline;">Classe 5</h6>
+                                </div>
+                            </div>
+                        </div>
                         <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="d-none"></div>
                     </div>
                 </div> 
@@ -241,6 +274,7 @@
             map.mapTypes.set('styled_map', styledMap)
             map.setMapTypeId('styled_map')
             infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
+            
 
             poligono(infowindow,map)
         }
@@ -293,9 +327,12 @@
             });
             let ctx = document.getElementById(id)
             if(id=="map-som"){
+                mapa.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('legend'));
                 ctx = document.getElementById("map")
+                document.querySelector('#legend').style.display = 'block'
             }else{
                 ctx = document.getElementById(id)
+                document.querySelector('#legend').style.display = 'none'
             }
             let value = ctx.getAttribute('dados')
             let data = JSON.parse(value).data
@@ -307,7 +344,14 @@
                 4:'#370617',
                 5:'#370617',
             }
-            let dicionario_som = {0: '#67ad45', 1: '#f20089', 2: '#ff0000', 3: '#008bbf', 4: '#fca311',5:'#2d00f7'}
+            
+            let dicionario_som = {
+                0: '#67ad45', 
+                1: '#f20089', 
+                2: '#ff0000', 
+                3: '#008bbf', 
+                4: '#fca311',
+            }
             
 
 
@@ -343,6 +387,7 @@
         }
 
     </script>
+    
     <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
     <script src="https://www.amcharts.com/lib/4/core.js" ></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
@@ -359,4 +404,5 @@
         })
 
     </script>
+
 {% endblock scripts %}              

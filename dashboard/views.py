@@ -136,6 +136,8 @@ def site_view(request):
                 "lat":float(coordenadas.split(',')[1])
             }  for coordenadas in objeto['coordenadas'].split(' ')]
         }
+
+    num_classe_som = casos_cidade.aggregate(Max('classe'))['classe__max']
    
     referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
     def prepareRegioesJson(objeto):
@@ -270,6 +272,7 @@ def site_view(request):
         'resp_saude':resp_saude,
         'percentual_confirmados':percentual_confirmados,
         'percentual_obitos':percentual_obitos,
+        'num_classe_som':num_classe_som,
     }
     
     return render(request, 'dashboard/index.html', context)

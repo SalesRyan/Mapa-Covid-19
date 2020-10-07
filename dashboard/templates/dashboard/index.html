@@ -146,29 +146,39 @@
                 </div>
                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
-                        <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
+                        <div id="map" dados="{{ data_mapa }}" num-classe-som="{{num_classe_som}}" class="rounded pl-0"></div>
                         <div id="legend" style="overflow: hidden;">
                             <div class="d-flex flex-column justify-content-between h-100 w-100">
-                                <div class="d-flex justify-content-around">
-                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: #67ad45;"></span>
-                                    <h6 style="align-self: baseline;">Classe 1</h6>
-                                </div>
-                                <div class="d-flex justify-content-around">
-                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #f20089;"></span>
-                                    <h6 style="align-self: baseline;">Classe 2</h6>
-                                </div>
-                                <div class="d-flex justify-content-around">
-                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #ff0000;"></span>
-                                    <h6 style="align-self: baseline;">Classe 3</h6>
-                                </div>
-                                <div class="d-flex justify-content-around">
-                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #008bbf;"></span>
-                                    <h6 style="align-self: baseline;">Classe 4</h6>
-                                </div>
-                                <div class="d-flex justify-content-around">
-                                    <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #fca311;"></span>
-                                    <h6 style="align-self: baseline;">Classe 5</h6>
-                                </div>
+                                <button style="border: none;" onclick="escolheCor('#67ad45')">
+                                    <div class="d-flex justify-content-around">
+                                        <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: #67ad45;"></span>
+                                        <h6 style="align-self: baseline;">Classe 1</h6>
+                                    </div>
+                                </button>
+                                <button style="border: none;" onclick="escolheCor('#f20089')">
+                                    <div class="d-flex justify-content-around">
+                                        <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #f20089;"></span>
+                                        <h6 style="align-self: baseline;">Classe 2</h6>
+                                    </div>
+                                </button>
+                                <button style="border: none;" onclick="escolheCor('#ff0000')">
+                                    <div class="d-flex justify-content-around">
+                                        <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #ff0000;"></span>
+                                        <h6 style="align-self: baseline;">Classe 3</h6>
+                                    </div>
+                                </button>
+                                <button style="border: none;" onclick="escolheCor('#008bbf')">
+                                    <div class="d-flex justify-content-around">
+                                        <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #008bbf;"></span>
+                                        <h6 style="align-self: baseline;">Classe 4</h6>
+                                    </div>
+                                </button>
+                                <button style="border: none;" onclick="escolheCor('#fca311')">
+                                    <div class="d-flex justify-content-around">
+                                        <span class="icon" style="border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #fca311;"></span>
+                                        <h6 style="align-self: baseline;">Classe 5</h6>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                         <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="d-none"></div>
@@ -262,7 +272,6 @@
         var listadepoligonos = []
 
         function initMap() {
-            var antes = Date.now();
             let styledMap = new google.maps.StyledMapType(style)
 
             map = new google.maps.Map(document.querySelector('div#map'), {
@@ -294,6 +303,7 @@
             listadepoligonos.forEach(element => {
                 element.setMap(null)
             })
+            listadepoligonos = []
             
             let busca = document.querySelector("#dataTable_filter > label > input")
             busca.value = ''
@@ -317,6 +327,36 @@
             busca.value = '';
             busca.dispatchEvent(new Event('keyup', {'key':'Enter'}));
         }
+
+        {% comment %} function divideJson(classe){
+
+            let ctx = document.getElementById("map")
+            let value = ctx.getAttribute('dados')
+            let data = JSON.parse(value).data
+            return data.filter((obj) => obj.classeSom == classe)
+        } {% endcomment %}
+
+        /* function escolheCor(cor){
+            listadepoligonos.filter((obj)=>obj.fillColor==cor).forEach(function (obj) {
+                obj.setMap(map)
+            })
+            listadepoligonos.filter((obj)=>obj.fillColor!=cor).forEach(function (obj, index) {
+                //let color = obj.fillColor
+                obj.fillColor = "#efefef"
+                obj.setMap(map)
+                //obj.fillColor = color
+            })
+        } */
+
+        function escolheCor(cor){
+            listadepoligonos.filter((obj)=>obj.fillColor==cor).forEach(function (obj) {
+                obj.setMap(map)
+            })
+            listadepoligonos.filter((obj)=>obj.fillColor!=cor).forEach(function (obj) {
+                obj.setMap(null)
+            })
+        }
+
         function poligono(infowindow,mapa) {
             // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
             google.maps.event.addListener(mapa, 'click', function () {
@@ -330,6 +370,11 @@
                 mapa.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('legend'));
                 ctx = document.getElementById("map")
                 document.querySelector('#legend').style.display = 'block'
+                /* Array.from(document.querySelectorAll('div#legend > div > button')).forEach(function (obj){
+                    document.addListener(obj, "click", escolheCor(obj.style.background))
+                }) */
+                /* num_classe_som = ctx.getAttribute('num-class-som')
+                criaInfoLengend(num_classe_som,) */
             }else{
                 ctx = document.getElementById(id)
                 document.querySelector('#legend').style.display = 'none'
@@ -388,7 +433,6 @@
 
     </script>
     
-    <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
     <script src="https://www.amcharts.com/lib/4/core.js" ></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
     <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
@@ -397,6 +441,7 @@
 
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
     <script src="{% static 'js/lineChart.js' %}"></script>
     <script>
         $(function () {

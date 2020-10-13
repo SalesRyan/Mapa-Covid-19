@@ -165,3 +165,6 @@ class HistoricoCidadesDiarioPred(AuditModel):
 
 class Recuperados(AuditModel):
     quantidade = models.IntegerField("Quantidades de Recuperados")
+
+class PoligonoPI(AuditModel):
+    poligono = models.CharField("Coordenadas", null=True, blank=True, max_length=1000000)

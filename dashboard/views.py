@@ -26,7 +26,8 @@ def site_view(request):
     dados_estado_pred = DadosEstadoPredicao.objects.all()
     dados_leitos_pred = LeitosPredicao.objects.all()
     casos_regioes = CasosRegioes.objects.all().values()
-    recuperados = Recuperados.objects.last().quantidade      
+    recuperados = Recuperados.objects.last().quantidade
+    piaui = json.dumps({'data':literal_eval(PoligonoPI.objects.last().poligono)})
     
     size = len(dados_estado)
     obitos_atual = dados_estado.last().obitos
@@ -273,6 +274,7 @@ def site_view(request):
         'percentual_confirmados':percentual_confirmados,
         'percentual_obitos':percentual_obitos,
         'num_classe_som':num_classe_som,
+        'piaui':piaui
     }
     
     return render(request, 'dashboard/index.html', context)

@@ -383,3 +383,62 @@ def cidades_list_view(request):
 
 def sobre_view(request):
     return render(request, 'dashboard/sobre.html')
+
+def som_list_view(request):
+    cidades = CasosCidade.objects.all()
+    num_classe_som = cidades.aggregate(Max('classe'))['classe__max']
+
+
+    context = {
+        'classe':[num for num in range(num_classe_som+1)]
+    }
+    
+    return render(request, 'som/list.html', context)
+
+
+def som_detalhes_view(request, classe):
+    data_atualizacao = DataAtualizacao.objects.last()
+    historico_cidades = HistoricoCidadesDiario.objects.filter(cidade__classe=classe)
+    # casos_cidade = historico_cidades.values("cidade__nome")
+    casos_cidade = CasosCidade.objects.filter(classe=classe).values("nome","confirmados","obitos","incidencia","regiao")
+
+    # dados_list = [literal_eval(obj.dados) for obj in historico_cidades]
+    # data_historico_diario_list = []
+    # for dados in dados_list:
+    #     data_historico_diario = [{
+    #             'date':obj[0],
+    #             'confirmados':obj[1],
+    #             'obitos':obj[2],
+    #         } for obj in dados]
+    #     data_historico_diario_list.append(data_historico_diario)
+    
+    # dicio = {}
+    # for ob in data_historico_diario_list:
+    #     for dados in ob:
+    #         try:
+    #             dicio[dados['date']] = {
+    #                 'confirmados':dicio[date]['confirmados']+dados['confirmados'],
+    #                 'obitos':dicio[date]['obitos']+dados['obitos'],
+    #             }
+    #         except:
+    #             dicio[dados['date']] = {
+    #                 'confirmados':dados['confirmados'],
+    #                 'obitos':dados['obitos'],
+    #             }
+
+    # confirmados_atual = data_historico_diario['data'][-1]['confirmados']
+    # confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
+    # obitos_atual = data_historico_diario['data'][-1]['obitos']
+    # obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
+
+    context = {
+        # 'confirmados_atual':confirmados_atual,
+        # 'confirmados_novos':confirmados_novos,
+        # 'obitos_atual':obitos_atual,
+        # 'obitos_novos':obitos_novos,
+        # 'data_historico_diario':json.dumps(data_historico_diario),
+        'casos_cidade':casos_cidade,
+        'nome':classe,
+        'data_atualizacao':data_atualizacao,
+    }
+    return render(request, 'som/detalhes.html',context)

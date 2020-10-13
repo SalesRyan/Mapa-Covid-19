@@ -12,5 +12,8 @@ urlpatterns = [
     path('cidades/detalhes/<str:nome>', detalhes_cidade_view, name='detalhes_cidade'),
     path('cidades/list', cidades_list_view, name='list_cidades'),
 
+    path('som/list/', som_list_view, name='som_cidades'),
+    path('som/detalhes/<int:classe>', som_detalhes_view, name='detalhes_som'),
+
     path('sobre', sobre_view, name='sobre'),
 ]

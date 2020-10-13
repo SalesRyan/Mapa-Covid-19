@@ -146,6 +146,7 @@
                 </div>
                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
+                        <div id="map-pi" dados ="{{ piaui }}" style="display: none !important;"></div>
                         <div id="map" dados="{{ data_mapa }}" num-classe-som="{{num_classe_som}}" class="rounded pl-0"></div>
                         <div id="legend" style="overflow: hidden;">
                             <div class="d-flex flex-column justify-content-between h-100 w-100">
@@ -270,6 +271,11 @@
         var infowindow
         var map;
         var listadepoligonos = []
+        var piaui = document.querySelector('#map-pi')
+        piaui = piaui.getAttribute('dados')
+        piaui = JSON.parse(piaui)
+        piaui = piaui.data
+        
 
         function initMap() {
             let styledMap = new google.maps.StyledMapType(style)
@@ -284,17 +290,24 @@
             map.setMapTypeId('styled_map')
             infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
             
-
+            var linha = new google.maps.Polyline({
+                path: piaui,
+                geodesic:true,
+                strokeColor:"#000000",
+                strokeOpacity:1,
+                strokeWeight:1
+            })
+            linha.setMap(map)
             poligono(infowindow,map)
         }
-        function criaPoligono(path, cor) {
+        function criaPoligono(path, cor, fill = 0.35) {
             var cidades_poligonoreal = new google.maps.Polygon({
                 paths: path,
                 strokeColor: cor,
                 strokeOpacity: 0.8,
                 strokeWeight: 3,
                 fillColor: cor,
-                fillOpacity: 0.35
+                fillOpacity: fill
             });
             return cidades_poligonoreal
         }
@@ -328,13 +341,13 @@
             busca.dispatchEvent(new Event('keyup', {'key':'Enter'}));
         }
 
-        {% comment %} function divideJson(classe){
+        /* function divideJson(classe){
 
             let ctx = document.getElementById("map")
             let value = ctx.getAttribute('dados')
             let data = JSON.parse(value).data
             return data.filter((obj) => obj.classeSom == classe)
-        } {% endcomment %}
+        } */
 
         /* function escolheCor(cor){
             listadepoligonos.filter((obj)=>obj.fillColor==cor).forEach(function (obj) {

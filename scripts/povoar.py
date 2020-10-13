@@ -222,3 +222,8 @@ for cidades in historicos:
         cidade = cidades.cidade,
         dados = str(data)   
     ).save()
+
+print('Povoando o poligono do PI')
+arq = open('scripts/arquivos/PI.json', 'r')
+js = json.loads(arq.read())
+PoligonoPI.objects.create(poligono = str(js['coords'])).save()

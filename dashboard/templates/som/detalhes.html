@@ -6,6 +6,7 @@
 {% endblock title %}
 {% block head %}
     <link href= "{% static 'css/graficos.css' %}" rel="stylesheet" />
+    <link href= "{% static 'css/styles.css' %}" rel="stylesheet" />
     <style>
         /* Always set the map height explicitly to define the size of the div
         * element that contains the map. */
@@ -14,6 +15,7 @@
             min-width: 50%;
         }
     </style>
+
 {% endblock head %}
 {% block body %}
     <div class="container-fluid">
@@ -59,6 +61,25 @@
         </div> {% endcomment %}
         
         <div class="row d-flex d-flex-align-items-stretch">
+            <div class="col-xl-6 mb-4" id="map-container" >
+                {% comment %} <div class="btn-group btn-group-toggle" style="position: absolute;z-index: 80000; margin: 10px; height: 40px; border-radius: 2px;" data-toggle="buttons">
+                    <label class="btn btn-secondary active" style="border-radius: 2px; height: 100%;">
+                        <input type="radio" name="options" onchange="alterMap('map')" id="option1" autocomplete="off" checked> Municípios
+                    </label>
+                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
+                        <input type="radio" name="options" onchange="alterMap('map-regioes')"  id="option2" autocomplete="off"> Regiões
+                    </label>
+                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
+                        <input type="radio" name="options" onchange="alterMap('map-som')"  id="option3" autocomplete="off"> SOM
+                    </label>
+                </div> {% endcomment %}
+                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
+                    <div class="flex-grow-1 flex-shrink-0 pl-0" >
+                        <div id="map-pi" dados ="{{ piaui }}" style="display: none !important;"></div>
+                        <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
+                    </div>
+                </div> 
+            </div>
             <div class="col-xl-6 mb-4" style="height: 650px;">
                 <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
                     <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
@@ -108,19 +129,114 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
     <script src="{% static 'js/style_map.js' %}"></script>
-    
-    <script src="https://www.amcharts.com/lib/4/core.js" ></script>
-    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
-    {% comment %} <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script> {% endcomment %}
-    <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
 
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-    <script src="{% static 'js/lineChart.js' %}"></script>
     <script>
+        var id = "map"
+        var infowindow
+        var map;
+        var piaui = document.querySelector('#map-pi')
+        piaui = piaui.getAttribute('dados')
+        piaui = JSON.parse(piaui)
+        piaui = piaui.data
+        
+
+        function initMap() {
+            let styledMap = new google.maps.StyledMapType(style)
+
+            map = new google.maps.Map(document.querySelector('div#map'), {
+                center: { lat: -7.0364390, lng: -42.822612 },
+                zoom: 6.1,
+                streetViewControl: false,
+                mapTypeControl: false
+            });
+            map.mapTypes.set('styled_map', styledMap)
+            map.setMapTypeId('styled_map')
+            infowindow = new google.maps.InfoWindow(); //Cria a janela de informação usada para a área da ubs
+            
+            var linha = new google.maps.Polyline({
+                path: piaui,
+                geodesic:true,
+                strokeColor:"#000000",
+                strokeOpacity:1,
+                strokeWeight:1
+            })
+            linha.setMap(map)
+            poligono(infowindow,map)
+        }
+        function criaPoligono(path, cor, fill = 0.35) {
+            var cidades_poligonoreal = new google.maps.Polygon({
+                paths: path,
+                strokeColor: cor,
+                strokeOpacity: 0.8,
+                strokeWeight: 3,
+                fillColor: cor,
+                fillOpacity: fill
+            });
+            return cidades_poligonoreal
+        }
+
+
+        function buttonVerMais(nome){
+            return '<a href="/cidades/detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
+        }
+
+
+        function poligono(infowindow,mapa) {
+            // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
+            google.maps.event.addListener(mapa, 'click', function () {
+                infowindow.close();
+            });
+            let ctx = document.getElementById(id)
+            let value = ctx.getAttribute('dados')
+            let data = JSON.parse(value).data
+            
+            let dicionario_som = {
+                0: '#67ad45', 
+                1: '#f20089', 
+                2: '#ff0000', 
+                3: '#008bbf', 
+                4: '#fca311',
+            }
+            
+
+
+            data.forEach(element => {
+                cidades_poligono = criaPoligono(element.coordenadas,dicionario_som[element.classeSom])
+                cidades_poligono.setMap(mapa);
+
+        
+                // Evento para exibir a infowindow com o nome da UBS e a quantidade cada um dos tipos de notificações
+                cidades_poligono.addListener('click', function (event) {
+                    let nome
+                    nome = element.nome
+                    var contentString = '<div id="content" onunload="LimparCampo()">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
+                        String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
+                        "Incidência: " + String(element.incidencia)+
+                        '<br><br>'+ buttonVerMais(String(nome)) + '</div>';
+                    infowindow.setContent(contentString);
+                    infowindow.setPosition(event.latLng);
+                    infowindow.open(mapa);
+                    google.maps.event.addListener(infowindow, 'closeclick', LimparCampo)
+                });
+            });
+                    
+        }
+    </script>
+    
+    
+    {% comment %} <script src="https://www.amcharts.com/lib/4/core.js" ></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script> {% endcomment %}
+    {% comment %} <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script> {% endcomment %}
+    {% comment %} <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script> {% endcomment %}
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{google_api_key}}&callback=initMap"></script>
+    {% comment %} <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/lineChart.js' %}"></script> {% endcomment %}
+    {% comment %} <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-    </script>
+    </script> {% endcomment %}
 {% endblock scripts %}

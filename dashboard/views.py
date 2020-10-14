@@ -399,46 +399,36 @@ def som_list_view(request):
 
 
 def som_detalhes_view(request, classe):
+    env = os.environ
+    GOOGLE_API_KEY = env.get('GOOGLE_API_KEY')
     data_atualizacao = DataAtualizacao.objects.last()
     historico_cidades = HistoricoCidadesDiario.objects.filter(cidade__classe=classe)
     # casos_cidade = historico_cidades.values("cidade__nome")
-    casos_cidade = CasosCidade.objects.filter(classe=classe).values("nome","confirmados","obitos","incidencia","regiao")
+    casos_cidade = CasosCidade.objects.filter(classe=classe).values("nome","confirmados","obitos","incidencia","regiao","classe","coordenadas")
 
-    # dados_list = [literal_eval(obj.dados) for obj in historico_cidades]
-    # data_historico_diario_list = []
-    # for dados in dados_list:
-    #     data_historico_diario = [{
-    #             'date':obj[0],
-    #             'confirmados':obj[1],
-    #             'obitos':obj[2],
-    #         } for obj in dados]
-    #     data_historico_diario_list.append(data_historico_diario)
-    
-    # dicio = {}
-    # for ob in data_historico_diario_list:
-    #     for dados in ob:
-    #         try:
-    #             dicio[dados['date']] = {
-    #                 'confirmados':dicio[date]['confirmados']+dados['confirmados'],
-    #                 'obitos':dicio[date]['obitos']+dados['obitos'],
-    #             }
-    #         except:
-    #             dicio[dados['date']] = {
-    #                 'confirmados':dados['confirmados'],
-    #                 'obitos':dados['obitos'],
-    #             }
+    referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
+    def prepareJson(objeto):
+        return {
+            "nome": objeto['nome'],
+            "obitos": objeto['obitos'],
+            "confirmados": objeto['confirmados'],
+            "incidencia": str(objeto['incidencia']).replace('.',','),
+            "classeSom": objeto['classe'],
+            "classe": int(objeto['incidencia']*10/(2*referencia)),
+            "coordenadas": [{
+                "lng":float(coordenadas.split(',')[0]),
+                "lat":float(coordenadas.split(',')[1])
+            }  for coordenadas in objeto['coordenadas'].split(' ')]
+        }
 
-    # confirmados_atual = data_historico_diario['data'][-1]['confirmados']
-    # confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
-    # obitos_atual = data_historico_diario['data'][-1]['obitos']
-    # obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
+    data_mapa = {
+        'data': [prepareJson(obj) for obj in casos_cidade]
+    }
 
     context = {
-        # 'confirmados_atual':confirmados_atual,
-        # 'confirmados_novos':confirmados_novos,
-        # 'obitos_atual':obitos_atual,
-        # 'obitos_novos':obitos_novos,
-        # 'data_historico_diario':json.dumps(data_historico_diario),
+        'google_api_key':GOOGLE_API_KEY,
+        'piaui':json.dumps({'data':literal_eval(PoligonoPI.objects.last().poligono)}),
+        'data_mapa':json.dumps(data_mapa),
         'casos_cidade':casos_cidade,
         'nome':classe,
         'data_atualizacao':data_atualizacao,

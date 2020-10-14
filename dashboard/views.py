@@ -294,6 +294,10 @@ def detalhes_view(request, nome):
             'obitos':obj[2],
         } for obj in dados]
     }
+    confirmados_atual = data_historico_diario['data'][-1]['confirmados']
+    confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
+    obitos_atual = data_historico_diario['data'][-1]['obitos']
+    obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
     data_historico_diario['data'][-1]['lineDash'] = '2,2'
     for dia in dados_pred:
         data_historico_diario['data'].append({
@@ -305,10 +309,6 @@ def detalhes_view(request, nome):
             'lineDash': '2,2',
         })
 
-    confirmados_atual = data_historico_diario['data'][-1]['confirmados']
-    confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
-    obitos_atual = data_historico_diario['data'][-1]['obitos']
-    obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
 
     context = {
         'confirmados_atual':confirmados_atual,
@@ -346,6 +346,10 @@ def detalhes_cidade_view(request, nome):
             'obitos':obj[2],
         } for obj in dados]
     }
+    confirmados_atual = data_historico_diario['data'][-1]['confirmados']
+    confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
+    obitos_atual = data_historico_diario['data'][-1]['obitos']
+    obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
 
     data_historico_diario['data'][-1]['lineDash'] = '2,2'
     for dia in dados_pred:
@@ -358,10 +362,6 @@ def detalhes_cidade_view(request, nome):
             'lineDash': '2,2',
         })
 
-    confirmados_atual = data_historico_diario['data'][-1]['confirmados']
-    confirmados_novos = int(confirmados_atual) - int(data_historico_diario['data'][-2]['confirmados'])
-    obitos_atual = data_historico_diario['data'][-1]['obitos']
-    obitos_novos = int(obitos_atual) - int(data_historico_diario['data'][-2]['obitos'])
 
     context = {
         'confirmados_atual':confirmados_atual,

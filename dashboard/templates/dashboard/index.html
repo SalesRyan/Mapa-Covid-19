@@ -332,6 +332,9 @@
             if(id=="map"){
                 return '<a href="/cidades/detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
             }
+            if(id == "map-som"){
+                return '<a href="/som/detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
+            }
             return '<a href="/regioes/detalhes/'+nome+'"/>'+'<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
         }
 
@@ -425,10 +428,14 @@
                 
                 // Evento para exibir a infowindow com o nome da UBS e a quantidade cada um dos tipos de notificações
                 cidades_poligono.addListener('click', function (event) {
+                    let nome
+                    nome = element.nome
+                    if(id == 'map-som')
+                        nome = element.classeSom
                     var contentString = '<div id="content" onunload="LimparCampo()">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
                         String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +
                         "Incidência: " + String(element.incidencia)+
-                        '<br><br>'+ buttonVerMais(String(element.nome)) + '</div>';
+                        '<br><br>'+ buttonVerMais(String(nome)) + '</div>';
                     let busca = document.querySelector("#dataTable_filter > label > input")
                     if(id == "map")
                         busca.value = `^${element.nome}`

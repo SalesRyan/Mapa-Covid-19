@@ -5,8 +5,8 @@
     | {{nome}}
 {% endblock title %}
 {% block head %}
-    <link href= "{% static 'css/graficos.css' %}" rel="stylesheet" />
     <link href= "{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href= "{% static 'css/graficos.css' %}" rel="stylesheet" />
     <style>
         /* Always set the map height explicitly to define the size of the div
         * element that contains the map. */
@@ -58,27 +58,47 @@
                     </div>
                 </div>
             </div>
-        </div> {% endcomment %}
+        </div>  {% endcomment %}
         
         <div class="row d-flex d-flex-align-items-stretch">
             <div class="col-xl-6 mb-4" id="map-container" >
-                {% comment %} <div class="btn-group btn-group-toggle" style="position: absolute;z-index: 80000; margin: 10px; height: 40px; border-radius: 2px;" data-toggle="buttons">
-                    <label class="btn btn-secondary active" style="border-radius: 2px; height: 100%;">
-                        <input type="radio" name="options" onchange="alterMap('map')" id="option1" autocomplete="off" checked> Municípios
-                    </label>
-                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
-                        <input type="radio" name="options" onchange="alterMap('map-regioes')"  id="option2" autocomplete="off"> Regiões
-                    </label>
-                    <label class="btn btn-secondary" style="border-radius: 2px; height: 100%;">
-                        <input type="radio" name="options" onchange="alterMap('map-som')"  id="option3" autocomplete="off"> SOM
-                    </label>
-                </div> {% endcomment %}
                 <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
                         <div id="map-pi" dados ="{{ piaui }}" style="display: none !important;"></div>
-                        <div id="map" dados="{{ data_mapa }}" class="rounded pl-0"></div>
+                        <div id="map" dados="{{ data_mapa }}" dados-media-desvio="{{data_media_desvio}}"class="rounded pl-0"></div>
                     </div>
                 </div> 
+            </div>
+            <div class="col-xl-6 mb-4" style="height: 650px;">
+                <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
+                    <div class="card-header"><i class="fas fa-table mr-1"></i>Municípios</div>
+                    <div class="card-body overflow-auto">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTableDetalhes" width="100%" style="max-height: 700px;" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Cidade</th>
+                                        <th>Confirmados</th>
+                                        <th>Óbitos</th>
+                                        <th>Incidência</th>
+                                        <th style="display: none;">Região</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for object in casos_cidade %}
+                                        <tr>
+                                            <td>{{ object.nome }}</td>
+                                            <td>{{ object.confirmados }}</td>
+                                            <td>{{ object.obitos }}</td>
+                                            <td>{{ object.incidencia|float_filter_tag }}</td>
+                                            <td style="display: none;">{{ object.regiao }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-xl-6 mb-4" style="height: 650px;">
                 <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0; max-height: 850px !important;" >
@@ -189,6 +209,7 @@
             let ctx = document.getElementById(id)
             let value = ctx.getAttribute('dados')
             let data = JSON.parse(value).data
+            let data_media_desvio = ctx.getAttribute('data-media-desvio')
             
             let dicionario_som = {
                 0: '#67ad45', 
@@ -234,9 +255,9 @@
     {% comment %} <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="{% static 'js/lineChart.js' %}"></script> {% endcomment %}
-    {% comment %} <script>
+    <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-    </script> {% endcomment %}
+    </script>
 {% endblock scripts %}

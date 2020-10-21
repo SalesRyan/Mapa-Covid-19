@@ -7,6 +7,7 @@ from django.db.models import Max,Sum
 from scripts.funcoes import propDoen, respSaude
 import pandas as pd
 from ast import literal_eval
+import numpy as np
 
 # Create your views here.
 
@@ -421,14 +422,35 @@ def som_detalhes_view(request, classe):
             }  for coordenadas in objeto['coordenadas'].split(' ')]
         }
 
+    confirmados_list = list(map(lambda x: x['confirmados'], casos_cidade))
+    obitos_list = list(map(lambda x: x['obitos'], casos_cidade))
+    incidencia_list = list(map(lambda x: x['incidencia'], casos_cidade))
+
+    confirmados_media = np.average(confirmados_list)
+    obitos_media = np.average(obitos_list)
+    incidencia_media = np.average(incidencia_list)
+    confirmados_desvio = np.std(confirmados_list)
+    obitos_desvio = np.std(obitos_list)
+    incidencia_desvio = np.std(incidencia_list)
+
     data_mapa = {
         'data': [prepareJson(obj) for obj in casos_cidade]
+    }
+
+    data_media_desvio = {
+        'confirmados_media':confirmados_media,
+        'obitos_media':obitos_media,
+        'incidencia_media':incidencia_media,
+        'confirmados_desvio':confirmados_desvio,
+        'obitos_desvio':obitos_desvio,
+        'incidencia_desvio':incidencia_desvio,
     }
 
     context = {
         'google_api_key':GOOGLE_API_KEY,
         'piaui':json.dumps({'data':literal_eval(PoligonoPI.objects.last().poligono)}),
         'data_mapa':json.dumps(data_mapa),
+        'data_media_desvio':json.dumps(data_media_desvio),
         'casos_cidade':casos_cidade,
         'nome':classe,
         'data_atualizacao':data_atualizacao,

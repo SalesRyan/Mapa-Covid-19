@@ -407,6 +407,7 @@ def som_detalhes_view(request, classe):
     # casos_cidade = historico_cidades.values("cidade__nome")
     casos_cidade = CasosCidade.objects.filter(classe=classe).values("nome","confirmados","obitos","incidencia","regiao","classe","coordenadas")
 
+
     referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
     def prepareJson(objeto):
         return {
@@ -433,26 +434,49 @@ def som_detalhes_view(request, classe):
     obitos_desvio = np.std(obitos_list)
     incidencia_desvio = np.std(incidencia_list)
 
+    df = pd.read_csv("arquivos_auxiliares/Extração de dados/final.csv")
+
+    # media_bpc = np.average(dados_financeiros['VALOR_BPC'])
+    df_filter = pd.concat([df[ df['MUNICIPIO'] == obj['nome']] for obj in casos_cidade])
+    
+    bpc_desvio = round( df_filter['VALOR_BPC'].std(),2)
+    ae_desvio =  round(df_filter['VALOR_AE'].std(),2)
+    bf_desvio =  round(df_filter['VALOR_BF'].std(),2)
+    
+    bpc_media = round( df_filter['VALOR_BPC'].mean(),2)
+    ae_media =  round(df_filter['VALOR_AE'].mean(),2)
+    bf_media =  round(df_filter['VALOR_BF'].mean(),2)
+
+    bpc_qtd = round( df_filter['QTD_BPC'].sum(),2)
+    ae_qtd =  round(df_filter['QTD_AE'].sum(),2)
+    bf_qtd =  round(df_filter['QTD_BF'].sum(),2)
+
+
     data_mapa = {
         'data': [prepareJson(obj) for obj in casos_cidade]
-    }
-
-    data_media_desvio = {
-        'confirmados_media':confirmados_media,
-        'obitos_media':obitos_media,
-        'incidencia_media':incidencia_media,
-        'confirmados_desvio':confirmados_desvio,
-        'obitos_desvio':obitos_desvio,
-        'incidencia_desvio':incidencia_desvio,
     }
 
     context = {
         'google_api_key':GOOGLE_API_KEY,
         'piaui':json.dumps({'data':literal_eval(PoligonoPI.objects.last().poligono)}),
         'data_mapa':json.dumps(data_mapa),
-        'data_media_desvio':json.dumps(data_media_desvio),
         'casos_cidade':casos_cidade,
         'nome':classe,
         'data_atualizacao':data_atualizacao,
+        'bpc_desvio':bpc_desvio,
+        'ae_desvio':ae_desvio,
+        'bf_desvio':bf_desvio,
+        'bpc_media':bpc_media,
+        'ae_media':ae_media,
+        'bf_media':bf_media,
+        'bpc_qtd':bpc_qtd,
+        'ae_qtd':ae_qtd,
+        'bf_qtd':bf_qtd,
+        'confirmados_media':confirmados_media,
+        'obitos_media':obitos_media,
+        'incidencia_media':incidencia_media,
+        'confirmados_desvio':confirmados_desvio,
+        'obitos_desvio':obitos_desvio,
+        'incidencia_desvio':incidencia_desvio,
     }
     return render(request, 'som/detalhes.html',context)

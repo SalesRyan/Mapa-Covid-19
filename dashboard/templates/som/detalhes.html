@@ -77,23 +77,49 @@
                             <table class="table table-bordered" id="dataTableDetalhes" width="100%" style="max-height: 700px;" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Cidade</th>
-                                        <th>Confirmados</th>
-                                        <th>Óbitos</th>
-                                        <th>Incidência</th>
-                                        <th style="display: none;">Região</th>
+                                        <th>Benefício/Dado</th>
+                                        <th>Quantidade de pessoas</th>
+                                        <th>Média</th>
+                                        <th>Desvio Padrão</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for object in casos_cidade %}
-                                        <tr>
-                                            <td>{{ object.nome }}</td>
-                                            <td>{{ object.confirmados }}</td>
-                                            <td>{{ object.obitos }}</td>
-                                            <td>{{ object.incidencia|float_filter_tag }}</td>
-                                            <td style="display: none;">{{ object.regiao }}</td>
-                                        </tr>
-                                    {% endfor %}
+                                    <tr>
+                                        <td>Auxílio Emegergencial</td>
+                                        <td>{{ ae_qtd }}</td>
+                                        <td>{{ ae_media }}</td>
+                                        <td>{{ ae_desvio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Benefício de Prestação Continuada (BPC)</td>
+                                        <td>{{ bpc_qtd }}</td>
+                                        <td>{{ bpc_media }}</td>
+                                        <td>{{ bpc_desvio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bolsa Família</td>
+                                        <td>{{ bf_qtd }}</td>
+                                        <td>{{ bf_media }}</td>
+                                        <td>{{ bf_desvio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Confirmados</td>
+                                        <td>{{ bf_qtd }}</td>
+                                        <td>{{ bf_media }}</td>
+                                        <td>{{ bf_desvio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Obitos</td>
+                                        <td>{{ bf_qtd }}</td>
+                                        <td>{{ bf_media }}</td>
+                                        <td>{{ bf_desvio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Incidência</td>
+                                        <td>{{ bf_qtd }}</td>
+                                        <td>{{ bf_media }}</td>
+                                        <td>{{ bf_desvio }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

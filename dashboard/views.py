@@ -382,10 +382,13 @@ def som_detalhes_view(request, classe):
     data_atualizacao = DataAtualizacao.objects.last()
     historico_cidades = HistoricoCidadesDiario.objects.filter(cidade__classe=classe)
     # casos_cidade = historico_cidades.values("cidade__nome")
-    casos_cidade = CasosCidade.objects.filter(classe=classe).values("nome","confirmados","obitos","incidencia","regiao","classe","coordenadas")
+    casos_cidade = CasosCidade.objects.filter(classe=classe).values("nome","confirmados","obitos","incidencia","regiao","classe","coordenadas","populacao")
 
-
+    
     referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
+    pop_total = casos_cidade.aggregate(Sum('populacao'))['populacao__sum']
+    conf_total = casos_cidade.aggregate(Sum('confirmados'))['confirmados__sum']
+    incidencia = conf_total/pop_total * 10000
     def prepareJson(objeto):
         return {
             "nome": objeto['nome'],
@@ -449,12 +452,15 @@ def som_detalhes_view(request, classe):
         'bpc_qtd':bpc_qtd,
         'ae_qtd':ae_qtd,
         'bf_qtd':bf_qtd,
-        'confirmados_media':confirmados_media,
-        'obitos_media':obitos_media,
-        'incidencia_media':incidencia_media,
-        'confirmados_desvio':confirmados_desvio,
-        'obitos_desvio':obitos_desvio,
-        'incidencia_desvio':incidencia_desvio,
+        'confirmados':np.sum(confirmados_list),
+        'obitos':np.sum(obitos_list),
+        'incidencia':round(incidencia,2),
+        'confirmados_media':round(confirmados_media, 2),
+        'obitos_media':round(obitos_media, 2),
+        'incidencia_media':round(incidencia_media, 2),
+        'confirmados_desvio':round(confirmados_desvio),
+        'obitos_desvio':round(obitos_desvio, 2),
+        'incidencia_desvio':round(incidencia_desvio, 2),
     }
     return render(request, 'som/detalhes.html',context)
 

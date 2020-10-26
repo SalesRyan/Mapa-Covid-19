@@ -77,10 +77,10 @@
                             <table class="table table-bordered" id="dataTableDetalhes" width="100%" style="max-height: 700px;" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Benefício/Dado</th>
+                                        <th>Benefício</th>
                                         <th>Quantidade de pessoas</th>
-                                        <th>Média</th>
-                                        <th>Desvio Padrão</th>
+                                        <th>Média (R$)</th>
+                                        <th>Desvio Padrão (R$)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,23 +102,36 @@
                                         <td>{{ bf_media }}</td>
                                         <td>{{ bf_desvio }}</td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </div><div class="table-responsive">
+                            <table class="table table-bordered" id="dataTableDetalhes" width="100%" style="max-height: 700px;" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Dado</th>
+                                        <th>Quantidade de pessoas</th>
+                                        <th>Média</th>
+                                        <th>Desvio Padrão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td>Confirmados</td>
-                                        <td>{{ bf_qtd }}</td>
-                                        <td>{{ bf_media }}</td>
-                                        <td>{{ bf_desvio }}</td>
+                                        <td>{{ confirmados }}</td>
+                                        <td>{{ confirmados_media }}</td>
+                                        <td>{{ confirmados_desvio }}</td>
                                     </tr>
                                     <tr>
                                         <td>Obitos</td>
-                                        <td>{{ bf_qtd }}</td>
-                                        <td>{{ bf_media }}</td>
-                                        <td>{{ bf_desvio }}</td>
+                                        <td>{{ obitos }}</td>
+                                        <td>{{ obitos_media }}</td>
+                                        <td>{{ obitos_desvio }}</td>
                                     </tr>
                                     <tr>
                                         <td>Incidência</td>
-                                        <td>{{ bf_qtd }}</td>
-                                        <td>{{ bf_media }}</td>
-                                        <td>{{ bf_desvio }}</td>
+                                        <td>{{ incidencia }}</td>
+                                        <td>{{ incidencia_media }}</td>
+                                        <td>{{ incidencia_desvio }}</td>
                                     </tr>
                                 </tbody>
                             </table>

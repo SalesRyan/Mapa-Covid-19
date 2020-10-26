@@ -65,7 +65,7 @@ def generateDataUpdateTable(sheets):
     
 def generateInternedDataTable(sheets):
     
-    df = getData(sheets,index=28)
+    df = getData(sheets,index=0)
     df = df[df.Dias!='']
 
     df = CheckValue(df,'Capacidade Leitos Clínicos')
@@ -92,7 +92,7 @@ def generateInternedDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateCityDataTable(sheets):
-    df = getData(sheets,index=2)
+    df = getData(sheets,index=3)
     df = df[df['Município']!='PIAUÍ']
     df = df[df['Município']!='']
     df = df[df['Município'] != 'Total geral']   
@@ -128,7 +128,7 @@ def generateComorbidityTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateAgeRangeTable(sheets):
-    df = getData(sheets,index=10)
+    df = getData(sheets,index=11)
     df = df[df['Faixa Etária']!='TOTAL']
     d = {
         'Faixa Etária':df['Faixa Etária'].to_list(),
@@ -139,7 +139,7 @@ def generateAgeRangeTable(sheets):
 
 def generateGenderTable(sheets):
     df1 = getData(sheets,index=9)
-    df2 = getData(sheets,index=0)
+    df2 = getData(sheets,index=10)
     d = {
         'Obitos Masculino':list(df2[df2.Sexo=="Masculino"].Quantidade),
         'Obitos Feminino':list(df2[df2.Sexo=="Feminino"].Quantidade),
@@ -371,7 +371,7 @@ def respSaude(dfL):
 
 def generateRecoveredTable(sheets):
     
-    df = getData(sheets,index=18)
+    df = getData(sheets,index=19)
 
     d = {
         'Recuperados':df['Recuperados'].to_list(),

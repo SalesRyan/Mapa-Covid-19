@@ -15,5 +15,7 @@ urlpatterns = [
     path('som/list/', som_list_view, name='list_som'),
     path('som/detalhes/<int:classe>', som_detalhes_view, name='detalhes_som'),
 
+    path('json/poligonos/regioes', poligonos_regioes_view, name='json_poligonos_regioes'),
+
     path('sobre', sobre_view, name='sobre'),
 ]

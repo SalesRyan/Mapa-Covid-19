@@ -9,6 +9,8 @@ import pandas as pd
 from ast import literal_eval
 import numpy as np
 
+from django.http import JsonResponse
+
 # Create your views here.
 
 
@@ -480,3 +482,25 @@ def som_detalhes_view(request, classe):
         'incidencia_desvio':incidencia_desvio,
     }
     return render(request, 'som/detalhes.html',context)
+
+def poligonos_regioes_view(request):
+    casos_regioes = CasosRegioes.objects.all().values()
+    referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
+    
+    def prepareRegioesJson(objeto):
+        return {
+            "nome": objeto['nome'],
+            "obitos": objeto['obitos'],
+            "confirmados": objeto['confirmados'],
+            "incidencia": str(round(objeto['incidencia'],2)).replace('.',','),
+            "classe": int(objeto['incidencia']*10/(2*referencia_regioes)),
+            "coordenadas": [{
+                "lng":float(coordenadas.split(',')[0]),
+                "lat":float(coordenadas.split(',')[1])
+            }  for coordenadas in objeto['coordenadas'].split(' ')]
+        }
+    
+    data_mapa_regioes = {
+        'data': [prepareRegioesJson(obj) for obj in casos_regioes]
+    }
+    return JsonResponse(data)

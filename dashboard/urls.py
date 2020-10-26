@@ -15,7 +15,9 @@ urlpatterns = [
     path('som/list/', som_list_view, name='list_som'),
     path('som/detalhes/<int:classe>', som_detalhes_view, name='detalhes_som'),
 
-    path('json/poligonos/regioes', poligonos_regioes_view, name='json_poligonos_regioes'),
+    path('api/poligonos/regioes', poligonos_regioes_api_view, name='api_poligonos_regioes'),
+    path('api/grafico/cidades', grafico_cidades_api_view, name='api_grafico_cidades'),
+    path('api/grafico/leitos', grafico_leitos_api_view, name='api_grafico_leitos'),
 
     path('sobre', sobre_view, name='sobre'),
 ]

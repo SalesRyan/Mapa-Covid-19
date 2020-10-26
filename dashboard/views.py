@@ -11,6 +11,8 @@ import numpy as np
 
 from django.http import JsonResponse
 
+from .functions import *
+
 # Create your views here.
 
 
@@ -126,43 +128,16 @@ def site_view(request):
         } for obj in casos_faixa_etaria]
     }
     referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
-   
-    def prepareJson(objeto):
-        return {
-            "nome": objeto['nome'],
-            "obitos": objeto['obitos'],
-            "confirmados": objeto['confirmados'],
-            "incidencia": str(objeto['incidencia']).replace('.',','),
-            "classeSom": objeto['classe'],
-            "classe": int(objeto['incidencia']*10/(2*referencia)),
-            "coordenadas": [{
-                "lng":float(coordenadas.split(',')[0]),
-                "lat":float(coordenadas.split(',')[1])
-            }  for coordenadas in objeto['coordenadas'].split(' ')]
-        }
-
     num_classe_som = casos_cidade.aggregate(Max('classe'))['classe__max']
    
     referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
-    def prepareRegioesJson(objeto):
-        return {
-            "nome": objeto['nome'],
-            "obitos": objeto['obitos'],
-            "confirmados": objeto['confirmados'],
-            "incidencia": str(round(objeto['incidencia'],2)).replace('.',','),
-            "classe": int(objeto['incidencia']*10/(2*referencia_regioes)),
-            "coordenadas": [{
-                "lng":float(coordenadas.split(',')[0]),
-                "lat":float(coordenadas.split(',')[1])
-            }  for coordenadas in objeto['coordenadas'].split(' ')]
-        }
     
     data_mapa = {
-        'data': [prepareJson(obj) for obj in casos_cidade]
+        'data': [prepareJson(obj,referencia) for obj in casos_cidade]
     }
     
     data_mapa_regioes = {
-        'data': [prepareRegioesJson(obj) for obj in casos_regioes]
+        'data': [prepareRegioesJson(obj,referencia_regioes) for obj in casos_regioes]
     }
 
     ocupacao = last_leitos.ocupados_clinicos
@@ -483,24 +458,69 @@ def som_detalhes_view(request, classe):
     }
     return render(request, 'som/detalhes.html',context)
 
-def poligonos_regioes_view(request):
+def poligonos_regioes_api_view(request):
     casos_regioes = CasosRegioes.objects.all().values()
     referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
     
-    def prepareRegioesJson(objeto):
-        return {
-            "nome": objeto['nome'],
-            "obitos": objeto['obitos'],
-            "confirmados": objeto['confirmados'],
-            "incidencia": str(round(objeto['incidencia'],2)).replace('.',','),
-            "classe": int(objeto['incidencia']*10/(2*referencia_regioes)),
-            "coordenadas": [{
-                "lng":float(coordenadas.split(',')[0]),
-                "lat":float(coordenadas.split(',')[1])
-            }  for coordenadas in objeto['coordenadas'].split(' ')]
-        }
-    
     data_mapa_regioes = {
-        'data': [prepareRegioesJson(obj) for obj in casos_regioes]
+        'data': [prepareRegioesJson(obj,referencia_regioes) for obj in casos_regioes]
     }
-    return JsonResponse(data)
+    return JsonResponse(data_mapa_regioes)
+
+def grafico_cidades_api_view(request):
+    dados_estado = DadosEstado.objects.all()
+    dados_estado_pred = DadosEstadoPredicao.objects.all()
+    data_casos_cidades = {
+            'data': [{
+                'date':str(obj.data.strftime('%d-%m-%Y')),
+                'confirmados':obj.confirmados,
+                'obitos':obj.obitos, 
+            } for obj in dados_estado]
+        }
+    data_casos_cidades['data'][-1]['lineDash'] = '2,2'
+    for obj in dados_estado_pred:
+        data_casos_cidades['data'].append({
+            'date':str(obj.data.strftime('%d-%m-%Y')),
+            'confirmados':obj.confirmados,
+            'obitos':obj.obitos,
+            'additional': '(Projeção)',
+            'lineColor': '#f8cd3c',
+            'lineDash': '2,2',
+        })
+    return JsonResponse(data_casos_cidades)
+
+def grafico_leitos_api_view(request):
+    leitos = Leitos.objects.all().order_by("data")
+    dados_leitos_pred = LeitosPredicao.objects.all()
+
+    data_leitos = {
+        'data': [{
+            'date':str(obj.data.strftime('%d-%m-%Y')),
+            'capacidadeClinicos':obj.capacidade_clinicos,
+            'ocupadosClinicos':obj.ocupados_clinicos/obj.capacidade_clinicos,
+            'capacidadeUti':obj.capacidade_uti,
+            'ocupadosUti':obj.ocupados_uti/obj.capacidade_uti,
+            'capacidadeEstabilizacao':obj.capacidade_estabilizacao,
+            'ocupadosEstabilizacao':obj.ocupados_estabilizacao/obj.capacidade_estabilizacao,
+            'capacidadeRespiradores':obj.capacidade_respiradores,
+            'ocupadosRespiradores':obj.ocupados_respiradores/obj.capacidade_respiradores,
+        } for obj in leitos]
+    }
+
+    data_leitos['data'][-1]['lineDash'] = '2,2'
+    for obj in dados_leitos_pred:
+        data_leitos['data'].append({
+            'date':str(obj.data.strftime('%d-%m-%Y')),
+            'capacidadeClinicos':1,
+            'ocupadosClinicos':obj.taxa_ocupados_clinicos/100,
+            'capacidadeUti':1,
+            'ocupadosUti':obj.taxa_ocupados_uti/100,
+            'capacidadeEstabilizacao':1,
+            'ocupadosEstabilizacao':obj.taxa_ocupados_estabilizacao/100,
+            'capacidadeRespiradores':1,
+            'ocupadosRespiradores':obj.taxa_ocupados_respiradores/100,
+            'additional': '(Projeção)',
+            'lineColor': '#f8cd3c',
+            'lineDash': '2,2',
+        })
+    return JsonResponse(data_leitos)

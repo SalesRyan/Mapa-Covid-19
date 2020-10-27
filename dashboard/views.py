@@ -45,88 +45,6 @@ def site_view(request):
     penult_leitos = leitos[size_leitos-2]
     altas_atual = last_leitos.altas
     altas_novos = altas_atual - penult_leitos.altas
-
-    data_casos_cidades = {
-        'data': [{
-            'date':str(obj.data.strftime('%d-%m-%Y')),
-            'confirmados':obj.confirmados,
-            'obitos':obj.obitos, 
-        } for obj in dados_estado]
-    }
-    data_casos_cidades['data'][-1]['lineDash'] = '2,2'
-    for obj in dados_estado_pred:
-        data_casos_cidades['data'].append({
-            'date':str(obj.data.strftime('%d-%m-%Y')),
-            'confirmados':obj.confirmados,
-            'obitos':obj.obitos,
-            'additional': '(Projeção)',
-            'lineColor': '#f8cd3c',
-            'lineDash': '2,2',
-        })
-
-    data_leitos = {
-        'data': [{
-            'date':str(obj.data.strftime('%d-%m-%Y')),
-            'capacidadeClinicos':obj.capacidade_clinicos,
-            'ocupadosClinicos':obj.ocupados_clinicos/obj.capacidade_clinicos,
-            'capacidadeUti':obj.capacidade_uti,
-            'ocupadosUti':obj.ocupados_uti/obj.capacidade_uti,
-            'capacidadeEstabilizacao':obj.capacidade_estabilizacao,
-            'ocupadosEstabilizacao':obj.ocupados_estabilizacao/obj.capacidade_estabilizacao,
-            'capacidadeRespiradores':obj.capacidade_respiradores,
-            'ocupadosRespiradores':obj.ocupados_respiradores/obj.capacidade_respiradores,
-        } for obj in leitos]
-    }
-
-    data_leitos['data'][-1]['lineDash'] = '2,2'
-    for obj in dados_leitos_pred:
-        data_leitos['data'].append({
-            'date':str(obj.data.strftime('%d-%m-%Y')),
-            'capacidadeClinicos':1,
-            'ocupadosClinicos':obj.taxa_ocupados_clinicos/100,
-            'capacidadeUti':1,
-            'ocupadosUti':obj.taxa_ocupados_uti/100,
-            'capacidadeEstabilizacao':1,
-            'ocupadosEstabilizacao':obj.taxa_ocupados_estabilizacao/100,
-            'capacidadeRespiradores':1,
-            'ocupadosRespiradores':obj.taxa_ocupados_respiradores/100,
-            'additional': '(Projeção)',
-            'lineColor': '#f8cd3c',
-            'lineDash': '2,2',
-        })
-
-
-    data_comorbidades = {
-        'data': [{
-            'name':obj.nome,
-            'value':obj.quantidade,
-        } for obj in comorbidades]
-    } 
-    data_sexo_casos = {
-        'data' : [{
-                'label':'Masculino',
-                'value':casos_sexo.casos_masculinos,
-            },{
-                'label':'Feminino',
-                'value':casos_sexo.casos_femininos
-            }]
-    }
-    data_sexo_obitos = {
-        'data' : [{
-                'label':'Masculino',
-                'value':casos_sexo.obitos_masculinos,
-            },{
-                'label':'Feminino',
-                'value':casos_sexo.obitos_femininos,
-            }]
-    }
-    data_faixa = {
-        'data': [{
-            'faixaEtaria':obj.faixa_etaria,
-            'confirmados':obj.confirmados,
-            'obitos':obj.obitos,
-        } for obj in casos_faixa_etaria]
-    }
     referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
     num_classe_som = casos_cidade.aggregate(Max('classe'))['classe__max']
    
@@ -233,12 +151,6 @@ def site_view(request):
         'confirmados_novos': confirmados_novos,
         'obitos_atual': obitos_atual,
         'obitos_novos': obitos_novos,
-        'data_faixa':json.dumps(data_faixa),
-        'data_sexo_casos':json.dumps(data_sexo_casos),
-        'data_sexo_obitos':json.dumps(data_sexo_obitos),
-        'data_casos_cidade': json.dumps(data_casos_cidades),
-        'data_leitos': json.dumps(data_leitos),
-        'data_comorbidades': json.dumps(data_comorbidades),
         'casos_cidade': casos_cidade,
         'data_mapa': json.dumps(data_mapa),
         'data_mapa_regioes': json.dumps(data_mapa_regioes),
@@ -530,3 +442,50 @@ def grafico_leitos_api_view(request):
             'lineDash': '2,2',
         })
     return JsonResponse(data_leitos)
+
+def grafico_comormidades_api_view(request):
+    comorbidades = Comorbidades.objects.all()
+    data_comorbidades = {
+            'data': [{
+                'name':obj.nome,
+                'value':obj.quantidade,
+            } for obj in comorbidades]
+        } 
+    return JsonResponse(data_comorbidades)
+
+def grafico_sexo_confirmados_api_view(request):
+    casos_sexo = CasosSexo.objects.last()
+    data_sexo_casos = {
+        'data' : [{
+                'label':'Masculino',
+                'value':casos_sexo.casos_masculinos,
+            },{
+                'label':'Feminino',
+                'value':casos_sexo.casos_femininos
+            }]
+    }
+    return JsonResponse(data_sexo_casos)
+
+def grafico_sexo_obitos_api_view(request):
+    casos_sexo = CasosSexo.objects.last()
+    data_sexo_obitos = {
+        'data' : [{
+                'label':'Masculino',
+                'value':casos_sexo.obitos_masculinos,
+            },{
+                'label':'Feminino',
+                'value':casos_sexo.obitos_femininos,
+            }]
+    }
+    return JsonResponse(data_sexo_obitos)
+
+def grafico_faixa_api_view(request):
+    casos_faixa_etaria = CasosFaixaEtaria.objects.all()
+    data_faixa = {
+        'data': [{
+            'faixaEtaria':obj.faixa_etaria,
+            'confirmados':obj.confirmados,
+            'obitos':obj.obitos,
+        } for obj in casos_faixa_etaria]
+    }
+    return JsonResponse(data_faixa)

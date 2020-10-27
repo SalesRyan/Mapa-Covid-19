@@ -18,6 +18,10 @@ urlpatterns = [
     path('api/poligonos/regioes', poligonos_regioes_api_view, name='api_poligonos_regioes'),
     path('api/grafico/cidades', grafico_cidades_api_view, name='api_grafico_cidades'),
     path('api/grafico/leitos', grafico_leitos_api_view, name='api_grafico_leitos'),
+    path('api/grafico/comorbidades', grafico_comormidades_api_view, name='api_grafico_comorbidades'),
+    path('api/grafico/sexo/confirmados', grafico_sexo_confirmados_api_view, name='api_grafico_sexo_confirmados'),
+    path('api/grafico/sexo/obitos', grafico_sexo_obitos_api_view, name='api_grafico_sexo_obitos'),
+    path('api/grafico/faixa-etaria', grafico_faixa_api_view, name='api_grafico_faixa'),
 
     path('sobre', sobre_view, name='sobre'),
 ]

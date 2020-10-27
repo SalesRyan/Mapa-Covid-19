@@ -145,7 +145,7 @@
                         <input type="radio" name="options" onchange="alterMap('map-som')"  id="option3" autocomplete="off"> SOM
                     </label>
                 </div>
-                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0">
+                <div class="map container-fluid d-flex w-100 h-100 p-0 pl-0" onload="graficos()">
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
                         <div id="map-pi" dados ="{{ piaui }}" style="display: none !important;"></div>
                         <div id="map" dados="{{ data_mapa }}" num-classe-som="{{num_classe_som}}" class="rounded pl-0"></div>
@@ -227,13 +227,13 @@
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6">
                     <div class="card-header"><i class="fas fa-chart-line mr-1"></i>Situação no Piauí</div>
-                    <div class="chart" id="chart-1" dados="{{ data_casos_cidade }}" ></div>
+                    <div class="chart" id="chart-1"></div>
                 </div>
             </div>
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6">
                     <div class="card-header"><i class="fas fa-chart-line mr-1"></i>Ocupação dos Leitos no Piauí</div>
-                    <div class="chart" id="chartdivleitos" dados="{{ data_leitos }}"></div>
+                    <div class="chart" id="chartdivleitos"></div>
                 </div>
             </div>
         </div>
@@ -242,15 +242,15 @@
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6">
                     <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Casos por Idade</div>
-                    <div class="chart" id="chartdivfaixaetaria" dados="{{ data_faixa }}"></div>
+                    <div class="chart" id="chartdivfaixaetaria"></div>
                 </div>
             </div>
             <div class="col-xl-6 mb-4">
                 <div class="card mb-6" >
                     <div class="card-header" ><i class="fas fa-chart-pie mr-1"></i>Distribuição por Sexo</div>
                     <div class="pizza d-flex">
-                        <div class="pizza-chart" id="chartdivsexocasos" dados="{{ data_sexo_casos }}" ></div>
-                        <div class="pizza-chart" id="chartdivsexoobitos" dados="{{ data_sexo_obitos }}"></div>
+                        <div class="pizza-chart" id="chartdivsexocasos" ></div>
+                        <div class="pizza-chart" id="chartdivsexoobitos"></div>
                     </div>
                 </div>
             </div>
@@ -470,5 +470,20 @@
         })
 
     </script>
+
+    <script>
+        graficosLinhaSituacao()
+        graficosLinhaLeitos()
+        graficosPizza()
+        graficosPizzaObitos() 
+        graficosPessoaComordidades()
+        graficosBarrasFaixaEtaria()
+        function graficos (){
+            console.log("ok")
+        }
+
+    </script>
+
+
 
 {% endblock scripts %}              

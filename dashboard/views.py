@@ -327,21 +327,22 @@ def som_detalhes_view(request, classe):
     incidencia_desvio = np.std(incidencia_list)
 
     df = pd.read_csv("arquivos_auxiliares/Extração de dados/final.csv")
+    df_pop = pd.read_csv("arquivos_auxiliares/Extração de dados/final_normalizado.csv")
 
     # media_bpc = np.average(dados_financeiros['VALOR_BPC'])
-    df_filter = pd.concat([df[ df['MUNICIPIO'] == obj['nome']] for obj in casos_cidade])
+    df_filter = pd.concat([df[df['MUNICIPIO'] == obj['nome']] for obj in casos_cidade])
+    df_filter_pop = pd.concat([df_pop[df_pop['MUNICIPIO'] == obj['nome']] for obj in casos_cidade])
+    bpc_desvio = round(df_filter_pop['VALOR_BPC'].std(),2)
+    ae_desvio =  round(df_filter_pop['VALOR_AE'].std(),2)
+    bf_desvio =  round(df_filter_pop['VALOR_BF'].std(),2)
     
-    bpc_desvio = round( df_filter['VALOR_BPC'].std(),2)
-    ae_desvio =  round(df_filter['VALOR_AE'].std(),2)
-    bf_desvio =  round(df_filter['VALOR_BF'].std(),2)
-    
-    bpc_media = round( df_filter['VALOR_BPC'].mean(),2)
-    ae_media =  round(df_filter['VALOR_AE'].mean(),2)
-    bf_media =  round(df_filter['VALOR_BF'].mean(),2)
+    bpc_media = round(df_filter_pop['VALOR_BPC'].mean(),2)
+    ae_media =  round(df_filter_pop['VALOR_AE'].mean(),2)
+    bf_media =  round(df_filter_pop['VALOR_BF'].mean(),2)
 
-    bpc_qtd = round( df_filter['QTD_BPC'].sum(),2)
-    ae_qtd =  round(df_filter['QTD_AE'].sum(),2)
-    bf_qtd =  round(df_filter['QTD_BF'].sum(),2)
+    bpc_qtd = round(df_filter['QTD_BPC'].sum()/pop_total,2)
+    ae_qtd =  round(df_filter['QTD_AE'].sum()/pop_total,2)
+    bf_qtd =  round(df_filter['QTD_BF'].sum()/pop_total,2)
 
 
     data_mapa = {
@@ -364,8 +365,8 @@ def som_detalhes_view(request, classe):
         'bpc_qtd':bpc_qtd,
         'ae_qtd':ae_qtd,
         'bf_qtd':bf_qtd,
-        'confirmados':np.sum(confirmados_list),
-        'obitos':np.sum(obitos_list),
+        'confirmados':round(np.sum(confirmados_list), 4),
+        'obitos':round(np.sum(obitos_list), 4),
         'incidencia':round(incidencia,2),
         'confirmados_media':round(confirmados_media, 2),
         'obitos_media':round(obitos_media, 2),

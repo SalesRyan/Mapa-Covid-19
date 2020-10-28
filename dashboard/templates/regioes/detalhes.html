@@ -123,4 +123,9 @@
             $('[data-toggle="tooltip"]').tooltip()
         })
     </script>
+    <script>
+        let ctx = document.querySelector("#chart-1")
+        let data = JSON.parse(ctx.getAttribute("dados")).data
+        graficosLinhaSituacao(data)
+    </script>
 {% endblock scripts %}

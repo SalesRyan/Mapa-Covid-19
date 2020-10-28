@@ -1,83 +1,81 @@
-function graficosLinhaSituacao() {
-        
-    //am4core.useTheme(am4themes_animated);
-    var data = null
-    let endpoint = "/api/grafico/cidades"
+function ajaxGraficoCidade(){
     $.ajax({
-    method: "GET",
-        url: endpoint,
+        method: "GET",
+        url: "/api/grafico/cidades",
         async: false,
-        success: function (data_ajax){
-            data = data_ajax
-            data = data.data
-                
-            // Create chart instance
-            let chart = am4core.create(document.getElementById("chart-1"), am4charts.XYChart);
-            
-            chart.language.locale = am4lang_pt_BR;
-            chart.dateFormatter.language = new am4core.Language();
-            chart.dateFormatter.language.locale = am4lang_pt_BR;
-            
-            for(let item of data){
-                if(item.lineColor){
-                    item.lineColor = am4core.color(item.lineColor) 
-                }
-            }
-        
-            chart.data = data;
-            chart.dateFormatter.inputDateFormat = "dd-MM-yyyy";
-            
-            // Create axes
-            let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-            dateAxis.renderer.grid.template.location = 0;
-            
-            let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-            
-            // Create series
-            function createSeries(field, name) {
-                let series = chart.series.push(new am4charts.LineSeries());
-                series.dataFields.valueY = field;
-                series.dataFields.dateX = "date";
-                series.name = name;
-                series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('#')}[/] [#fff]{additional}[/]";
-                series.strokeWidth = 2;
-                series.propertyFields.stroke = "lineColor"
-                series.propertyFields.strokeDasharray = "lineDash";
-                
-                
-                let bullet = series.bullets.push(new am4charts.CircleBullet());
-                bullet.propertyFields.fill = "lineColor";
-                bullet.stroke = am4core.color("#fff");
-                // bullet.fill = am4core.color("#ff0000");
-                bullet.strokeWidth = 1;
-                //bullet.propertyFields.stroke = "bulletColor"
-                //console.log(bullet)
-        
-        
-                return series;
-            }
-            
-            
-            let series1 = createSeries("confirmados", "Confirmados");
-            let series2 = createSeries("obitos", "Óbitos");
-            
-            chart.legend = new am4charts.Legend();
-            chart.cursor = new am4charts.XYCursor();
-            
-            chart.scrollbarX = new am4charts.XYChartScrollbar();
-            chart.scrollbarX.series.push(series1);
-            chart.scrollbarX.series.push(series2);
-            chart.scrollbarX.parent = chart.bottomAxesContainer;
-            
-            chart.chartContainer.pixelMarginTop = 100
-            chart.chartContainer.MarginTop = 100
-            chart.chartContainer.relativeMarginTop = 100
-            dateAxis.start = 0.79;
-            dateAxis.keepSelection = true;
+        success: function (data_ajax) {
+            data = data_ajax.data
+            graficosLinhaSituacao(data)
             graficosLinhaLeitos()
-        },
+        }
     })
+}
+
+function graficosLinhaSituacao(data) {   
+
+    //am4core.useTheme(am4themes_animated);
+    let chart = am4core.create(document.getElementById("chart-1"), am4charts.XYChart);
     
+    chart.language.locale = am4lang_pt_BR;
+    chart.dateFormatter.language = new am4core.Language();
+    chart.dateFormatter.language.locale = am4lang_pt_BR;
+    
+    for(let item of data){
+        if(item.lineColor){
+            item.lineColor = am4core.color(item.lineColor) 
+        }
+    }
+
+    chart.data = data;
+    chart.dateFormatter.inputDateFormat = "dd-MM-yyyy";
+    
+    // Create axes
+    let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    dateAxis.renderer.grid.template.location = 0;
+    
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    
+    // Create series
+    function createSeries(field, name) {
+        let series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.valueY = field;
+        series.dataFields.dateX = "date";
+        series.name = name;
+        series.tooltipText = "{dateX.formatDate('dd/MM/yy')}: {valueY.formatNumber('#')}[/] [#fff]{additional}[/]";
+        series.strokeWidth = 2;
+        series.propertyFields.stroke = "lineColor"
+        series.propertyFields.strokeDasharray = "lineDash";
+        
+        
+        let bullet = series.bullets.push(new am4charts.CircleBullet());
+        bullet.propertyFields.fill = "lineColor";
+        bullet.stroke = am4core.color("#fff");
+        // bullet.fill = am4core.color("#ff0000");
+        bullet.strokeWidth = 1;
+        //bullet.propertyFields.stroke = "bulletColor"
+        //console.log(bullet)
+
+
+        return series;
+    }
+    
+    
+    let series1 = createSeries("confirmados", "Confirmados");
+    let series2 = createSeries("obitos", "Óbitos");
+    
+    chart.legend = new am4charts.Legend();
+    chart.cursor = new am4charts.XYCursor();
+    
+    chart.scrollbarX = new am4charts.XYChartScrollbar();
+    chart.scrollbarX.series.push(series1);
+    chart.scrollbarX.series.push(series2);
+    chart.scrollbarX.parent = chart.bottomAxesContainer;
+    
+    chart.chartContainer.pixelMarginTop = 100
+    chart.chartContainer.MarginTop = 100
+    chart.chartContainer.relativeMarginTop = 100
+    dateAxis.start = 0.79;
+    dateAxis.keepSelection = true;
 }
 
 function graficosLinhaLeitos() {

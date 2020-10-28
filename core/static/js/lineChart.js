@@ -6,7 +6,7 @@ function graficosLinhaSituacao() {
     $.ajax({
     method: "GET",
         url: endpoint,
-        // async: false,
+        async: false,
         success: function (data_ajax){
             data = data_ajax
             data = data.data
@@ -74,6 +74,7 @@ function graficosLinhaSituacao() {
             chart.chartContainer.relativeMarginTop = 100
             dateAxis.start = 0.79;
             dateAxis.keepSelection = true;
+            graficosLinhaLeitos()
         },
     })
     
@@ -88,7 +89,7 @@ function graficosLinhaLeitos() {
     $.ajax({
         method: "GET",
         url: endpoint,
-        // async: false,
+        async: false,
         success: function (data_ajax) {
             data = data_ajax
             data = data.data
@@ -157,6 +158,7 @@ function graficosLinhaLeitos() {
             
             dateAxis.start = 0.79;
             dateAxis.keepSelection = true;
+            graficosPizza()
         },
     })
 }
@@ -213,6 +215,7 @@ function graficosPizza() {
             
             chart.legend = new am4charts.Legend();
             chart.legend.marginBottom = 20;
+            graficosPizzaObitos()
         },
     })
     
@@ -225,7 +228,7 @@ function graficosPizzaObitos() {
     $.ajax({
         method: "GET",
         url: endpoint,
-        // async: false,
+        async: false,
         success: function (data_ajax) {
             data = data_ajax
             data = data.data
@@ -269,6 +272,7 @@ function graficosPizzaObitos() {
             
             chart.legend = new am4charts.Legend();
             chart.legend.marginBottom = 20;
+            graficosPessoaComordidades()
         },
     })
 }
@@ -280,7 +284,7 @@ function graficosPessoaComordidades() {
     $.ajax({
         method: "GET",
         url: endpoint,
-        // async: false,
+        async: false,
         success: function (data_ajax) {
             data = data_ajax
             data = data.data
@@ -311,6 +315,7 @@ function graficosPessoaComordidades() {
             chart.legend = new am4charts.Legend();
             chart.legend.position = "left";
             chart.legend.valign = "bottom";
+            graficosBarrasFaixaEtaria()
         },
     })
     
@@ -322,7 +327,7 @@ function graficosBarrasFaixaEtaria() {
     $.ajax({
         method: "GET",
         url: endpoint,
-        // async: false,
+        async: false,
         success: function (data_ajax) {
             data = data_ajax
             data = data.data

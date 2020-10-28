@@ -63,7 +63,7 @@ function buttonVerMais(nome) {
     if (id == "map") {
         return '<a href="/cidades/detalhes/' + nome + '"/>' + '<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
     }
-    if (id == "map-som") {
+    if (id == "map-agrupamento") {
         return '<a href="/agrupamento/detalhes/' + nome + '"/>' + '<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
     }
     return '<a href="/regioes/detalhes/' + nome + '"/>' + '<button id="botaoteste" class="btn btn-sm btn-link">Ver Mais</button>'
@@ -93,7 +93,7 @@ function poligono(infowindow, mapa) {
         infowindow.close();
     });
     let ctx = document.getElementById(id)
-    if (id == "map-som") {
+    if (id == "map-agrupamento") {
         mapa.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('legend'));
         ctx = document.getElementById("map")
         document.querySelector('#legend').style.display = 'block'
@@ -128,7 +128,7 @@ function poligono(infowindow, mapa) {
 
 
     data.forEach(element => {
-        if (id == "map-som") {
+        if (id == "map-agrupamento") {
             cidades_poligono = criaPoligono(element.coordenadas, dicionario_som[element.classeSom])
         } else {
             cidades_poligono = criaPoligono(element.coordenadas, dicionario[element.classe])
@@ -141,7 +141,7 @@ function poligono(infowindow, mapa) {
         cidades_poligono.addListener('click', function (event) {
             let nome
             nome = element.nome
-            if (id == 'map-som')
+            if (id == 'map-agrupamento')
                 nome = element.classeSom
             var contentString = '<div id="content" onunload="LimparCampo()">' + "<h6>" + String(element.nome) + "</h6>" + "Casos confirmados: " +
                 String(element.confirmados) + "<br><br>" + "Obitos: " + String(element.obitos) + "<br><br>" +

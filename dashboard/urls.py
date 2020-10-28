@@ -12,8 +12,8 @@ urlpatterns = [
     path('cidades/detalhes/<str:nome>', detalhes_cidade_view, name='detalhes_cidade'),
     path('cidades/list', cidades_list_view, name='list_cidades'),
 
-    path('agrupamento/list/', som_list_view, name='list_som'),
-    path('agrupamento/detalhes/<int:classe>', som_detalhes_view, name='detalhes_som'),
+    path('agrupamento/list/', agrupamento_list_view, name='list_agrupamento'),
+    path('agrupamento/detalhes/<int:classe>', agrupamento_detalhes_view, name='detalhes_agrupamento'),
 
     path('api/poligonos/regioes', poligonos_regioes_api_view, name='api_poligonos_regioes'),
     path('api/grafico/cidades', grafico_cidades_api_view, name='api_grafico_cidades'),

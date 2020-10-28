@@ -276,7 +276,7 @@ def cidades_list_view(request):
 def sobre_view(request):
     return render(request, 'dashboard/sobre.html')
 
-def som_list_view(request):
+def agrupamento_list_view(request):
     cidades = CasosCidade.objects.all()
     num_classe_som = cidades.aggregate(Max('classe'))['classe__max']
 
@@ -288,7 +288,7 @@ def som_list_view(request):
     return render(request, 'som/list.html', context)
 
 
-def som_detalhes_view(request, classe):
+def agrupamento_detalhes_view(request, classe):
     env = os.environ
     GOOGLE_API_KEY = env.get('GOOGLE_API_KEY')
     data_atualizacao = DataAtualizacao.objects.last()

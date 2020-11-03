@@ -163,6 +163,7 @@ def cabecalhoGenerateHistory(sheets):
     df = df.replace({'BERTOLINEA': "Bertolínia"})
     df = df.replace({'CAPITAO GERVASIO DE OLIVEIRA': "CAPITAO GERVASIO OLIVEIRA"})
     df = df.replace({'sao braz': "sao braz do piaui"})
+    df = df.replace({'SAO BRAZ DO PIAUI DO PIAUI': "sao braz do piaui"})
 
     return df
 

@@ -2,7 +2,7 @@ from sklearn.cluster import KMeans, AffinityPropagation, MeanShift, SpectralClus
 import pandas as pd
 
 
-def agrupamento(df_nor, df_real, mode, n_groups = 3, verbose = 0):
+def agrupamento(df_nor=pd.read_csv('scripts/agrupamentos/df_normalizado.csv'), df_real=pd.read_csv('scripts/agrupamentos/df_normal.csv'), mode='kmeans', n_groups = 3, verbose = 0):
     
     if verbose:
         print('Show DataFrames:')
@@ -84,7 +84,7 @@ def agrupamento(df_nor, df_real, mode, n_groups = 3, verbose = 0):
             print(var.describe())
             print(result[index])
  
-    return final_groups, final_citys
+    return final_citys
 
 
 # df_nor = pd.read_csv('final_normalizado 0 a 1.csv')

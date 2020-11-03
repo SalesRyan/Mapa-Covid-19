@@ -37,7 +37,6 @@ print('povoando casosCidade coordenadas')
 print('povoando casosCidade')
 def classAgrupamento(nome):
     grupos = agrupamento()
-    map()
     for index,grupo in enumerate(grupos):
         if unidecode(nome.replace("'", "")) in grupo:
             return index

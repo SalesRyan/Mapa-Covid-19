@@ -7,6 +7,23 @@ piaui = piaui.getAttribute('dados')
 piaui = JSON.parse(piaui)
 piaui = piaui.data
 
+let dicionario = {
+    0: '#e85d04',
+    1: '#dc2f02',
+    2: '#9d0208',
+    3: '#6a040f',
+    4: '#370617',
+    5: '#370617',
+}
+
+let dicionario_som = {
+    0: '#67ad45',
+    1: '#f20089',
+    2: '#ff0000',
+    3: '#008bbf',
+    4: '#fca311',
+}
+
 function initMap() {
     let styledMap = new google.maps.StyledMapType(style)
 
@@ -108,25 +125,24 @@ function poligono(infowindow, mapa) {
     }
     let value = ctx.getAttribute('dados')
     let data = JSON.parse(value).data
-    let dicionario = {
-        0: '#e85d04',
-        1: '#dc2f02',
-        2: '#9d0208',
-        3: '#6a040f',
-        4: '#370617',
-        5: '#370617',
+    
+    function prepareString(index, color){
+        return `<button style="border: none; " onclick="escolheCor('${color}')">
+            <div class="d-flex justify-content-around">
+                <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: ${color};"></span>
+                <h6 style="align-self: baseline;">Classe ${index}</h6>
+            </div>
+        </button>`
     }
-
-    let dicionario_som = {
-        0: '#67ad45',
-        1: '#f20089',
-        2: '#ff0000',
-        3: '#008bbf',
-        4: '#fca311',
+    let size = Math.max(...data.map((a) => a.classeSom))
+    let str = ""
+    while(size >= 0){
+        str = prepareString(size+1, dicionario_som[size]) + str    
+        size-=1
     }
-
-
-
+    document.querySelector('#classes-container').innerHTML = str
+    
+        
     data.forEach(element => {
         if (id == "map-agrupamento") {
             cidades_poligono = criaPoligono(element.coordenadas, dicionario_som[element.classeSom])

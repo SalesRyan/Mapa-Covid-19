@@ -36,9 +36,10 @@ print('povoando casosCidade coordenadas')
 
 print('povoando casosCidade')
 def classAgrupamento(nome):
-    grupos = agrupamento()
+    grupos = agrupamento() 
+    grupos = [[cidade.replace("'","") for cidade in grupo] for grupo in grupos]
     for index,grupo in enumerate(grupos):
-        if unidecode(nome.replace("'", "")) in grupo:
+        if unidecode(nome) in grupo:
             return index
     return -1
 

@@ -18,7 +18,7 @@
             padding: 10px;
             bottom: 25px !important;
             left: 5px !important;
-            height: 35%;
+            max-height: 35%;
             width: 120px;
         }
     </style>
@@ -149,38 +149,9 @@
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
                         <div id="map-pi" dados ="{{ piaui }}" style="display: none !important;"></div>
                         <div id="map" dados="{{ data_mapa }}" num-classe-som="{{num_classe_som}}" class="rounded pl-0"></div>
-                        <div id="legend" style="overflow: hidden;">
-                            <div class="d-flex flex-column justify-content-between h-100 w-100">
-                                <button style="border: none; " onclick="escolheCor('#67ad45')">
-                                    <div class="d-flex justify-content-around">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: #67ad45;"></span>
-                                        <h6 style="align-self: baseline;">Classe 1</h6>
-                                    </div>
-                                </button>
-                                <button style="border: none;" onclick="escolheCor('#f20089')">
-                                    <div class="d-flex justify-content-around">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #f20089;"></span>
-                                        <h6 style="align-self: baseline;">Classe 2</h6>
-                                    </div>
-                                </button>
-                                <button style="border: none;" onclick="escolheCor('#ff0000')">
-                                    <div class="d-flex justify-content-around">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #ff0000;"></span>
-                                        <h6 style="align-self: baseline;">Classe 3</h6>
-                                    </div>
-                                </button>
-                                <button style="border: none;" onclick="escolheCor('#008bbf')">
-                                    <div class="d-flex justify-content-around">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #008bbf;"></span>
-                                        <h6 style="align-self: baseline;">Classe 4</h6>
-                                    </div>
-                                </button>
-                                <button style="border: none;" onclick="escolheCor('#fca311')">
-                                    <div class="d-flex justify-content-around">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px;align-self: baseline; background: #fca311;"></span>
-                                        <h6 style="align-self: baseline;">Classe 5</h6>
-                                    </div>
-                                </button>
+                        <div id="legend" class="overflow-hidden">
+                            <div id="classes-container" class="d-flex flex-column justify-content-between h-100 w-100">             
+                                <!--- Inserção Via javascript-->
                             </div>
                         </div>
                         <div id="map-regioes" dados="{{ data_mapa_regioes }}" class="d-none"></div>

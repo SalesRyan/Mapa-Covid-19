@@ -18,6 +18,7 @@ from scripts.funcoes import *
 from django.db.models import Sum
 from ast import literal_eval
 import json
+from scripts.agrupamentos.agrupamentos import agrupamento
 
 filterwarnings("ignore")
 sheets = authentic()
@@ -34,10 +35,10 @@ print('povoando casosCidade coordenadas')
 
 
 print('povoando casosCidade')
-def classSom(nome):
-    grupos = json.loads(open('scripts/arquivos/grupos.json', 'r').read())
-    for index,grupo in enumerate(grupos['data']):
-        if nome in grupo:
+def classAgrupamento(nome):
+    grupos = agrupamento()
+    for index,grupo in enumerate(grupos):
+        if unidecode(nome.replace("'", "")) in grupo:
             return index
     return -1
 
@@ -50,7 +51,7 @@ dataset = [CasosCidade.objects.update_or_create(
         'incidencia':str(d[3]).replace(',', '.'),
         'populacao':d[4],
         'cep':d[5],
-        'classe':classSom(d[0]),
+        'classe':classAgrupamento(d[0]),
     }) for d in df.values]
 
 print("Povoando a data de atualização")
@@ -140,8 +141,8 @@ kml_regiao = parser.fromstring(arq_regiao)
 
 print('povoando CasosRegioes coordenadas')
 dataset = [CasosRegioes.objects.create(
-    nome=unidecode(str(placemark.name)).upper(),
-    coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).replace(" ","").replace("\n", " ").strip(),
+        nome=unidecode(str(placemark.name)).upper(),
+        coordenadas=str(placemark.Polygon.outerBoundaryIs.LinearRing.coordinates).replace(" ","").replace("\n", " ").strip(),
     ).save() for placemark in kml_regiao.Document.Placemark]
 
 regioes = json.loads(open('scripts/arquivos/regioes.json', 'r').read())

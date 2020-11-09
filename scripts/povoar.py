@@ -19,6 +19,8 @@ from django.db.models import Sum
 from ast import literal_eval
 import json
 from scripts.agrupamentos.agrupamentos import agrupamento
+from scripts.agrupamentos.povoar_atualizar_financeiro import povoar as povoar_financeiro
+
 
 filterwarnings("ignore")
 sheets = authentic()
@@ -54,6 +56,9 @@ dataset = [CasosCidade.objects.update_or_create(
         'cep':d[5],
         'classe':classAgrupamento(d[0]),
     }) for d in df.values]
+
+print("Povoando os dados fincanceiro")
+povoar_financeiro()
 
 print("Povoando a data de atualização")
 dataset = [DataAtualizacao.objects.create(

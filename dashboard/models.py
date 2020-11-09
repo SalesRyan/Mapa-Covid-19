@@ -177,4 +177,16 @@ class DadosFinanceiros(AuditModel):
     quantidade_auxilio_emergencial = models.IntegerField("Quantidade Auxílio Emergencial")
     valor_BPC = models.IntegerField("Valor BPC")
     quantidade_BPC = models.IntegerField("Quantidade BPC")
-    data_atualizacao = models.DateField("Consultado em ", auto_now=False, auto_now_add=False)
+    
+    def __str__(self):
+        return self.cidade.nome
+
+    class Meta:
+        ordering = ['cidade']
+
+class RefereciaAtualizacaoFinaceiro(AuditModel):
+    referencia = models.CharField("Consultado em", max_length=50)
+
+    def __str__(self):
+        return self.referencia
+

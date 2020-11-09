@@ -17,6 +17,9 @@ historico_cidades_pred = HistoricoCidadesDiarioPred.objects.all()
 recuperados = Recuperados.objects.all()
 poligono = PoligonoPI.objects.all()
 
+DadosFinanceiros.objects.all().delete()
+RefereciaAtualizacaoFinaceiro.objects.all().delete()
+
 data_atualizacao.delete()
 dados_estado.delete()
 historico_cidades_pred.delete()

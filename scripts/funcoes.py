@@ -52,10 +52,14 @@ def authentic():
     client = gspread.authorize(creds)
     return client.open_by_key('1b-GkDhhxJIwWcA6tk3z4eX58f-f1w2TA2f2XrI4XB1w')
 
+def getSheetIndex(name, sheets):
+    for idx, sheet in enumerate(sheets):
+        if(sheet.title == name):
+            return idx
 
 def generateDataUpdateTable(sheets):
     
-    df = getData(sheets,index=5)
+    df = getData(sheets,index=getSheetIndex('Dt Atualiza', sheets))
 
     d = {
         'Data de Atualização':df['Data'].to_list(),
@@ -65,7 +69,7 @@ def generateDataUpdateTable(sheets):
     
 def generateInternedDataTable(sheets):
     
-    df = getData(sheets,index=0)
+    df = getData(sheets,index=getSheetIndex('Internações Dia', sheets))
     df = df[df.Dias!='']
 
     df = CheckValue(df,'Capacidade Leitos Clínicos')
@@ -92,7 +96,7 @@ def generateInternedDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateCityDataTable(sheets):
-    df = getData(sheets,index=3)
+    df = getData(sheets,index=getSheetIndex('Conf Obito Mun', sheets))
     df = df[df['Município']!='PIAUÍ']
     df = df[df['Município']!='']
     df = df[df['Município'] != 'Total geral']   
@@ -108,7 +112,7 @@ def generateCityDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateStateDataTable(sheets):
-    df = getData(sheets,index=4)
+    df = getData(sheets,index=getSheetIndex('Casos por Dia', sheets))
 
     d = {
         'Dias':df['Dias'].to_list(),
@@ -119,7 +123,7 @@ def generateStateDataTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateComorbidityTable(sheets):
-    df = getData(sheets,index=1)
+    df = getData(sheets,index=getSheetIndex('Comorbidades', sheets))
     
     d = {
         'Morbidades':df['Morbidades'].to_list(),
@@ -128,7 +132,7 @@ def generateComorbidityTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateAgeRangeTable(sheets):
-    df = getData(sheets,index=11)
+    df = getData(sheets,index=getSheetIndex('Conf Obt Fx Etária', sheets))
     df = df[df['Faixa Etária']!='TOTAL']
     d = {
         'Faixa Etária':df['Faixa Etária'].to_list(),
@@ -138,8 +142,8 @@ def generateAgeRangeTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def generateGenderTable(sheets):
-    df1 = getData(sheets,index=9)
-    df2 = getData(sheets,index=10)
+    df1 = getData(sheets,index=getSheetIndex('Conf Sexo', sheets))
+    df2 = getData(sheets,index=getSheetIndex('Óbito Sexo', sheets))
     d = {
         'Obitos Masculino':list(df2[df2.Sexo=="Masculino"].Quantidade),
         'Obitos Feminino':list(df2[df2.Sexo=="Feminino"].Quantidade),
@@ -149,7 +153,7 @@ def generateGenderTable(sheets):
     return pd.DataFrame(data=d).replace({'': 0})
 
 def cabecalhoGenerateHistory(sheets):
-    df = getData(sheets,index=30)
+    df = getData(sheets,index=getSheetIndex('HistóricoDiário', sheets))
     d = {
         'DATA':df['DATA'].to_list(),
         'MUNICÍPIO':df['MUNICÍPIO'].to_list(),
@@ -296,7 +300,7 @@ def pred_de(X_train,y_train,X_test):
 
     pred_values = modelo_polinomial.predict(X_test)
     pred = np.int_(pred_values)
-    return pred
+    return np.int_(np.where(pred < 0, 0, pred))
     
 
 def pred_clinical(csv,mode=7):
@@ -372,7 +376,7 @@ def respSaude(dfL):
 
 def generateRecoveredTable(sheets):
     
-    df = getData(sheets,index=19)
+    df = getData(sheets,index=getSheetIndex('Altas Médicas', sheets))
 
     d = {
         'Recuperados':df['Recuperados'].to_list(),

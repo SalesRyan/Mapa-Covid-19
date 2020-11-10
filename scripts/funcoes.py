@@ -113,6 +113,7 @@ def generateCityDataTable(sheets):
 
 def generateStateDataTable(sheets):
     df = getData(sheets,index=getSheetIndex('Casos por Dia', sheets))
+    df = df[df.Dias!='']
 
     d = {
         'Dias':df['Dias'].to_list(),
@@ -154,6 +155,7 @@ def generateGenderTable(sheets):
 
 def cabecalhoGenerateHistory(sheets):
     df = getData(sheets,index=getSheetIndex('HistóricoDiário', sheets))
+    df = df[df.DATA!='']
     d = {
         'DATA':df['DATA'].to_list(),
         'MUNICÍPIO':df['MUNICÍPIO'].to_list(),

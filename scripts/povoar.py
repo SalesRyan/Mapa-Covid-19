@@ -38,7 +38,35 @@ print('povoando casosCidade coordenadas')
 
 print('povoando casosCidade')
 def classAgrupamento(nome):
-    grupos = agrupamento() 
+    objs = DadosFinanceiros.objects.all()
+    dicio = {
+        'MUNICIPIO':[],
+        'VALOR_BF':[],
+        'QTD_BF':[],
+        'VALOR_AE':[],
+        'QTD_AE':[],
+        'VALOR_BPC':[],
+        'QTD_BPC':[],
+        'CONF':[],
+        'OBT':[],
+        'INC':[],
+        'POP':[]
+    }
+    for obj in objs:
+        dicio['MUNICIPIO'].append(obj.cidade.nome)
+        dicio['VALOR_BF'].append(obj.valor_bolsa_familia)
+        dicio['QTD_BF'].append(obj.quantidade_bolsa_familia)
+        dicio['VALOR_AE'].append(obj.valor_auxilio_emergencial)
+        dicio['QTD_AE'].append(obj.quantidade_auxilio_emergencial)
+        dicio['VALOR_BPC'].append(obj.valor_BPC)
+        dicio['QTD_BPC'].append(obj.quantidade_BPC)
+        dicio['CONF'].append(obj.cidade.confirmados)
+        dicio['OBT'].append(obj.cidade.obitos)
+        dicio['INC'].append(obj.cidade.incidencia)
+        dicio['POP'].append(obj.cidade.populacao)
+    df = pd.DataFrame(dicio)
+    df_normalizado = df.apply(lambda x: pd.Series([x[0], x[1]/x[10], x[2]/x[10], x[3]/x[10], x[4]/x[10], x[5]/x[10], x[6]/x[10], x[7]/x[10], x[8]/x[10], x[9]]), axis=1 ,raw=True)
+    grupos = agrupamento(df_real=df, df_nor=df_normalizado) 
     grupos = [[cidade.replace("'","") for cidade in grupo] for grupo in grupos]
     for index,grupo in enumerate(grupos):
         if unidecode(nome) in grupo:
@@ -57,8 +85,6 @@ dataset = [CasosCidade.objects.update_or_create(
         'classe':classAgrupamento(d[0]),
     }) for d in df.values]
 
-print("Povoando os dados fincanceiro")
-povoar_financeiro()
 
 print("Povoando a data de atualização")
 dataset = [DataAtualizacao.objects.create(
@@ -234,3 +260,7 @@ print('Povoando o poligono do PI')
 arq = open('scripts/arquivos/PI.json', 'r')
 js = json.loads(arq.read())
 PoligonoPI.objects.create(poligono = str(js['coords'])).save()
+
+print("Povoando os dados fincanceiro")
+povoar_financeiro()
+

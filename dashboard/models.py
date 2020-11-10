@@ -193,3 +193,9 @@ class RefereciaAtualizacaoFinaceiro(AuditModel):
 class CorrecaoCasosCidade(AuditModel):
     nome = models.CharField("Nome errado", max_length=50)
     cidade = models.ForeignKey("dashboard.CasosCidade", verbose_name="Cidade", on_delete=models.DO_NOTHING, null=True)
+    
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        ordering = ['cidade']

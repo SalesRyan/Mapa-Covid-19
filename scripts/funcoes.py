@@ -15,6 +15,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from warnings import filterwarnings
 from unidecode import unidecode
+from scripts.email import mail
 
 filterwarnings("ignore")
 
@@ -182,6 +183,11 @@ def generateHistoryTable(sheets):
         }
     """
     df = cabecalhoGenerateHistory(sheets)
+
+
+    for ob in CorrecaoCasosCidade.objects.all():
+        df = df.replace({ob.nome: ob.cidade.nome}) 
+
     hashmap = json.loads(open('scripts/arquivos/hashmap.json', 'r').read())
     dicio = {}
 
@@ -189,13 +195,18 @@ def generateHistoryTable(sheets):
         dicio[regiao] = []
 
     for idx, line in enumerate(df.values):
-        regiao = hashmap[unidecode(str(line[1])).upper()]
-        if dicio[regiao] and line[0] in dicio[regiao][-1]:
-            dicio[regiao][-1] = [line[0],int(line[2])+dicio[regiao][-1][1], int(line[3])+dicio[regiao][-1][2]]
-        else:
-            dicio[regiao].append([line[0],int(line[2]), int(line[3])])
+        try:
+            regiao = hashmap[unidecode(str(line[1])).upper().replace("'","")]
+            if dicio[regiao] and line[0] in dicio[regiao][-1]:
+                dicio[regiao][-1] = [line[0],int(line[2])+dicio[regiao][-1][1], int(line[3])+dicio[regiao][-1][2]]
+            else:
+                dicio[regiao].append([line[0],int(line[2]), int(line[3])])
+        except:
+            mail("Nome da cidade não identificado","Essa cidade nao existe: " +str(line[1])+ " Vá em <<url>>/admin/dashboard/correcaocasoscidade/, adicione esse o nome não identificado e selecione o nome correto")
+            raise "Nome da cidade não identificado: " + str(line[1])
     return dicio
-    
+        
+
 def generateHistoryCityTable(sheets):
     """
         Modelo de Json:

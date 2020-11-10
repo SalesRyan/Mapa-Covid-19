@@ -171,11 +171,11 @@ class PoligonoPI(AuditModel):
 
 class DadosFinanceiros(AuditModel):
     cidade = models.ForeignKey("dashboard.CasosCidade", verbose_name="Cidade", on_delete=models.DO_NOTHING, null=True)
-    valor_bolsa_familia = models.IntegerField("Valor Bolsa Família")
+    valor_bolsa_familia = models.FloatField("Valor Bolsa Família")
     quantidade_bolsa_familia = models.IntegerField("Quantidade Bolsa Família")
-    valor_auxilio_emergencial = models.IntegerField("Valor Auxílio Emergencial")
+    valor_auxilio_emergencial = models.FloatField("Valor Auxílio Emergencial")
     quantidade_auxilio_emergencial = models.IntegerField("Quantidade Auxílio Emergencial")
-    valor_BPC = models.IntegerField("Valor BPC")
+    valor_BPC = models.FloatField("Valor BPC")
     quantidade_BPC = models.IntegerField("Quantidade BPC")
     
     def __str__(self):

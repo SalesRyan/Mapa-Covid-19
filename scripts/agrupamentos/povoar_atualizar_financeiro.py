@@ -16,6 +16,8 @@ import os
 import environ
 
 from scripts.agrupamentos.funcoes import *
+from scripts.agrupamentos.agrupamentos import definirGrupo
+from dashboard.models import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env_file = os.path.join(BASE_DIR, ".env")
@@ -79,3 +81,4 @@ def verificar():
         inserir()
         referencia.referencia = mes_ano
         referencia.save()
+        definirGrupo(CasosCidade.objects.all())

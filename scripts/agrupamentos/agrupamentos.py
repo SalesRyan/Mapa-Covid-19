@@ -1,6 +1,10 @@
 from sklearn.cluster import KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering, DBSCAN, OPTICS, Birch
 import pandas as pd
 
+from dashboard.models import *
+from unidecode import unidecode
+
+
 
 def agrupamento(df_nor=pd.read_csv('scripts/agrupamentos/df_normalizado.csv'), df_real=pd.read_csv('scripts/agrupamentos/df_normal.csv'), mode='kmeans', n_groups = 3, verbose = 0):
     
@@ -94,3 +98,46 @@ def agrupamento(df_nor=pd.read_csv('scripts/agrupamentos/df_normalizado.csv'), d
 
 # print(groups)
 # print(citys)
+
+def classAgrupamento(nome):
+    objs = DadosFinanceiros.objects.all()
+    dicio = {
+        'MUNICIPIO':[],
+        'VALOR_BF':[],
+        'QTD_BF':[],
+        'VALOR_AE':[],
+        'QTD_AE':[],
+        'VALOR_BPC':[],
+        'QTD_BPC':[],
+        'CONF':[],
+        'OBT':[],
+        'INC':[],
+        'POP':[]
+    }
+    for obj in objs:
+        dicio['MUNICIPIO'].append(obj.cidade.nome)
+        dicio['VALOR_BF'].append(obj.valor_bolsa_familia)
+        dicio['QTD_BF'].append(obj.quantidade_bolsa_familia)
+        dicio['VALOR_AE'].append(obj.valor_auxilio_emergencial)
+        dicio['QTD_AE'].append(obj.quantidade_auxilio_emergencial)
+        dicio['VALOR_BPC'].append(obj.valor_BPC)
+        dicio['QTD_BPC'].append(obj.quantidade_BPC)
+        dicio['CONF'].append(obj.cidade.confirmados)
+        dicio['OBT'].append(obj.cidade.obitos)
+        dicio['INC'].append(obj.cidade.incidencia)
+        dicio['POP'].append(obj.cidade.populacao)
+    df = pd.DataFrame(dicio)
+    df_normalizado = df.apply(lambda x: pd.Series([x[0], x[1]/x[10], x[2]/x[10], x[3]/x[10], x[4]/x[10], x[5]/x[10], x[6]/x[10], x[7]/x[10], x[8]/x[10], x[9]]), axis=1 ,raw=True)
+    df_normalizado = df_normalizado.rename(columns={x:y for x,y in enumerate(dicio.keys())})
+    grupos = agrupamento(df_real=df, df_nor=df_normalizado) 
+    grupos = [[cidade.replace("'","") for cidade in grupo] for grupo in grupos]
+    for index,grupo in enumerate(grupos):
+        if unidecode(nome) in grupo:
+            return index
+    return -1
+
+def definirGrupo(objs):
+    print('Definindo grupos do agrupamento casosCidade agrupamento')
+    for obj in objs:
+        obj.classe=classAgrupamento(obj.nome)
+        obj.save() 

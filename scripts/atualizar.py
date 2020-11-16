@@ -17,7 +17,7 @@ def atualizarDataUpdate(d):
     return False
 
 def atualizarDadosEstado(d):
-    for line in d[-5:]:    
+    for line in d[-15:]:    
         DadosEstado.objects.update_or_create(
             data=datetime.strptime(line[0]+'/2020','%d/%m/%Y'),
             defaults={
@@ -48,7 +48,7 @@ def atualizarCasosRegioes():
         obj.save()
 
 def atualizarLeitos(d):
-    for line in d[-5:]:
+    for line in d[-15:]:
         Leitos.objects.update_or_create(
             data=datetime.strptime(line[0],'%d/%m/%Y'),
             defaults={

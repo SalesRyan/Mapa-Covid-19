@@ -99,7 +99,7 @@ def agrupamento(df_nor=pd.read_csv('scripts/agrupamentos/df_normalizado.csv'), d
 # print(groups)
 # print(citys)
 
-def classAgrupamento(nome):
+def classAgrupamento():
     objs = DadosFinanceiros.objects.all()
     dicio = {
         'MUNICIPIO':[],
@@ -131,13 +131,12 @@ def classAgrupamento(nome):
     df_normalizado = df_normalizado.rename(columns={x:y for x,y in enumerate(dicio.keys())})
     grupos = agrupamento(df_real=df, df_nor=df_normalizado) 
     grupos = [[cidade.replace("'","") for cidade in grupo] for grupo in grupos]
-    for index,grupo in enumerate(grupos):
-        if unidecode(nome) in grupo:
-            return index
-    return -1
+    return grupos
 
 def definirGrupo(objs):
     print('Definindo grupos do agrupamento casosCidade agrupamento')
-    for obj in objs:
-        obj.classe=classAgrupamento(obj.nome)
-        obj.save() 
+    grupos = classAgrupamento()
+    for idx,grupo in enumerate(grupos):
+        for obj in objs.filter(nome__in=grupo):
+            obj.classe=idx
+            obj.save() 

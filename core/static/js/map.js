@@ -101,6 +101,15 @@ function escolheCor(cor) {
     })
 }
 
+function prepareString(index, color){
+    return `<button style="border: none; " onclick="escolheCor('${color}')">
+        <div class="d-flex justify-content-around">
+            <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: ${color};"></span>
+            <h6 style="align-self: baseline;">&nbsp;Grupo ${index}</h6>
+        </div>
+    </button>`
+}
+
 function poligono(infowindow, mapa) {
     // Evento para fechar a infowindow caso o usuário clique num lugar do mapa sem ser a área de alguma UBS
     google.maps.event.addListener(mapa, 'click', function () {
@@ -113,27 +122,23 @@ function poligono(infowindow, mapa) {
     if (id == "map-agrupamento") {
         mapa.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('legend'));
         ctx = document.getElementById("map")
+        document.querySelector('#legend-map-regioes').style.display = 'none'
+        document.querySelector('#legend-map-cidades').style.display = 'none'
         document.querySelector('#legend').style.display = 'block'
-        /* Array.from(document.querySelectorAll('div#legend > div > button')).forEach(function (obj){
-            document.addListener(obj, "click", escolheCor(obj.style.background))
-        }) */
-        /* num_classe_som = ctx.getAttribute('num-class-som')
-        criaInfoLengend(num_classe_som,) */
-    } else {
+    } else if (id=="map"){
         ctx = document.getElementById(id)
+        document.querySelector('#legend').style.display = 'none'
+        document.querySelector('#legend-map-regioes').style.display = 'none'
+        document.querySelector('#legend-map-cidades').style.display = 'block'
+    } else{
+        ctx = document.getElementById(id)
+        document.querySelector('#legend-map-cidades').style.display = 'none'
+        document.querySelector('#legend-map-regioes').style.display = 'block'
         document.querySelector('#legend').style.display = 'none'
     }
     let value = ctx.getAttribute('dados')
     let data = JSON.parse(value).data
     
-    function prepareString(index, color){
-        return `<button style="border: none; " onclick="escolheCor('${color}')">
-            <div class="d-flex justify-content-around">
-                <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: ${color};"></span>
-                <h6 style="align-self: baseline;">Classe ${index}</h6>
-            </div>
-        </button>`
-    }
     let size = Math.max(...data.map((a) => a.classeSom))
     let str = ""
     while(size >= 0){

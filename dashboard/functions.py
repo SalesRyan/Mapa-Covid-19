@@ -25,3 +25,25 @@ def prepareRegioesJson(objeto,referencia_regioes):
             "lat":float(coordenadas.split(',')[1])
         }  for coordenadas in objeto['coordenadas'].split(' ')]
     }
+
+dicionario_color = {
+    0: '#e85d04',
+    1: '#dc2f02',
+    2: '#9d0208',
+    3: '#6a040f',
+    4: '#370617',
+    5: '#370617',
+}
+
+def data_min_max(dados):
+    incidencia_min_max = list()
+    for index in range(0,6):
+        try:
+            incidencia_min_max.append({
+                'min':min(data['incidencia'] for data in dados if data['classe'] == index),
+                'max':max(data['incidencia'] for data in dados if data['classe'] == index),
+                'color':dicionario_color[index],
+            })
+        except :
+            print(index)
+    return incidencia_min_max

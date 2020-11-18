@@ -58,6 +58,9 @@ def site_view(request):
         'data': [prepareRegioesJson(obj,referencia_regioes) for obj in casos_regioes]
     }
 
+    incidencia_cidades = data_min_max(data_mapa['data'])
+    incidencia_regioes = data_min_max(data_mapa_regioes['data'])
+
     ocupacao = last_leitos.ocupados_clinicos
     ocupacao += last_leitos.ocupados_uti
     ocupacao += last_leitos.ocupados_estabilizacao
@@ -156,8 +159,8 @@ def site_view(request):
         'data_mapa_regioes': json.dumps(data_mapa_regioes),
         'ocupacao_atual':str(round(taxa_ocupacao,2)).replace('.', ','),
         'ocupacao_novos':str(taxa_ocupacao_penult).replace('.', ','),
-        # 'altas_atual':altas_atual,
-        # 'altas_novos':altas_novos,
+        'incidencia_cidades':incidencia_cidades,
+        'incidencia_regioes':incidencia_regioes,
         'recuperados':recuperados,
         'prop_doen':prop_doen,
         'resp_saude':resp_saude,

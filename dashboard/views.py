@@ -285,7 +285,8 @@ def agrupamento_list_view(request):
 
 
     context = {
-        'classe':[num for num in range(num_classe_som+1)]
+        'classe':[num for num in range(num_classe_som+1)],
+        'cor':['#67ad45','#f20089','#ff0000']
     }
     
     return render(request, 'som/list.html', context)

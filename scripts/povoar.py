@@ -223,7 +223,7 @@ arq = open('scripts/arquivos/PI.json', 'r')
 js = json.loads(arq.read())
 PoligonoPI.objects.create(poligono = str(js['coords'])).save()
 
-print("Povoando os dados fincanceiro")
+print("Povoando os dados financeiro")
 povoar_financeiro()
 
 print('povoando agrupamento')

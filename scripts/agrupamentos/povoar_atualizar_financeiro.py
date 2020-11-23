@@ -23,21 +23,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env_file = os.path.join(BASE_DIR, ".env")
 environ.Env.read_env(env_file)
 env = os.environ
-key_ae = env.get('key_ae')
-key_bf = env.get('key_bf')
-key_bpc = env.get('key_bpc')
+key = env.get('key')
 
 
 cod_teresina = '2211001'
 data_atual = date.today()
 
 nomes = ['auxilio-emergencial-por-municipio', 'bolsa-familia-por-municipio', 'bpc-por-municipio']
-headers_ae = {'Accept': 'application/json', 'chave-api-dados': key_ae}
-headers_bf = {'Accept': 'application/json', 'chave-api-dados': key_bf}
-headers_bpc = {'Accept': 'application/json', 'chave-api-dados': key_bpc}
+headers = {'Accept': 'application/json', 'chave-api-dados': key}
 
-
-mes_ano = min_data(data_atual,headers_ae,headers_bf,headers_bpc,nomes,cod_teresina)
+mes_ano = min_data(data_atual,headers,nomes,cod_teresina)
 print("mes_ano:",mes_ano)
 def inserir():
 
@@ -52,9 +47,9 @@ def inserir():
         url_bpc = f'http://www.portaltransparencia.gov.br/api-de-dados/{nomes[2]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
         
         time.sleep(0.1)
-        dados_dicio_ae = get_data_api(url_ae, headers = headers_ae )
-        dados_dicio_bf = get_data_api(url_bf, headers =headers_bf )
-        dados_dicio_bpc = get_data_api(url_bpc, headers = headers_bpc)
+        dados_dicio_ae = get_data_api(url_ae, headers = headers)
+        dados_dicio_bf = get_data_api(url_bf, headers = headers)
+        dados_dicio_bpc = get_data_api(url_bpc, headers = headers)
 
         cidade = CasosCidade.objects.get(nome=unidecode(nome).upper().replace("'",""))
         print("Povoando dados da cidade: ",cidade)

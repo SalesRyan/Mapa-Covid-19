@@ -1,8 +1,8 @@
 {% extends 'core/base.html' %}
 {% load staticfiles %}
-{% load float_filter_tag %}
+{% load tags %}
 {% block title %}
-    | Listagem de Cidades
+    | Listagem de Grupos
 {% endblock title %}      
 {% block body %}
     <div class="container-fluid  col-xl-9">
@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-xl-12 mb-4">
                 <div class="card mb-4 container-fluid d-flex w-100 h-100" id="tabela" style="padding: 0;" >
-                    <div class="card-header"><i class="fas fa-table mr-1"></i>Cidades</div>
+                    <div class="card-header"><i class="fas fa-table mr-1"></i>Grupos</div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTableCidades" width="100%" cellspacing="0">
@@ -25,7 +25,10 @@
                                 <tbody>
                                     {% for object in classe %}
                                         <tr>
-                                            <td style="padding: 1.5%;">{{ object }}</td>
+                                            <td style=""> 
+                                                <button class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid !important; width: 15px !important; height: 15px !important; align-self: baseline !important; background: {{cor|list_tag:forloop.counter0 }}!important;"></button>
+                                                Grupo {{ object|add_one_tag }}
+                                            </td>
                                             <td> <a href="{% url 'dashboard:detalhes_agrupamento' object %}"><button title="Ver Detalhes" class="btn btn-primary" ><i class="fa fa-eye"></i></button></a></td>
                                         </tr>
                                     {% endfor %}

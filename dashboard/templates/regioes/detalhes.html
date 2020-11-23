@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load staticfiles %}
-{% load float_filter_tag %}
+{% load tags %}
 {% block title %}
     | {{nome}}
 {% endblock title %}
@@ -77,7 +77,7 @@
                                 <tbody>
                                     {% for object in casos_cidade %}
                                         <tr>
-                                            <td>{{ object.nome }}</td>
+                                            <td> <a href="{% url 'dashboard:detalhes_cidade' object.nome %}"> {{ object.nome }} </a></td>
                                             <td>{{ object.confirmados }}</td>
                                             <td>{{ object.obitos }}</td>
                                             <td>{{ object.incidencia|float_filter_tag }}</td>

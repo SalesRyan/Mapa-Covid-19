@@ -120,7 +120,7 @@ class Comorbidades(AuditModel):
         return self.nome
 
     class Meta:
-        ordering = ['nome']
+        ordering = ['-quantidade']
 
 class HistoricoDiario(AuditModel): #por regiao
     regiao = models.ForeignKey("dashboard.CasosRegioes", verbose_name="Regiao", on_delete=models.DO_NOTHING, null=True)

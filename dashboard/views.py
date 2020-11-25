@@ -3,7 +3,7 @@ import os
 from .models import *
 from django.core.paginator import Paginator,InvalidPage, EmptyPage
 import json
-from django.db.models import Max,Sum
+from django.db.models import Max,Sum, Min, Avg
 from scripts.funcoes import propDoen, respSaude
 import pandas as pd
 from ast import literal_eval
@@ -46,20 +46,34 @@ def site_view(request):
     altas_atual = last_leitos.altas
     altas_novos = altas_atual - penult_leitos.altas
     referencia = casos_cidade.aggregate(Max('incidencia'))['incidencia__max']
+    incidencia_min = casos_cidade.aggregate(Min('incidencia'))['incidencia__min']
     num_classe_som = casos_cidade.aggregate(Max('classe'))['classe__max']
    
     referencia_regioes = casos_regioes.aggregate(Max('incidencia'))['incidencia__max']
+    referencia_regioes_min = casos_regioes.aggregate(Min('incidencia'))['incidencia__min']
     
     data_mapa = {
-        'data': [prepareJson(obj,referencia) for obj in casos_cidade]
+        'data': [prepareJson(obj,referencia) for obj in casos_cidade],
     }
+    
+    data_incidencia_cidades = {
+        'incidencia_min': incidencia_min,
+        'incidencia_max': referencia,
+        'incidencia_mean': round((referencia+incidencia_min)/2, 2),
+    } 
+    
+    data_incidencia_regioes = {
+        'incidencia_min': round(referencia_regioes_min, 2),
+        'incidencia_max': round(referencia_regioes,2),
+        'incidencia_mean': round((referencia_regioes_min+referencia_regioes)/2, 2),
+    } 
     
     data_mapa_regioes = {
         'data': [prepareRegioesJson(obj,referencia_regioes) for obj in casos_regioes]
     }
 
-    incidencia_cidades = data_min_max(data_mapa['data'])
-    incidencia_regioes = data_min_max(data_mapa_regioes['data'])
+    # incidencia_cidades = data_min_max(data_mapa['data'])
+    # incidencia_regioes = data_min_max(data_mapa_regioes['data'])
 
     ocupacao = last_leitos.ocupados_clinicos
     ocupacao += last_leitos.ocupados_uti
@@ -159,8 +173,8 @@ def site_view(request):
         'data_mapa_regioes': json.dumps(data_mapa_regioes),
         'ocupacao_atual':str(round(taxa_ocupacao,2)).replace('.', ','),
         'ocupacao_novos':str(taxa_ocupacao_penult).replace('.', ','),
-        'incidencia_cidades':incidencia_cidades,
-        'incidencia_regioes':incidencia_regioes,
+        'data_incidencia_cidades':data_incidencia_cidades,
+        'data_incidencia_regioes':data_incidencia_regioes,
         'recuperados':recuperados,
         'prop_doen':prop_doen,
         'resp_saude':resp_saude,

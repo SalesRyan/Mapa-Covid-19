@@ -159,26 +159,56 @@
                     <div class="flex-grow-1 flex-shrink-0 pl-0" >
                         <div id="map-pi" dados ="{{ piaui }}" style="display: none !important;"></div>
                         <div id="map" dados="{{ data_mapa }}" num-classe-som="{{num_classe_som}}" class="rounded pl-0"></div>
-                        <div id="legend-map-cidades" class="overflow-hidden" style="display: none;">
-                            <div id="" class="d-flex flex-column justify-content-between align-items-start h-100 w-100">
-                                <h6> Incidência </h6>
-                                {% for incidencia in incidencia_cidades %}
-                                    <div class="d-flex justify-content-around align-center">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: {{incidencia.color}};"> </span>
-                                        <h6 style="align-self: baseline;">&nbsp;{{incidencia.min}} - {{incidencia.max}}</h6>
+                        <div id="legend-map-cidades" class="overflow-hidden" style="width: 120px; height:180px; display: none;">
+                            <h6> Incidência </h6>
+                            <div id="" class="d-flex justify-content-start h-100 w-100">
+                                <div class="rounded-pill mt-2" style="width: 15%; height:78%; background-image: linear-gradient( to top,#e85d04, #dc2f02, #9d0208, #6a040f, #370617, #370617 );"> </div>
+                                <div class=" d-flex justify-content-between flex-column" style="height: 85%;">
+                                    <div class=""> 
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                        </svg>
+                                        {{data_incidencia_cidades.incidencia_max}}
                                     </div>
-                                {% endfor %}
+                                    <div class=""> 
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                        </svg>
+                                        {{data_incidencia_cidades.incidencia_mean}}
+                                    </div>
+                                    <div class=""> 
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                        </svg>
+                                        {{data_incidencia_cidades.incidencia_min}}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="legend-map-regioes" class="overflow-hidden" style="display: none;">
-                            <div id="" class="d-flex flex-column justify-content-between align-items-start h-100 w-100">
-                                <h6> Incidência </h6>
-                                {% for incidencia in incidencia_regioes %}
-                                    <div class="d-flex justify-content-around align-center">
-                                        <span class="icon" style="border-radius: 1em !important; border: rgba(0, 0, 0, 0.651) 1px solid; width: 15px; height: 15px; align-self: baseline; background: {{incidencia.color}};"> </span>
-                                        <h6 style="align-self: baseline;">&nbsp;{{incidencia.min}} - {{incidencia.max}}</h6>
+                        <div id="legend-map-regioes" class="overflow-hidden" style="width: 120px; height:180px; display: none;">
+                            <h6> Incidência </h6>
+                            <div id="" class="d-flex justify-content-start h-100 w-100">
+                                <div class="rounded-pill mt-2" style="width: 15%; height:78%; background-image: linear-gradient( to top,#e85d04, #dc2f02, #9d0208, #6a040f, #370617, #370617 );"> </div>
+                                <div class=" d-flex justify-content-between flex-column" style="height: 85%;">
+                                    <div class=""> 
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                        </svg>
+                                        {{data_incidencia_regioes.incidencia_max}}
                                     </div>
-                                {% endfor %}
+                                    <div class=""> 
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                        </svg>
+                                        {{data_incidencia_regioes.incidencia_mean}}
+                                    </div>
+                                    <div class=""> 
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 12.796L4.519 8 10 3.204v9.592zm-.659.753l-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                        </svg>
+                                        {{data_incidencia_regioes.incidencia_min}}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

@@ -206,6 +206,7 @@
                             <table class="table table-bordered" id="dataTable" width="100%" style="max-height: 700px;" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th class="d-none">Nome da Cidade</th>
                                         <th>Cidade</th>
                                         <th>Confirmados</th>
                                         <th>Óbitos</th>
@@ -216,6 +217,7 @@
                                 <tbody>
                                     {% for object in casos_cidade %}
                                         <tr>
+                                            <td style="display: none;">{{ object.nome }}</td>
                                             <td> <a href="{% url 'dashboard:detalhes_cidade' object.nome %}"> {{ object.nome }} </a></td>
                                             <td>{{ object.confirmados }}</td>
                                             <td>{{ object.obitos }}</td>

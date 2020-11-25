@@ -76,7 +76,7 @@ class Leitos(AuditModel):
     altas = models.IntegerField("Altas", null=True, blank=True)
 
     def __str__(self):
-        return self.data
+        return str(self.data)
 
     class Meta:
         ordering = ['data']

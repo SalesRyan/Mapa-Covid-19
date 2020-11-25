@@ -7,7 +7,7 @@ def get_data_api(url, headers):
     while True:
         try:    
             response = requests.get(url, headers = headers)
-            time.sleep(2)
+            time.sleep(3)
 
             dados_dicio = literal_eval(response.text)
 
@@ -22,7 +22,8 @@ def get_data_api(url, headers):
                 dados_dicio = dados_dicio[0]
             return dados_dicio
         except:
-            time.sleep(2)
+            time.sleep(3)
+            print('Exception em get_data_api, tentando novamente')
             continue
 
 def get_last_year(data_atual,headers,nome,cod):
@@ -35,7 +36,7 @@ def get_last_year(data_atual,headers,nome,cod):
                 if mes < 10:
                     mes = '0' + str(mes)
                 atual_mes_ano = str(ano) + str(mes)
-                time.sleep(2)
+                time.sleep(3)
                 url = f'http://www.portaltransparencia.gov.br/api-de-dados/{nome}?mesAno={atual_mes_ano}&codigoIbge={cod}&pagina=1'
 
                 r = requests.get(url, headers = headers)
@@ -45,7 +46,8 @@ def get_last_year(data_atual,headers,nome,cod):
                     mes_ano = atual_mes_ano
             return mes_ano
         except:
-            time.sleep(2)
+            time.sleep(3)
+            print('Exception em get_last_year')
             continue
 
 

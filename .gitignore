@@ -26,3 +26,8 @@ dados.txt
 
 #linux
 aquivos_auxiliares/Download\ Planilha/creds.json
+.idea/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

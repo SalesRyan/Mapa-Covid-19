@@ -32,7 +32,7 @@ SECRET_KEY = env.get("SECRET_KEY")
 from ast import literal_eval
 DEBUG = literal_eval(env.get("DEBUG"))
 
-ALLOWED_HOSTS = ['mapa-covid-19.herokuapp.com','localhost']
+ALLOWED_HOSTS = ['mapa-covid-19.herokuapp.com','https://ec2-54-87-194-58.compute-1.amazonaws.com']
 # default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 # Application definition
 
@@ -137,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')

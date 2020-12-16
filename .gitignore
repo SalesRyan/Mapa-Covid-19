@@ -31,3 +31,5 @@ aquivos_auxiliares/Download\ Planilha/creds.json
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+venv/

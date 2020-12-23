@@ -32,7 +32,7 @@ SECRET_KEY = env.get("SECRET_KEY")
 from ast import literal_eval
 DEBUG = literal_eval(env.get("DEBUG"))
 
-ALLOWED_HOSTS = ['*','mapa-covid-19.herokuapp.com']
+ALLOWED_HOSTS = ['mapacovid19.com.br','mapa-covid-19.herokuapp.com','www.mapacovid19.com.br','www.mapa-covid-19.herokuapp.com']
 # default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 # Application definition
 
@@ -85,17 +85,16 @@ WSGI_APPLICATION = 'mapa_covid.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },'postgres_heroku': {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE':  env.get('DB_ENGINE'),
             'NAME': env.get('DB_NAME_PRODUCAO'),
             'USER': env.get('DB_USER_PRODUCAO'),
             'PASSWORD': env.get('DB_PASSWORD_PRODUCAO'),
             'HOST': env.get('DB_HOST_PRODUCAO'),
             'PORT': env.get('DB_PORT_PRODUCAO'),
+        # 'OPTIONS': {
+        #     'init_command': 'SET default_storage_engine=INNODB',
+        # },
     },
 }
 
@@ -137,11 +136,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = 'staticfiles'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 DEFAULT_FROM_EMAIL = env.get("DEFAULT_FROM_EMAIL")
 EMAIL_USE_TLS = True
@@ -157,7 +153,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-try:
-    from .settings_local import *
-except ImportError:
-    pass
+# try:
+#     from .settings_local import *
+# except ImportError:
+#     pass

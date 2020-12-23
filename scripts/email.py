@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 
 def mail(subject, message):
-    user = User.obejcts.all()
+    user = User.objects.all()
     send_mail(
         subject,
         message,

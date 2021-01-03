@@ -153,7 +153,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-# try:
-#     from .settings_local import *
-# except ImportError:
-#     pass
+try:
+    from .settings_local import *
+except ImportError:
+    pass

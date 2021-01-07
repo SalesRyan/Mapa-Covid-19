@@ -28,7 +28,7 @@ jedi==0.17.2
 joblib==0.16.0
 jupyter-client==6.1.7
 jupyter-core==4.6.3
-lxml==4.5.1
+lxml==4.6.2
 Markdown==3.2.2
 mime==0.1.0
 nine==1.1.0

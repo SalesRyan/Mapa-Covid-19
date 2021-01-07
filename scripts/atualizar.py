@@ -19,7 +19,7 @@ def atualizarDataUpdate(d):
 def atualizarDadosEstado(d):
     for line in d[-15:]:    
         DadosEstado.objects.update_or_create(
-            data=datetime.strptime(line[0]+('/2020' if line[0],split('/')[1] == 12 else '/2021'),'%d/%m/%Y'),
+            data=datetime.strptime(line[0]+('/2020' if int(line[0].split('/')[1]) == 12 else '/2021'),'%d/%m/%Y'),
             defaults={
                 'confirmados':line[1],
                 'obitos':line[2],

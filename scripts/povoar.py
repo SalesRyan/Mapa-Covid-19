@@ -72,10 +72,10 @@ dataset = [Leitos.objects.create(
 # print('povoando DadosEstado')
 df = generateStateDataTable(sheets)
 dataset = [DadosEstado.objects.create(
-    data=datetime(2020, int(d[0].split('/')[1]), int(d[0].split('/')[0])),
+    data=datetime(2020 if idx < 289 else 2021, int(d[0].split('/')[1]), int(d[0].split('/')[0])),
     confirmados=d[1],
     obitos=d[2],
-    ).save() for d in df.values] 
+    ).save() for idx, d in enumerate(df.values)] 
 
 print('povoando Comorbidades')
 dataset = [Comorbidades.objects.create(
@@ -105,7 +105,7 @@ pred_obitos = pred(df,'Óbitos')
 
 
 last_date = list(df['Dias'])[-1]
-last_date = datetime.strptime(last_date+'/2020','%d/%m/%Y')
+last_date = datetime.strptime(last_date+'/2021','%d/%m/%Y')
 count = 1
 for conf, obt in zip(pred_confirmados, pred_obitos):
     DadosEstadoPredicao.objects.create(

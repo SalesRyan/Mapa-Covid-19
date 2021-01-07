@@ -19,7 +19,7 @@ def atualizarDataUpdate(d):
 def atualizarDadosEstado(d):
     for line in d[-15:]:    
         DadosEstado.objects.update_or_create(
-            data=datetime.strptime(line[0]+'/2020','%d/%m/%Y'),
+            data=datetime.strptime(line[0]+('/2020' if line[0],split('/')[1] == 12 else '/2021'),'%d/%m/%Y'),
             defaults={
                 'confirmados':line[1],
                 'obitos':line[2],
@@ -95,7 +95,7 @@ def atualizarPred(d):
     pred_confirmados = pred(d,'Confirmados')
     pred_obitos = pred(d,'Óbitos')
     last_date = list(d['Dias'])[-1]
-    last_date = datetime.strptime(str(last_date)+'/2020','%d/%m/%Y')
+    last_date = datetime.strptime(str(last_date)+'/2021','%d/%m/%Y')
     predicoes = DadosEstadoPredicao.objects.all()
 
     count = 1

@@ -156,7 +156,7 @@ def generateGenderTable(sheets):
 
 def cabecalhoGenerateHistory(sheets):
     df = getData(sheets,index=getSheetIndex('HistóricoDiário', sheets))
-    df = df[df.DATA!='']
+    df = df[df['DATA']!='']
     d = {
         'DATA':df['DATA'].to_list(),
         'MUNICÍPIO':df['MUNICÍPIO'].to_list(),

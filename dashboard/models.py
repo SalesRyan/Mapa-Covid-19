@@ -14,7 +14,7 @@ class DadosEstado(AuditModel):
     obitos = models.IntegerField("Obitos", null=True, blank=True)
     
     def __str__(self):
-        return self.data
+        return str(self.data)
 
     class Meta:
         ordering = ['data']
@@ -25,7 +25,7 @@ class DadosEstadoPredicao(AuditModel):
     obitos = models.IntegerField("Obitos", null=True, blank=True)
 
     def __str__(self):
-        return self.data
+        return str(self.data)
 
     class Meta:
         ordering = ['data']

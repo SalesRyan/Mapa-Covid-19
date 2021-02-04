@@ -46,7 +46,7 @@ def inserir():
         url_bf = f'http://www.portaltransparencia.gov.br/api-de-dados/{nomes[1]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
         url_bpc = f'http://www.portaltransparencia.gov.br/api-de-dados/{nomes[2]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
         
-        time.sleep(0.1)
+        time.sleep(3)
         dados_dicio_ae = get_data_api(url_ae, headers = headers)
         dados_dicio_bf = get_data_api(url_bf, headers = headers)
         dados_dicio_bpc = get_data_api(url_bpc, headers = headers)

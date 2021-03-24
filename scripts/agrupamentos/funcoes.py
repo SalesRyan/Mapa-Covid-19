@@ -37,9 +37,10 @@ def get_last_year(data_atual,headers,nome,cod):
                     mes = '0' + str(mes)
                 atual_mes_ano = str(ano) + str(mes)
                 time.sleep(0.3)
-                url = f'http://www.portaltransparencia.gov.br/api-de-dados/{nome}?mesAno={atual_mes_ano}&codigoIbge={cod}&pagina=1'
+                url = f'http://api.portaldatransparencia.gov.br/api-de-dados/{nome}?mesAno={atual_mes_ano}&codigoIbge={cod}&pagina=1'
 
                 r = requests.get(url, headers = headers)
+                print(r.text)
                 if r.text == '[]':
                     data_atual = data_atual - timedelta(days = 31 )
                 else:

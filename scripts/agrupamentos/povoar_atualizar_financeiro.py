@@ -42,9 +42,9 @@ def inserir():
     hora = datetime.now().hour
 
     for cod,nome in zip(codigos,nomes_cidades):
-        url_ae = f'http://www.portaltransparencia.gov.br/api-de-dados/{nomes[0]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
-        url_bf = f'http://www.portaltransparencia.gov.br/api-de-dados/{nomes[1]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
-        url_bpc = f'http://www.portaltransparencia.gov.br/api-de-dados/{nomes[2]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
+        url_ae = f'http://api.portaldatransparencia.gov.br/api-de-dados/{nomes[0]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
+        url_bf = f'http://api.portaldatransparencia.gov.br/api-de-dados/{nomes[1]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
+        url_bpc = f'http://api.portaldatransparencia.gov.br/api-de-dados/{nomes[2]}?mesAno={mes_ano}&codigoIbge={cod}&pagina=1'
         
         time.sleep(3)
         dados_dicio_ae = get_data_api(url_ae, headers = headers)

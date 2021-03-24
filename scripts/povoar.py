@@ -105,7 +105,7 @@ pred_obitos = pred(df,'Óbitos')
 
 
 last_date = list(df['Dias'])[-1]
-last_date = datetime.strptime(last_date+'/2021','%d/%m/%Y')
+last_date = datetime.strptime(last_date, '%d/%m/%Y')
 count = 1
 for conf, obt in zip(pred_confirmados, pred_obitos):
     DadosEstadoPredicao.objects.create(
@@ -118,7 +118,7 @@ for conf, obt in zip(pred_confirmados, pred_obitos):
 pred_leitos = pred_clinical(df_c,mode=3)
 # pred_obitos = PredFull(df,mode=14,name='Óbitos')
 last_date = list(df_c['Dias'])[-1]
-last_date = datetime.strptime(str(last_date),'%d/%m/%Y')
+last_date = datetime.strptime(str(last_date), '%d/%m/%Y')
 count = 1
 for LC, UTI, LE, LR in zip(pred_leitos['LC'], pred_leitos['UTI'], pred_leitos['LE'], pred_leitos['LR']):
     LeitosPredicao.objects.create(
